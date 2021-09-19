@@ -38,6 +38,7 @@ namespace SpeechMod
         private static void Speak()
         {
             string text = Game.Instance.DialogController.CurrentCue.DisplayText;
+            text = text.Replace("—", ".");
             WindowsVoice.speak(text);
         }
     }
