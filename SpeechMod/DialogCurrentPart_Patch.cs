@@ -9,14 +9,10 @@ namespace SpeechMod
     [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
     static class DialogCurrentPart_Patch
     {
-        private static bool m_Initialized;
-        
         static void Postfix()
         {
-            if (!Main.Enabled || m_Initialized)
+            if (!Main.Enabled)
                 return;
-
-            m_Initialized = true;
 
             Debug.Log("Speech Mod Initializing...");
 

@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
+using SpeechMod;
 using UnityEngine.UI;
 
 /// <summary>
-/// From https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
+/// Credit to Chad Weisshaar for the base from https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
 /// </summary>
 
 #if FAKE_WINDOWS_VOICE
@@ -50,7 +51,7 @@ public static class Utility
 public class WindowsVoice : MonoBehaviour
 {
     [DllImport("WindowsVoice")]
-    public static extern void initSpeech();
+    public static extern void initSpeech(int rate, int volume);
     [DllImport("WindowsVoice")]
     public static extern void destroySpeech();
     [DllImport("WindowsVoice")]
@@ -60,13 +61,13 @@ public class WindowsVoice : MonoBehaviour
     [DllImport("WindowsVoice")]
     public static extern void statusMessage(StringBuilder str, int length);
     public static WindowsVoice theVoice = null;
-    // Use this for initialization
-    void OnEnable()
+    
+    void Start()
     {
         if (theVoice == null)
         {
             theVoice = this;
-            initSpeech();
+            initSpeech(Main.Settings?.Rate ?? -1, Main.Settings?.Volume ?? 100);
         }
         //else
         //Destroy(gameObject);
@@ -75,14 +76,15 @@ public class WindowsVoice : MonoBehaviour
     {
         speak("Testing");
     }
+    
     public static void speak(string msg, float delay = 0f)
     {
-
         if (delay == 0f)
             addToSpeechQueue(msg);
         else
             theVoice.ExecuteLater(delay, () => speak(msg));
     }
+    
     void OnDestroy()
     {
         if (theVoice == this)
@@ -93,6 +95,7 @@ public class WindowsVoice : MonoBehaviour
             theVoice = null;
         }
     }
+    
     public static string GetStatusMessage()
     {
         StringBuilder sb = new StringBuilder(40);
