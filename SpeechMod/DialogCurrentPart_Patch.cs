@@ -1,10 +1,12 @@
-﻿using System.Speech.Synthesis;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Speech.Synthesis;
 using HarmonyLib;
 using Kingmaker;
 using Kingmaker.UI;
 using Owlcat.Runtime.UI.Controls.Button;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SpeechMod
 {
@@ -12,13 +14,8 @@ namespace SpeechMod
     static class DialogCurrentPart_Patch
     {
         private static bool m_Initialized;
-
-        //static void Prefix(ref CueShowData __cueData)
-        //{
-        //    if (!Main.Enabled) 
-        //        return;
-
-        //}
+        private static Assembly m_SystemSpeech;
+        //private static object m_SpeechSynthesizer;
 
         static void Postfix()
         {
@@ -26,60 +23,75 @@ namespace SpeechMod
                 return;
 
             m_Initialized = true;
-            
-            Debug.Log("Speech Testing");
+
+            Debug.Log(AssemblyDirectory);
+
+            Debug.Log("Speech Mod Initializing...");
 
             var parent = Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View");
-            Debug.Log("1");
-            var referenceBackGround = Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View/ButtonEdge").GetComponent<Image>();
-            Debug.Log("2");
-            var referenceArrow = Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View/ButtonEdge/Image").GetComponent<Image>();
-            Debug.Log("3");
-            
-            Debug.Log(referenceBackGround.name);
-            Debug.Log(referenceArrow.name);
-            
-            //var referenceArrowImage = referenceArrow.GetComponent<Image>();
-            //Image referenceImage = referenceButton.GetComponent<Image>();
-            //Sprite backgroundSprite = Sprite.Create(referenceImage.sprite.texture, referenceImage.GetPixelAdjustedRect(), new Vector2(.5f, .5f));
+            var originalButton = Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View/ButtonEdge").gameObject;
 
-            GameObject buttonGameObject = new GameObject("SpeechButton");
-            buttonGameObject.transform.SetParent(parent);
-            buttonGameObject.transform.localPosition = new Vector3(-493, 164, 0);
-            buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-            buttonGameObject.transform.localScale = Vector3.one;
+            //if (parent == null || originalButton == null)
+            //{
+            //    m_Initialized = false;
+            //    Debug.LogWarning("Parent or original button was not found!");
+            //    return;
+            //}
 
-            var backgroundImage = buttonGameObject.AddComponent<Image>();
-            backgroundImage.sprite = referenceBackGround.sprite;
-            
-            OwlcatButton speechButton = buttonGameObject.AddComponent<OwlcatButton>();
-            speechButton.OnLeftClick.AddListener(Call);
-            
-            GameObject arrowGameObject = new GameObject("Image");
-            arrowGameObject.transform.SetParent(buttonGameObject.transform);
-            arrowGameObject.transform.localPosition = Vector3.zero;
-            arrowGameObject.transform.localRotation = Quaternion.Euler(0, 0, 180);
-            
-            var arrowImage = arrowGameObject.AddComponent<Image>();
-            arrowImage.sprite = referenceArrow.sprite;
+            var gameObject = GameObject.Instantiate(originalButton, parent);
+            gameObject.name = "SpeechButton";
+            gameObject.transform.localPosition = new Vector3(-493, 164, 0);
+            gameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
+
+            var button = gameObject.GetComponent<OwlcatButton>();
+            button.OnLeftClick.AddListener(Speak);
+
+            gameObject.SetActive(true);
+
+            Debug.Log("Adding 'System.Speech.dll'...");
+            Console.Write("Adding 'System.Speech.dll'...");
+            m_SystemSpeech = Assembly.LoadFrom($"{AssemblyDirectory}/System.Speech.dll");
+
+            Debug.Log("Speech Mod Initialized!");
         }
 
-        private static void Call()
+        private static void Speak()
         {
-            new SpeechSynthesizer().SpeakAsync(Game.Instance.DialogController.CurrentCue.DisplayText);
+            if (m_SystemSpeech == null)
+            {
+                Debug.LogWarning("Assembly not loaded!");
+                return;
+            }
+
+            var speechSynthesizer = m_SystemSpeech.CreateInstance("System.Speech.Synthesis.SpeechSynthesizer");
+
+            if (speechSynthesizer == null)
+            {
+                Debug.LogError("Could not instantiate speech synthesizer!");
+                return;
+            }
+
+            ((SpeechSynthesizer)speechSynthesizer).Rate = Main.Settings?.Rate ?? -1;
+            ((SpeechSynthesizer)speechSynthesizer).Volume = Main.Settings?.Volume ?? 100;
+            //((SpeechSynthesizer)speechSynthesizer).SpeakCompleted += OnSpeakCompleted;
+
+            ((SpeechSynthesizer)speechSynthesizer).SpeakAsync(Game.Instance.DialogController.CurrentCue.DisplayText);
+        }
+
+        //private static void OnSpeakCompleted(object sender, SpeakCompletedEventArgs e)
+        //{
+        //    ((SpeechSynthesizer)sender)?.Dispose();
+        //}
+
+        private static string AssemblyDirectory
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return Path.GetDirectoryName(path);
+            }
         }
     }
-
-    //[HarmonyPatch(typeof(DialogCurrentPart), "Show")]
-    //public static class DialogCurrentPart_Show_Patch
-    //{
-    //    static void Postfix()
-    //    {
-            
-    //        if (GUILayout.Button("Speak", GUILayout.ExpandWidth(false)))
-    //        {
-    //            new SpeechSynthesizer().Speak(Game.Instance.DialogController.CurrentCue.DisplayText);
-    //        }
-    //    }
-    //}
 }
