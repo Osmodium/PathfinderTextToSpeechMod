@@ -10,11 +10,14 @@ namespace SpeechMod
 #endif
     internal static class Main
     {
+        public static UnityModManager.ModEntry.ModLogger Logger;
         public static Settings Settings;
         public static bool Enabled;
 
         private static bool Load(UnityModManager.ModEntry modEntry)
         {
+            Logger = modEntry.Logger;
+
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
             
             modEntry.OnToggle = OnToggle;
@@ -26,7 +29,7 @@ namespace SpeechMod
             
             return true;
         }
-
+        
         private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
         {
             Enabled = value;
