@@ -3,6 +3,7 @@ using Kingmaker;
 using Kingmaker.UI;
 using Owlcat.Runtime.UI.Controls.Button;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace SpeechMod
 {
@@ -28,6 +29,7 @@ namespace SpeechMod
             
             var button = buttonGameObject.GetComponent<OwlcatButton>();
             button.OnLeftClick.RemoveAllListeners();
+            button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
             button.OnLeftClick.AddListener(Speak);
 
             buttonGameObject.SetActive(true);
@@ -37,8 +39,15 @@ namespace SpeechMod
 
         private static void Speak()
         {
-            string text = Game.Instance.DialogController.CurrentCue.DisplayText;
-            text = text.Replace("—", ".");
+            string text = Game.Instance?.DialogController?.CurrentCue?.DisplayText;
+            if (string.IsNullOrEmpty(text))
+                return;
+            
+            // TODO: Load replaces into a dictionary from a json file so they can be added and altered more easily.
+            text = text.Replace("—", ",");
+            text = text.Replace("Kenabres", "Kenaaabres");
+            text = text.Replace("Iomedae", "I,omedae");
+            
             WindowsVoice.speak(text);
         }
     }
