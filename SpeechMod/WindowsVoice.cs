@@ -4,6 +4,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine.UI;
 
+/// <summary>
+/// From https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
+/// </summary>
+
 #if FAKE_WINDOWS_VOICE
 public class WindowsVoice : MonoBehaviour
 {
