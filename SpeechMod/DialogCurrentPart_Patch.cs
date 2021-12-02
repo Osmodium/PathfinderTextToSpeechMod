@@ -2,6 +2,7 @@
 using Kingmaker;
 using Kingmaker.UI;
 using Owlcat.Runtime.UI.Controls.Button;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,7 +27,7 @@ namespace SpeechMod
             buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
 
             buttonGameObject.AddComponent<WindowsVoice>();
-            
+
             var button = buttonGameObject.GetComponent<OwlcatButton>();
             button.OnLeftClick.RemoveAllListeners();
             button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
@@ -39,16 +40,29 @@ namespace SpeechMod
 
         private static void Speak()
         {
-            string text = Game.Instance?.DialogController?.CurrentCue?.DisplayText;
+            var text = Game.Instance?.DialogController?.CurrentCue?.DisplayText;
             if (string.IsNullOrEmpty(text))
+            {
+                Debug.LogWarning("No display text in the curren cue of the dialog controller!");
                 return;
-            
+            }
+
             // TODO: Load replaces into a dictionary from a json file so they can be added and altered more easily.
-            text = text.Replace("—", ",");
-            text = text.Replace("Kenabres", "Kenaaabres");
-            text = text.Replace("Iomedae", "I,omedae");
-            
+            foreach (var pair in _phoneticalDictionary)
+            {
+                text = text.Replace(pair.Key, pair.Value);
+            }
+
             WindowsVoice.speak(text);
         }
+
+        private static readonly Dictionary<string, string> _phoneticalDictionary = new Dictionary<string, string>()
+        {
+            { "—", "," },
+            { "Kenabres", "Keenaaabres" },
+            { "Iomedae", "I,omedaee" },
+            { "Golarion", "Goolaarion" },
+            { "Sovyrian", "Sovyyrian" }
+        };
     }
 }

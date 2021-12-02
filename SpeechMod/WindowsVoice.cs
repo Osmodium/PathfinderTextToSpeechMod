@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+﻿using SpeechMod;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
-using SpeechMod;
-using UnityEngine.UI;
+using UnityEngine;
 
 /// <summary>
 /// Credit to Chad Weisshaar for the base from https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
