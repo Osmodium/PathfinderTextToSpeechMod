@@ -16,7 +16,6 @@ namespace SpeechMod
 
         public static void Speak(string text)
         {
-            //var text = Game.Instance?.DialogController?.CurrentCue?.DisplayText;
             if (string.IsNullOrEmpty(text))
             {
                 Debug.LogWarning("No display text in the curren cue of the dialog controller!");
