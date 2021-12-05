@@ -29,7 +29,7 @@ namespace SpeechMod
                 text = text.Replace(pair.Key, pair.Value);
             }
 
-            WindowsVoice.speak(text);
+            WindowsVoice.Speak(text);
         }
     }
 }

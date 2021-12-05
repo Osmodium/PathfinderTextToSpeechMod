@@ -7,7 +7,7 @@ namespace SpeechMod
 {
     public static class ButtonFactory
     {
-        private static GameObject Button 
+        private static GameObject Button
         {
             get
             {
@@ -39,7 +39,7 @@ namespace SpeechMod
             var buttonGameObject = CreateButton(parent);
 
             SetAction(buttonGameObject, call);
-            
+
             return buttonGameObject;
         }
 

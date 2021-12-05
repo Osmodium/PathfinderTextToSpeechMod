@@ -13,12 +13,23 @@ namespace SpeechMod
             if (!Main.Enabled)
                 return;
 
+            AddWindowsVoice();
+
+            AddDialogSpeechButton();
+        }
+
+        private static void AddWindowsVoice()
+        {
             Debug.Log("Adding WindowsVoice gameobject.");
 
-            var windowsVoiceGameObject = new GameObject();
+            var windowsVoiceGameObject = new GameObject("WindowsVoice");
             windowsVoiceGameObject.AddComponent<WindowsVoice>();
+            GameObject.DontDestroyOnLoad(windowsVoiceGameObject);
+        }
 
-            Debug.Log("Adding speech button to current dialog ui.");
+        private static void AddDialogSpeechButton()
+        {
+            Debug.Log("Adding speech button to dialog ui.");
 
             var parent = Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View");
 
@@ -32,6 +43,6 @@ namespace SpeechMod
             buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
 
             buttonGameObject.SetActive(true);
-        }   
+        }
     }
 }

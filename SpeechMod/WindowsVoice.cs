@@ -61,7 +61,7 @@ public class WindowsVoice : MonoBehaviour
     [DllImport("WindowsVoice")]
     public static extern void statusMessage(StringBuilder str, int length);
     public static WindowsVoice theVoice = null;
-    
+
     void Start()
     {
         if (theVoice == null)
@@ -72,19 +72,20 @@ public class WindowsVoice : MonoBehaviour
         //else
         //Destroy(gameObject);
     }
-    public void test()
+
+    public void Test()
     {
-        speak("Testing");
+        Speak("Testing");
     }
-    
-    public static void speak(string msg, float delay = 0f)
+
+    public static void Speak(string msg, float delay = 0f)
     {
         if (delay == 0f)
             addToSpeechQueue(msg);
         else
-            theVoice.ExecuteLater(delay, () => speak(msg));
+            theVoice.ExecuteLater(delay, () => Speak(msg));
     }
-    
+
     void OnDestroy()
     {
         if (theVoice == this)
@@ -95,7 +96,7 @@ public class WindowsVoice : MonoBehaviour
             theVoice = null;
         }
     }
-    
+
     public static string GetStatusMessage()
     {
         StringBuilder sb = new StringBuilder(40);

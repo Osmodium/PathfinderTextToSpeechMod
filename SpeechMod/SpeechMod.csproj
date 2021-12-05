@@ -43,6 +43,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="UniRx, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\SteamLibrary\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UniRx.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>E:\SteamLibrary\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\Unity.TextMeshPro.dll</HintPath>
@@ -66,10 +70,11 @@
     <Compile Include="Patches\DialogCurrentPart_Patch.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RectExtensions.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Speech.cs" />
     <Compile Include="Patches\TooltipEngine_Patch.cs" />
-    <Compile Include="TooltipButton.cs" />
+    <Compile Include="TextMeshProValues.cs" />
     <Compile Include="WindowsVoice.cs" />
   </ItemGroup>
   <ItemGroup>
