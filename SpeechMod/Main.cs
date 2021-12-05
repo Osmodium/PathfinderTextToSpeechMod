@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using HarmonyLib;
+﻿using HarmonyLib;
+using System.Reflection;
 using UnityEngine;
 using UnityModManagerNet;
 
@@ -16,20 +16,24 @@ namespace SpeechMod
 
         private static bool Load(UnityModManager.ModEntry modEntry)
         {
+            Debug.Log("Speech Mod Initializing...");
+
             Logger = modEntry.Logger;
 
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
-            
+
             modEntry.OnToggle = OnToggle;
             modEntry.OnGUI = OnGui;
             modEntry.OnSaveGUI = OnSaveGui;
 
             var harmony = new Harmony(modEntry.Info.Id);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
-            
+
+            Debug.Log("Speech Mod Initialized!");
+
             return true;
         }
-        
+
         private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
         {
             Enabled = value;

@@ -21,6 +21,7 @@ namespace WindowsVoice {
   std::list<wchar_t*> theSpeechQueue;
   std::thread* theSpeechThread = nullptr;
   bool shouldTerminate = false;
+  bool shouldStop = false;
 
   std::wstring theStatusMessage;
 }

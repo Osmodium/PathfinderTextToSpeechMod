@@ -87,6 +87,11 @@ namespace WindowsVoice {
                         }
                         theMutex.unlock();
                     }
+
+                    if (shouldStop)
+                    {
+                        // TODO
+                    }
                 }
             }
             else

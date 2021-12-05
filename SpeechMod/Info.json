@@ -1,11 +1,11 @@
 {
   "Id": "SpeechMod",
-  "DisplayName": "Text to Speech of current dialog.",
+  "DisplayName": "Text to Speech",
   "Author": "Osmodium",
   "ManagerVersion": "0.23.3",
   "Requirements": [],
   "AssemblyName": "SpeechMod.dll",
   "EntryMethod": "SpeechMod.Main.Load",
   "GameVersion": "1.0.4",
-  "Version": "0.8.1"
+  "Version": "0.9.1"
 }
