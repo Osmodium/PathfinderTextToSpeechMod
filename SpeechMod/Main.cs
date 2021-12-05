@@ -16,6 +16,8 @@ namespace SpeechMod
 
         private static bool Load(UnityModManager.ModEntry modEntry)
         {
+            Debug.Log("Speech Mod Initializing...");
+
             Logger = modEntry.Logger;
 
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
@@ -27,6 +29,8 @@ namespace SpeechMod
             var harmony = new Harmony(modEntry.Info.Id);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
             
+            Debug.Log("Speech Mod Initialized!");
+
             return true;
         }
         
