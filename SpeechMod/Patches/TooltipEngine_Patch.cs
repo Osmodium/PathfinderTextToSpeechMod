@@ -19,9 +19,10 @@ namespace SpeechMod
             if (__result == null)
                 return;
 
+            // TODO: Possibly add more types
             if (__result is TooltipBrickTextView)
             {
-                if (IsInvalid(__result.transform.parent)) // TODO: Better way of telling if inside hover tooltip.
+                if (IsInvalid(__result.transform.parent))
                     return;
 
                 var view = __result as TooltipBrickTextView;
@@ -86,6 +87,7 @@ namespace SpeechMod
             }
         }
 
+        // TODO: Better way of telling if inside hover tooltip.
         private static bool IsInvalid(Transform parent)
         {
             return parent == null;
