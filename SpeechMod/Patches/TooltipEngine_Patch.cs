@@ -79,9 +79,10 @@ namespace SpeechMod
                         textMeshPro.color = defaultValues.color;
                     });
 
-                    onPointerClick.OnPointerClickAsObservable().Subscribe(_ =>
+                    onPointerClick.OnPointerClickAsObservable().Subscribe(clickEvent =>
                     {
-                        Speech.Speak(textMeshPro.text);
+                        if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
+                            Speech.Speak(textMeshPro.text);
                     });
                 }
             }
