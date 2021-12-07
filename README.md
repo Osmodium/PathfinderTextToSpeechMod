@@ -25,14 +25,17 @@ By Osmodium
 
 #### 1) Dialog 
 When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog.
+
 ![Playbutton for the current dialog](http://www.dashvoid.com/speechmod/playbutton_dialog.png)
 
 #### 2) Book text
 When inspecting a book (through right-click->Info) hover over the text and left click.
+
 ![Here the hover behaviour is set to underline the text, see the settings for more custumization](http://www.dashvoid.com/speechmod/booktext.png)
 
 #### 3) Item text
 When inspecting an item (through right-click->Info) hover over text (not all text is currently supported) and left click.
+
 ![Some of the texts are not supported yet. Try hovering different parts to see which are supported](http://www.dashvoid.com/speechmod/itemtext.png)
 
 ### Settings
