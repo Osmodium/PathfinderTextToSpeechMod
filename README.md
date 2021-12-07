@@ -1,7 +1,7 @@
   
 
 # SpeechMod - Windows only
-By Osmodium
+By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) to the dialog that is currently in focus and various text blocks when inspecting items (Info).
 
@@ -45,6 +45,7 @@ The different settings (available through ctrl+f10 if not overridden in the UMM)
 **Voice**: Select from the three Microsoft built-in voices (currently hardcoded, so if you haven't installed the voice, no voice will be heard).
 **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
 **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
+
 ![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings.png)
 
 ### Acknowledgments
