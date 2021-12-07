@@ -51,4 +51,4 @@ The different settings (available through ctrl+f10 if not overridden in the UMM)
 ### Acknowledgments
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
 - Pathfinder Wrath of The Righteous Discord channel members
-- Join our  [Discord](https://discord.gg/EFWq7rJFNN)
+- Join the [Discord](https://discord.gg/EFWq7rJFNN)
