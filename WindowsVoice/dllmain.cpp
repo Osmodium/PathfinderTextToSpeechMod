@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "WindowsVoice.h"
-#include <sapi.h>
+//#include <windows.h>
 //#include <iostream>
 
 namespace WindowsVoice {
@@ -14,7 +14,7 @@ namespace WindowsVoice {
             theStatusMessage = L"Failed to initialize COM for Voice.";
             return;
         }
-
+        
         HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void**)&pVoice);
         if (!SUCCEEDED(hr))
         {
@@ -63,7 +63,7 @@ namespace WindowsVoice {
         */
         pVoice->SetRate(rate);
         pVoice->SetVolume(volume);
-
+        
         SPVOICESTATUS voiceStatus;
         wchar_t* priorText = nullptr;
         while (!shouldTerminate)
@@ -86,11 +86,6 @@ namespace WindowsVoice {
                             theSpeechQueue.pop_front();
                         }
                         theMutex.unlock();
-                    }
-
-                    if (shouldStop)
-                    {
-                        // TODO
                     }
                 }
             }
@@ -176,6 +171,18 @@ namespace WindowsVoice {
         size_t count;
         wcstombs_s(&count, msg, msgLen, theStatusMessage.c_str(), msgLen);
     }
+
+    //CComPtr<IEnumSpObjectTokens> getVoicesAvailable()
+    //{
+    //    HRESULT hr = S_OK;
+    //    CComPtr<ISpObjectTokenCategory> cpSpCategory = NULL;
+    //    CComPtr<IEnumSpObjectTokens> cpSpEnumTokens = NULL;
+    //    if (SUCCEEDED(hr = SpGetCategoryFromId(SPCAT_VOICES, &cpSpCategory)))
+    //    {
+    //        cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens);
+    //    }
+    //    return cpSpEnumTokens;
+    //}
 }
 
 
