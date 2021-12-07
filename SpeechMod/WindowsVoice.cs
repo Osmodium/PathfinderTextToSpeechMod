@@ -60,6 +60,7 @@ public class WindowsVoice : MonoBehaviour
     public static extern void clearSpeechQueue();
     [DllImport("WindowsVoice")]
     public static extern void statusMessage(StringBuilder str, int length);
+
     public static WindowsVoice theVoice = null;
 
     void Start()

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.Tooltip.Bricks;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
+using System;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -69,14 +70,22 @@ namespace SpeechMod
                 {
                     onPointerEnter.OnPointerEnterAsObservable().Subscribe(_ =>
                     {
-                        textMeshPro.fontStyle |= FontStyles.Underline;
-                        textMeshPro.color = Color.blue;
+                        if(Main.Settings.FontStyleOnHover)
+                            for (int i = 0; i < Main.Settings.FontStyles.Length; i++)
+                            {
+                                if (Main.Settings.FontStyles[i])
+                                    textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames[i], true);
+                            }
+                        //textMeshPro.fontStyle |=  FontStyles.Underline;
+                        if (Main.Settings.ColorOnHover)
+                            textMeshPro.color = Main.ChosenColor;
                     });
 
                     onPointerExit.OnPointerExitAsObservable().Subscribe(_ =>
                     {
                         textMeshPro.fontStyle = defaultValues.fontStyles;
-                        textMeshPro.color = defaultValues.color;
+                        if (Main.Settings.ColorOnHover)
+                            textMeshPro.color = defaultValues.color;
                     });
 
                     onPointerClick.OnPointerClickAsObservable().Subscribe(clickEvent =>

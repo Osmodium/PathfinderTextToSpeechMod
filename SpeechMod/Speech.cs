@@ -11,7 +11,9 @@ namespace SpeechMod
             { "Kenabres", "Keenaaabres" },
             { "Iomedae", "I,omedaee" },
             { "Golarion", "Goolaarion" },
-            { "Sovyrian", "Sovyyrian" }
+            { "Sovyrian", "Sovyyrian" },
+            { "Rovagug", "Rovaagug" },
+            { "Irabeth", "Iira,beth" }
         };
 
         public static void Speak(string text)
@@ -28,7 +30,7 @@ namespace SpeechMod
                 text = text.Replace(pair.Key, pair.Value);
             }
 
-            WindowsVoice.Speak(text);
+            WindowsVoice.Speak($"<voice required=\"Name = {Main.ChosenVoice}\">{text}");
         }
     }
 }
