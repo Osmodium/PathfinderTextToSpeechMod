@@ -6,6 +6,7 @@ namespace SpeechMod
     {
         public int Rate = 1;
         public int Volume = 100;
+        public int Pitch = 0;
 
         public string[] AvailableVoices = { "Microsoft Hazel Desktop", "Microsoft David Desktop", "Microsoft Zira Desktop" };
         public int ChosenVoice = 1;

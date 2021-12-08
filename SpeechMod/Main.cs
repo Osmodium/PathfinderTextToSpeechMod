@@ -73,6 +73,12 @@ namespace SpeechMod
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
+            GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
+            Settings.Pitch = (int)GUILayout.HorizontalSlider(Settings.Pitch, -10, 10, GUILayout.Width(300f));
+            GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
             GUILayout.Label("Voice", GUILayout.ExpandWidth(false));
             GUILayout.Space(10);
             //GUILayout.Label($"{ChosenVoice}", GUILayout.ExpandWidth(false));

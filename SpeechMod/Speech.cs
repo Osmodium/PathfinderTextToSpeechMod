@@ -30,7 +30,7 @@ namespace SpeechMod
                 text = text.Replace(pair.Key, pair.Value);
             }
 
-            WindowsVoice.Speak($"<voice required=\"Name = {Main.ChosenVoice}\">{text}");
+            WindowsVoice.Speak($"<voice required=\"Name = { Main.ChosenVoice }\"><pitch absmiddle = \"{ Main.Settings.Pitch }\" >{ text }");
         }
     }
 }
