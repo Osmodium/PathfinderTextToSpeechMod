@@ -12,7 +12,9 @@ By [Osmodium](https://github.com/Osmodium)
  3. Download the SpeechMod-mod
  4. Install the mod by dragging the zip file from step 3 into the Unity Mod Manager window under the Mods tab. Alternatively locate the zip file after clicking the "Install" button in Unity Mod Manager.
 
-### Issues
+### Known issues / limitations
+
+*If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/PathfinderTextToSpeechMod/issues)*
 
  - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
  - No stopping of voice implemented yet.

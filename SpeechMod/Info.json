@@ -1,6 +1,6 @@
 {
   "Id": "SpeechMod",
-  "DisplayName": "Text to Speech",
+  "DisplayName": "SpeechMod - Text to Speech",
   "Author": "Osmodium",
   "ManagerVersion": "0.23.3",
   "Requirements": [],
