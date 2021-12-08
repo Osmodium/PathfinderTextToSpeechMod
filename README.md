@@ -14,7 +14,7 @@ By [Osmodium](https://github.com/Osmodium)
 
 ### Issues
 
- - Only works on Windows!
+ - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
  - No stopping of voice implemented yet.
  - Pressing multiple times queues the text to be spoken after the current one has played through.
  - "Hardcoded" voices to the three "old" Windows voices, since we are using SAPI voices.
