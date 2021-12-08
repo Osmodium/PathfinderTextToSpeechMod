@@ -1,5 +1,3 @@
-  
-
 # SpeechMod - Windows only
 By [Osmodium](https://github.com/Osmodium)
 
@@ -11,15 +9,16 @@ By [Osmodium](https://github.com/Osmodium)
 
  1. Download and install Unity Mod Manager, make sure it is at least version 0.23.0 (I use 0.23.3)
  2. Run Unity Mod Manger and set it up to find Pathfinder: Wrath of the Righteous (Second Adventure)
- 3. Download the SpeechMod mod
- 4. Install the mod by dragging the zip file from step 3 into the Unity Mod Manager window under the Mods tab
+ 3. Download the SpeechMod-mod
+ 4. Install the mod by dragging the zip file from step 3 into the Unity Mod Manager window under the Mods tab. Alternatively locate the zip file after clicking the "Install" button in Unity Mod Manager.
 
 ### Issues
 
  - Only works on Windows!
  - No stopping of voice implemented yet.
- - Pressing multiple times queues the text to spoken after the current one has played through.
- - "Hardcoded" voices to the three old voices, since we are using SAPI voices.
+ - Pressing multiple times queues the text to be spoken after the current one has played through.
+ - "Hardcoded" voices to the three "old" Windows voices, since we are using SAPI voices.
+ - If you don't hear any text being spoken, try switching to a different voice since the selected one might not be installed.
 
 ### How to use
 
@@ -47,6 +46,11 @@ The different settings (available through ctrl+f10 if not overridden in the UMM)
 **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 
 ![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings.png)
+
+### Motivation
+*Why did I create this mod?*
+I have come to realize that I spend alot of my energy through the day on various activities, so when I get to play a game I rarely have enough energy left over to focus on reading long passages of text. So I thought it nice if I could get a helping hand so I wouldn't miss out on the excellent stories and writing in text heavy games.
+After I started creating this mod, I have thought to myself that if I struggle with this issue, imageine what people with genuine disabilities must go through and possibly miss out on, which motivated me even more to get this mod working and release it. I really hope that it will help and encourage more people to get as much out of the game as possible.
 
 ### Acknowledgments
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
