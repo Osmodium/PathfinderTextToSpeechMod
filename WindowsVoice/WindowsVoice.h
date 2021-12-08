@@ -8,8 +8,14 @@
 #include <list>
 #include <thread>
 #include <sapi.h>
-//#include <atlbase.h>
-//#include <sphelper.h>
+#include <atlbase.h>
+#pragma warning(disable:4996)
+#include <sphelper.h>
+#pragma warning(default: 4996)
+#include <vector>
+//#include <Windows.h>
+
+using namespace std;
 
 namespace WindowsVoice {
   extern "C" {
@@ -18,13 +24,13 @@ namespace WindowsVoice {
     DLL_API void __cdecl clearSpeechQueue();
     DLL_API void __cdecl destroySpeech();
     DLL_API void __cdecl statusMessage(char* msg, int msgLen);
-    //DLL_API CComPtr<IEnumSpObjectTokens> __cdecl getVoicesAvailable();
+    DLL_API string* __cdecl getVoicesAvailable();
   }
 
-  std::mutex theMutex;
-  std::list<wchar_t*> theSpeechQueue;
-  std::thread* theSpeechThread = nullptr;
+  mutex theMutex;
+  list<wchar_t*> theSpeechQueue;
+  thread* theSpeechThread = nullptr;
   bool shouldTerminate = false;
 
-  std::wstring theStatusMessage;
+  wstring theStatusMessage;
 }

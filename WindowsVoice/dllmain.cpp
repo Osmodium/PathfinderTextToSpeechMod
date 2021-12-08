@@ -1,7 +1,5 @@
 ﻿#include "pch.h"
 #include "WindowsVoice.h"
-//#include <windows.h>
-//#include <iostream>
 
 namespace WindowsVoice {
 
@@ -14,7 +12,7 @@ namespace WindowsVoice {
             theStatusMessage = L"Failed to initialize COM for Voice.";
             return;
         }
-        
+
         HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void**)&pVoice);
         if (!SUCCEEDED(hr))
         {
@@ -63,7 +61,7 @@ namespace WindowsVoice {
         */
         pVoice->SetRate(rate);
         pVoice->SetVolume(volume);
-        
+
         SPVOICESTATUS voiceStatus;
         wchar_t* priorText = nullptr;
         while (!shouldTerminate)
@@ -146,7 +144,7 @@ namespace WindowsVoice {
             return;
         }
         theStatusMessage = L"Starting Windows Voice.";
-        theSpeechThread = new std::thread(WindowsVoice::speechThreadFunc, rate, volume);
+        theSpeechThread = new thread(WindowsVoice::speechThreadFunc, rate, volume);
     }
 
     void destroySpeech()
@@ -172,19 +170,32 @@ namespace WindowsVoice {
         wcstombs_s(&count, msg, msgLen, theStatusMessage.c_str(), msgLen);
     }
 
-    //CComPtr<IEnumSpObjectTokens> getVoicesAvailable()
-    //{
-    //    HRESULT hr = S_OK;
-    //    CComPtr<ISpObjectTokenCategory> cpSpCategory = NULL;
-    //    CComPtr<IEnumSpObjectTokens> cpSpEnumTokens = NULL;
-    //    if (SUCCEEDED(hr = SpGetCategoryFromId(SPCAT_VOICES, &cpSpCategory)))
-    //    {
-    //        cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens);
-    //    }
-    //    return cpSpEnumTokens;
-    //}
-}
+    string* getVoicesAvailable()
+    {
+        vector<string> voices;
+        HRESULT hr = S_OK;
+        CComPtr<ISpObjectTokenCategory> cpSpCategory = NULL;
+        CComPtr<IEnumSpObjectTokens> cpSpEnumTokens = NULL;
+        if (SUCCEEDED(hr = SpGetCategoryFromId(SPCAT_VOICES, &cpSpCategory)))
+        {
+            cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens);
 
+            CComPtr<ISpObjectToken> cpSpToken;
+            unsigned long ulFetched;
+            while (SUCCEEDED(hr = cpSpEnumTokens->Next(1, &cpSpToken, &ulFetched)))
+            {
+                WCHAR* description;
+                if (SUCCEEDED(hr = SpGetDescription(cpSpToken, &description)))
+                {
+                    wstring ws(description);
+                    string str(ws.begin(), ws.end());
+                    voices.push_back(str);
+                }
+            }
+        }
+        return &voices[0];
+    }
+}
 
 BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)
 {
