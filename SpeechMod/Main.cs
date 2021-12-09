@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityModManagerNet;
 using TMPro;
 using System;
+using System.Linq;
 
 namespace SpeechMod
 {
@@ -15,7 +16,7 @@ namespace SpeechMod
         public static UnityModManager.ModEntry.ModLogger Logger;
         public static Settings Settings;
         public static bool Enabled;
-        
+
         public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
         
         public static string ChosenVoice
@@ -42,6 +43,22 @@ namespace SpeechMod
 
             var harmony = new Harmony(modEntry.Info.Id);
             harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+            Logger.Log(WindowsVoiceUnity.GetStatusMessage());
+
+            Logger.Log("Available voices:");
+            string[] availableVoices = WindowsVoiceUnity.GetAvailableVoices();
+            foreach (var s in availableVoices)
+            {
+                Logger.Log(s);
+            }
+            if (availableVoices == null || availableVoices.Length == 0)
+            { 
+                Logger.Warning("No voices available found! Diabling mod!");
+                return false;
+            }
+            Logger.Log("Setting available voices list...");
+            Settings.AvailableVoices = availableVoices;
 
             Debug.Log("Speech Mod Initialized!");
 
@@ -88,7 +105,7 @@ namespace SpeechMod
             GUILayout.BeginHorizontal();
             Settings.ColorOnHover = GUILayout.Toggle(Settings.ColorOnHover, "Enable color on hover");
             GUILayout.EndHorizontal();
-            
+
             if (Settings.ColorOnHover)
             {
                 GUILayout.BeginHorizontal();
