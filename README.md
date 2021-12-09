@@ -41,10 +41,15 @@ When inspecting an item (through right-click->Info) hover over text (not all tex
 
 ### Settings
 The different settings (available through ctrl+f10 if not overridden in the UMM) for SpeechMod
+
 **Speech rate**: The speed of the voice the higher number, the faster speech. 1 is default.
+
 **Speech volume**: The volume of the voice from 0 to 100.
+
 **Voice**: Select from the three Microsoft built-in voices (currently hardcoded, so if you haven't installed the voice, no voice will be heard).
+
 **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
+
 **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 
 ![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings.png)
