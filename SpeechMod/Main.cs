@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityModManagerNet;
 using TMPro;
 using System;
-using System.Linq;
 
 namespace SpeechMod
 {
@@ -19,15 +18,9 @@ namespace SpeechMod
 
         public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
         
-        public static string ChosenVoice
-        {
-            get { return Settings.AvailableVoices[Settings.ChosenVoice]; }
-        }
+        public static string ChosenVoice => Settings.AvailableVoices[Settings.ChosenVoice];
 
-        public static Color ChosenColor
-        {
-            get { return new Color(Settings.ChosenColorR, Settings.ChosenColorG, Settings.ChosenColorB, Settings.ChosenColorA); }
-        }
+        public static Color ChosenColor => new Color(Settings.ChosenColorR, Settings.ChosenColorG, Settings.ChosenColorB, Settings.ChosenColorA);
 
         private static bool Load(UnityModManager.ModEntry modEntry)
         {
@@ -48,10 +41,12 @@ namespace SpeechMod
 
             Logger.Log("Available voices:");
             string[] availableVoices = WindowsVoiceUnity.GetAvailableVoices();
+#if DEBUG
             foreach (var s in availableVoices)
             {
                 Logger.Log(s);
             }
+#endif
             if (availableVoices == null || availableVoices.Length == 0)
             { 
                 Logger.Warning("No voices available found! Diabling mod!");

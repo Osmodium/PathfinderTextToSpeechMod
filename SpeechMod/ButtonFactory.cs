@@ -17,12 +17,12 @@ namespace SpeechMod
 
         public static GameObject CreateButton()
         {
-            return GameObject.Instantiate(Button);
+            return Object.Instantiate(Button);
         }
 
         public static GameObject CreateButton(Transform parent)
         {
-            return GameObject.Instantiate(Button, parent);
+            return Object.Instantiate(Button, parent);
         }
 
         public static GameObject CreatePlayButton(UnityAction call)

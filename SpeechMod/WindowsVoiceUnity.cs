@@ -39,11 +39,11 @@ public class WindowsVoice : MonoBehaviour
 #else
 public static class Utility
 {
-    public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, System.Action fn)
+    public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action fn)
     {
         return behaviour.StartCoroutine(_realExecute(delay, fn));
     }
-    static IEnumerator _realExecute(float delay, System.Action fn)
+    static IEnumerator _realExecute(float delay, Action fn)
     {
         yield return new WaitForSeconds(delay);
         fn();
@@ -88,7 +88,7 @@ public class WindowsVoiceUnity : MonoBehaviour
         Main.Logger.Log("GetAvailableVoices");
         string voicesDelim = getVoicesAvailable();
         if (string.IsNullOrWhiteSpace(voicesDelim))
-            return new string[0];
+            return Array.Empty<string>();
         string[] voices = voicesDelim.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         for(int i = 0; i < voices.Length; ++i)
         {

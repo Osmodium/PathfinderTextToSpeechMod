@@ -24,7 +24,7 @@ namespace SpeechMod
 
             var windowsVoiceGameObject = new GameObject("WindowsVoice");
             windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
-            GameObject.DontDestroyOnLoad(windowsVoiceGameObject);
+            Object.DontDestroyOnLoad(windowsVoiceGameObject);
         }
 
         private static void AddDialogSpeechButton()

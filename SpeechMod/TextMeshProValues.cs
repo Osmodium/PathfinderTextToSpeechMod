@@ -5,7 +5,7 @@ namespace SpeechMod
 {
     public class TextMeshProValues : MonoBehaviour
     {
-        public FontStyles fontStyles { get; set; }
-        public Color color { get; set; }
+        public FontStyles FontStyles { get; set; }
+        public Color Color { get; set; }
     }
 }
