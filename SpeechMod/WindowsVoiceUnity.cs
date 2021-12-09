@@ -72,7 +72,7 @@ public class WindowsVoiceUnity : MonoBehaviour
         if (theVoice == null)
         {
             theVoice = this;
-            initSpeech(1, 1);
+            initSpeech(1, 100);
         }
         //else
         //Destroy(gameObject);

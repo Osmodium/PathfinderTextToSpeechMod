@@ -49,8 +49,11 @@ namespace SpeechMod
             {
                 text = text.Replace(pair.Key, pair.Value);
             }
+
             string textToSpeak = $"{ voice }{ pitch }{ rate }{ volume }{ text }</voice>";
+#if DEBUG
             Main.Logger.Log(textToSpeak);
+#endif
             WindowsVoiceUnity.Speak(textToSpeak);
         }
     }
