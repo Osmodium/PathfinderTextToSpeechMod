@@ -20,7 +20,6 @@ Version: 0.9.5
  - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
  - No stopping of voice implemented yet.
  - Pressing multiple times queues the text to be spoken after the current one has played through.
- - If you don't hear any text being spoken, try switching to a different voice since the selected one might not be installed.
 
 ### How to use
 
@@ -30,17 +29,17 @@ When in dialog mode you can now press the play button next to the left image to 
 ![Playbutton for the current dialog](http://www.dashvoid.com/speechmod/playbutton_dialog.png)
 
 #### 2) Book text
-When inspecting a book (through right-click->Info) hover over the text and left click.
+When inspecting a book (through *right-click->Info*) *hover* over the text and *left click*.
 
 ![Here the hover behaviour is set to underline the text, see the settings for more custumization](http://www.dashvoid.com/speechmod/booktext.png)
 
 #### 3) Item text
-When inspecting an item (through right-click->Info) hover over text (not all text is currently supported) and left click.
+When inspecting an item (through *right-click->Info*) *hover* over text (not all text is currently supported) and *left click*.
 
 ![Some of the texts are not supported yet. Try hovering different parts to see which are supported](http://www.dashvoid.com/speechmod/itemtext.png)
 
 ### Settings
-The different settings (available through ctrl+f10 if not overridden in the UMM) for SpeechMod
+The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
 - **Speech rate**: The speed of the voice the higher number, the faster the speech. From -10 to 10, 1 is default.
 - **Speech volume**: The volume of the voice from 0 to 100.
 - **Speech pitch**: The pitch of the voice from -10 to 10.
