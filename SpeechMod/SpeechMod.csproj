@@ -74,7 +74,7 @@
     <Compile Include="Speech.cs" />
     <Compile Include="Patches\TooltipEngine_Patch.cs" />
     <Compile Include="TextMeshProValues.cs" />
-    <Compile Include="WindowsVoice.cs" />
+    <Compile Include="WindowsVoiceUnity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.json">

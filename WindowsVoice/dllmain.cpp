@@ -1,7 +1,27 @@
 ﻿#include "pch.h"
 #include "WindowsVoice.h"
 
-namespace WindowsVoice {
+namespace WindowsVoice 
+{
+    char* convertWstring(wstring wStr)
+    {
+        const wchar_t* input = wStr.c_str();
+
+        // Count required buffer size (plus one for null-terminator).
+        size_t size = (wcslen(input) + 1) * sizeof(wchar_t);
+        char* buffer = new char[size];
+
+#ifdef __STDC_LIB_EXT1__
+        // wcstombs_s is only guaranteed to be available if __STDC_LIB_EXT1__ is defined
+        size_t convertedSize;
+        std::wcstombs_s(&convertedSize, buffer, size, input, size);
+#else
+        std::wcstombs(buffer, input, size);
+#endif
+        return buffer;
+        // Free allocated memory:
+        // delete buffer;
+    }
 
     void speechThreadFunc(int rate, int volume)
     {
@@ -66,7 +86,7 @@ namespace WindowsVoice {
         wchar_t* priorText = nullptr;
         while (!shouldTerminate)
         {
-            pVoice->GetStatus(&voiceStatus, NULL);
+            pVoice->GetStatus(&voiceStatus, 0);
             if (voiceStatus.dwRunningState == SPRS_IS_SPEAKING)
             {
                 if (priorText == nullptr)
@@ -164,37 +184,122 @@ namespace WindowsVoice {
         theStatusMessage = L"Speech destroyed.";
     }
 
-    void statusMessage(char* msg, int msgLen)
+    /*void statusMessage(char* msg, int msgLen)
     {
         size_t count;
         wcstombs_s(&count, msg, msgLen, theStatusMessage.c_str(), msgLen);
+    }*/
+
+    char* getStatusMessage()
+    {
+        if (theStatusMessage.empty())
+        {
+            theStatusMessage = L"WindowsVoice not yet initialized!";
+        }
+
+        return convertWstring(theStatusMessage);
     }
 
-    string* getVoicesAvailable()
+    //char** getVoicesAvailable()
+    //{
+    //    
+    //}
+
+    //char* dgetVoicesAvailable()
+    //{
+    //    
+    //    char szSampleString[] = "Hello World";
+    //    
+    //    ULONG ulSize = strlen(szSampleString) + sizeof(char);
+    //    char* pszReturn = NULL;
+    //    
+    //    pszReturn = (char*)::CoTaskMemAlloc(ulSize);
+    //    // Copy the contents of szSampleString
+    //    // to the memory pointed to by pszReturn.
+    //    strcpy(pszReturn, szSampleString);
+    //    // Return pszReturn.
+    //    return pszReturn;
+    //}
+
+    //static std::vector<const char*> getStringArrayImpl() 
+    //static std::vector<const char*> getStringArrayImpl()
+    //{
+    //    // do the generating here
+    //    return { "foo", "bar", "baz" };
+    //}
+     
+    char* getVoicesAvailable()
     {
-        vector<string> voices;
+        wstring voices;
+
         HRESULT hr = S_OK;
         CComPtr<ISpObjectTokenCategory> cpSpCategory = NULL;
-        CComPtr<IEnumSpObjectTokens> cpSpEnumTokens = NULL;
         if (SUCCEEDED(hr = SpGetCategoryFromId(SPCAT_VOICES, &cpSpCategory)))
         {
-            cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens);
-
-            CComPtr<ISpObjectToken> cpSpToken;
-            unsigned long ulFetched;
-            while (SUCCEEDED(hr = cpSpEnumTokens->Next(1, &cpSpToken, &ulFetched)))
+            CComPtr<IEnumSpObjectTokens> cpSpEnumTokens;
+            if (SUCCEEDED(hr = cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens)))
             {
-                WCHAR* description;
-                if (SUCCEEDED(hr = SpGetDescription(cpSpToken, &description)))
+                ULONG vCount;
+                cpSpEnumTokens->GetCount(&vCount);
+                CComPtr<ISpObjectToken> pSpTok;
+                for (int i = 0; i < vCount; ++i)
                 {
-                    wstring ws(description);
-                    string str(ws.begin(), ws.end());
-                    voices.push_back(str);
+                    cpSpEnumTokens->Next(1, &pSpTok, NULL);
+                    // do something with the token here; for example, set the voice
+                    WCHAR* description;
+                    if (SUCCEEDED(hr = SpGetDescription(pSpTok, &description)))
+                    {
+                        voices.append(wstring(description) + L"\n");
+                    }
+                    // NOTE:  IEnumSpObjectTokens::Next will *overwrite* the pointer; must manually release
+                    pSpTok.Release();
                 }
             }
         }
-        return &voices[0];
+
+        return convertWstring(voices);
     }
+
+    //char** getVoicesAvailable()
+    //{
+    //    //vector<char*> voices = vector<char*>();
+    //    /*HRESULT hr = S_OK;
+    //    CComPtr<ISpObjectTokenCategory> cpSpCategory = NULL;
+    //    CComPtr<IEnumSpObjectTokens> cpSpEnumTokens = NULL;
+    //    if (SUCCEEDED(hr = SpGetCategoryFromId(SPCAT_VOICES, &cpSpCategory)))
+    //    {
+    //        cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens);
+
+    //        CComPtr<ISpObjectToken> cpSpToken;
+    //        unsigned long ulFetched;
+    //        while (SUCCEEDED(hr = cpSpEnumTokens->Next(1, &cpSpToken, &ulFetched)))
+    //        {
+    //            WCHAR* description;
+    //            if (SUCCEEDED(hr = SpGetDescription(cpSpToken, &description)))
+    //            {
+    //                voices.push_back((char*)description);
+    //            }
+    //        }
+    //    }*/
+    //    vector<char*>* voices = new vector<char*>();
+    //    voices->push_back("Test1");
+    //    voices->push_back("Test2");
+    //    voices->push_back("Test3");
+    //    //voices.push_back(nullptr);
+    //    
+    //    /*char** theVoices = new char*[voices.size()];
+    //    for (int i = 0; i < voices.size(); ++i)
+    //    {
+    //        theVoices[i] = voices[i];
+    //    }*/
+    //    //return voices;
+    //    //names = theVoices;
+    //    //names = reinterpret_cast<char**>(&theVoices[0]);
+    //    //names = &theVoices[0];
+    //    //size = theVoices.size();
+    //    //return &theVoices[0];
+    //    //names = &voices[0];
+    //}
 }
 
 BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)

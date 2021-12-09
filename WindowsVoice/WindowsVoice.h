@@ -23,14 +23,15 @@ namespace WindowsVoice {
     DLL_API void __cdecl addToSpeechQueue(const char* text);
     DLL_API void __cdecl clearSpeechQueue();
     DLL_API void __cdecl destroySpeech();
-    DLL_API void __cdecl statusMessage(char* msg, int msgLen);
-    DLL_API string* __cdecl getVoicesAvailable();
+    DLL_API char* __cdecl getStatusMessage();
+    DLL_API char* __cdecl getVoicesAvailable();
   }
 
   mutex theMutex;
   list<wchar_t*> theSpeechQueue;
   thread* theSpeechThread = nullptr;
   bool shouldTerminate = false;
-
   wstring theStatusMessage;
 }
+
+#define length(array) ((sizeof(array)) / (sizeof(array[0])))

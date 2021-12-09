@@ -16,6 +16,26 @@ namespace SpeechMod
             { "Irabeth", "Iira,beth" }
         };
 
+        private static string voice
+        {
+            get { return $"<voice required=\"Name={ Main.ChosenVoice }\">"; }
+        }
+
+        private static string pitch
+        {
+            get { return $"<pitch absmiddle=\"{ Main.Settings.Pitch }\"/>"; }
+        }
+
+        private static string rate
+        {
+            get { return $"<rate absspeed=\"{ Main.Settings.Rate }\"/>"; }
+        }
+
+        private static string volume
+        {
+            get { return $"<volume level=\"{ Main.Settings.Volume }\"/>"; }
+        }
+
         public static void Speak(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -30,7 +50,11 @@ namespace SpeechMod
                 text = text.Replace(pair.Key, pair.Value);
             }
 
-            WindowsVoice.Speak($"<voice required=\"Name = { Main.ChosenVoice }\"><pitch absmiddle = \"{ Main.Settings.Pitch }\" >{ text }");
+            string textToSpeak = $"{ voice }{ pitch }{ rate }{ volume }{ text }</voice>";
+#if DEBUG
+            Main.Logger.Log(textToSpeak);
+#endif
+            WindowsVoiceUnity.Speak(textToSpeak);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace SpeechMod
             Debug.Log("Adding WindowsVoice gameobject.");
 
             var windowsVoiceGameObject = new GameObject("WindowsVoice");
-            windowsVoiceGameObject.AddComponent<WindowsVoice>();
+            windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
             GameObject.DontDestroyOnLoad(windowsVoiceGameObject);
         }
 
