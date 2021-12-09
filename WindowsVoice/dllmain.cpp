@@ -184,12 +184,6 @@ namespace WindowsVoice
         theStatusMessage = L"Speech destroyed.";
     }
 
-    /*void statusMessage(char* msg, int msgLen)
-    {
-        size_t count;
-        wcstombs_s(&count, msg, msgLen, theStatusMessage.c_str(), msgLen);
-    }*/
-
     char* getStatusMessage()
     {
         if (theStatusMessage.empty())
@@ -199,34 +193,6 @@ namespace WindowsVoice
 
         return convertWstring(theStatusMessage);
     }
-
-    //char** getVoicesAvailable()
-    //{
-    //    
-    //}
-
-    //char* dgetVoicesAvailable()
-    //{
-    //    
-    //    char szSampleString[] = "Hello World";
-    //    
-    //    ULONG ulSize = strlen(szSampleString) + sizeof(char);
-    //    char* pszReturn = NULL;
-    //    
-    //    pszReturn = (char*)::CoTaskMemAlloc(ulSize);
-    //    // Copy the contents of szSampleString
-    //    // to the memory pointed to by pszReturn.
-    //    strcpy(pszReturn, szSampleString);
-    //    // Return pszReturn.
-    //    return pszReturn;
-    //}
-
-    //static std::vector<const char*> getStringArrayImpl() 
-    //static std::vector<const char*> getStringArrayImpl()
-    //{
-    //    // do the generating here
-    //    return { "foo", "bar", "baz" };
-    //}
      
     char* getVoicesAvailable()
     {
@@ -245,7 +211,6 @@ namespace WindowsVoice
                 for (int i = 0; i < vCount; ++i)
                 {
                     cpSpEnumTokens->Next(1, &pSpTok, NULL);
-                    // do something with the token here; for example, set the voice
                     WCHAR* description;
                     if (SUCCEEDED(hr = SpGetDescription(pSpTok, &description)))
                     {
@@ -259,47 +224,6 @@ namespace WindowsVoice
 
         return convertWstring(voices);
     }
-
-    //char** getVoicesAvailable()
-    //{
-    //    //vector<char*> voices = vector<char*>();
-    //    /*HRESULT hr = S_OK;
-    //    CComPtr<ISpObjectTokenCategory> cpSpCategory = NULL;
-    //    CComPtr<IEnumSpObjectTokens> cpSpEnumTokens = NULL;
-    //    if (SUCCEEDED(hr = SpGetCategoryFromId(SPCAT_VOICES, &cpSpCategory)))
-    //    {
-    //        cpSpCategory->EnumTokens(NULL, NULL, &cpSpEnumTokens);
-
-    //        CComPtr<ISpObjectToken> cpSpToken;
-    //        unsigned long ulFetched;
-    //        while (SUCCEEDED(hr = cpSpEnumTokens->Next(1, &cpSpToken, &ulFetched)))
-    //        {
-    //            WCHAR* description;
-    //            if (SUCCEEDED(hr = SpGetDescription(cpSpToken, &description)))
-    //            {
-    //                voices.push_back((char*)description);
-    //            }
-    //        }
-    //    }*/
-    //    vector<char*>* voices = new vector<char*>();
-    //    voices->push_back("Test1");
-    //    voices->push_back("Test2");
-    //    voices->push_back("Test3");
-    //    //voices.push_back(nullptr);
-    //    
-    //    /*char** theVoices = new char*[voices.size()];
-    //    for (int i = 0; i < voices.size(); ++i)
-    //    {
-    //        theVoices[i] = voices[i];
-    //    }*/
-    //    //return voices;
-    //    //names = theVoices;
-    //    //names = reinterpret_cast<char**>(&theVoices[0]);
-    //    //names = &theVoices[0];
-    //    //size = theVoices.size();
-    //    //return &theVoices[0];
-    //    //names = &voices[0];
-    //}
 }
 
 BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)
