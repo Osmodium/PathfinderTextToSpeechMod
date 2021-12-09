@@ -3,7 +3,7 @@ using Owlcat.Runtime.UI.Controls.Button;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace SpeechMod
+namespace SpeechMod.Unity
 {
     public static class ButtonFactory
     {

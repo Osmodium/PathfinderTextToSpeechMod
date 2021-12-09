@@ -1,9 +1,10 @@
 ﻿using HarmonyLib;
+using System;
 using System.Reflection;
+using SpeechMod.Unity;
+using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
-using TMPro;
-using System;
 
 namespace SpeechMod
 {
@@ -39,9 +40,9 @@ namespace SpeechMod
 
             Logger.Log(WindowsVoiceUnity.GetStatusMessage());
 
-            Logger.Log("Available voices:");
             string[] availableVoices = WindowsVoiceUnity.GetAvailableVoices();
 #if DEBUG
+            Logger.Log("Available voices:");
             foreach (var s in availableVoices)
             {
                 Logger.Log(s);
@@ -52,8 +53,12 @@ namespace SpeechMod
                 Logger.Warning("No voices available found! Diabling mod!");
                 return false;
             }
+            
             Logger.Log("Setting available voices list...");
             Settings.AvailableVoices = availableVoices;
+
+            Logger.Log("Loading phonetic dictionary...");
+            Speech.Speech.LoadDictionary();
 
             Debug.Log("Speech Mod Initialized!");
 

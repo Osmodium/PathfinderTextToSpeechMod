@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.UI;
+using SpeechMod.Unity;
 using UnityEngine;
 
 namespace SpeechMod
@@ -35,7 +36,7 @@ namespace SpeechMod
 
             var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
             {
-                Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
+                Speech.Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
             });
 
             buttonGameObject.name = "SpeechButton";

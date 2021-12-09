@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace SpeechMod
+namespace SpeechMod.Unity
 {
     public class TextMeshProValues : MonoBehaviour
     {

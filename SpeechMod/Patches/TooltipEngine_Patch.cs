@@ -2,6 +2,7 @@
 using Kingmaker.UI.MVVM._PCView.Tooltip.Bricks;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using System;
+using SpeechMod.Unity;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -91,7 +92,7 @@ namespace SpeechMod
                 onPointerClick.OnPointerClickAsObservable().Subscribe(clickEvent =>
                 {
                     if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
-                        Speech.Speak(textMeshPro.text);
+                        Speech.Speech.Speak(textMeshPro.text);
                 });
             }
         }
