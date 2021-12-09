@@ -2,6 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) to the dialog that is currently in focus and various text blocks when inspecting items (Info).
+Version: 0.9.5
 
 **Disclamer: for Windows version only**
 
@@ -19,7 +20,6 @@ By [Osmodium](https://github.com/Osmodium)
  - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
  - No stopping of voice implemented yet.
  - Pressing multiple times queues the text to be spoken after the current one has played through.
- - "Hardcoded" voices to the three "old" Windows voices, since we are using SAPI voices.
  - If you don't hear any text being spoken, try switching to a different voice since the selected one might not be installed.
 
 ### How to use
