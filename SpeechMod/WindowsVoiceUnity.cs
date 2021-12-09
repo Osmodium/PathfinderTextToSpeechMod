@@ -3,6 +3,8 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
+using System.Linq;
+using System;
 
 /// <summary>
 /// Credit to Chad Weisshaar for the base from https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
@@ -48,27 +50,29 @@ public static class Utility
     }
 }
 
-public class WindowsVoice : MonoBehaviour
+public class WindowsVoiceUnity : MonoBehaviour
 {
     [DllImport("WindowsVoice")]
-    public static extern void initSpeech(int rate, int volume);
+    private static extern void initSpeech(int rate, int volume);
     [DllImport("WindowsVoice")]
-    public static extern void destroySpeech();
+    private static extern void destroySpeech();
     [DllImport("WindowsVoice")]
-    public static extern void addToSpeechQueue(string s);
+    private static extern void addToSpeechQueue(string s);
     [DllImport("WindowsVoice")]
-    public static extern void clearSpeechQueue();
+    private static extern void clearSpeechQueue();
     [DllImport("WindowsVoice")]
-    public static extern void statusMessage(StringBuilder str, int length);
+    private static extern string getStatusMessage();
+    [DllImport("WindowsVoice")]
+    private static extern string getVoicesAvailable();
 
-    public static WindowsVoice theVoice = null;
+    public static WindowsVoiceUnity theVoice = null;
 
     void Start()
     {
         if (theVoice == null)
         {
             theVoice = this;
-            initSpeech(Main.Settings?.Rate ?? -1, Main.Settings?.Volume ?? 100);
+            initSpeech(1, 1);
         }
         //else
         //Destroy(gameObject);
@@ -79,12 +83,33 @@ public class WindowsVoice : MonoBehaviour
         Speak("Testing");
     }
 
+    public static string[] GetAvailableVoices()
+    {
+        Main.Logger.Log("GetAvailableVoices");
+        string voicesDelim = getVoicesAvailable();
+        if (string.IsNullOrWhiteSpace(voicesDelim))
+            return new string[0];
+        string[] voices = voicesDelim.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        for(int i = 0; i < voices.Length; ++i)
+        {
+            if (!voices[i].Contains('-'))
+                continue;
+            voices[i] = voices[i].Substring(0, voices[i].IndexOf('-')).Trim();
+        }
+        return voices;
+    }
+
     public static void Speak(string msg, float delay = 0f)
     {
         if (delay == 0f)
             addToSpeechQueue(msg);
         else
             theVoice.ExecuteLater(delay, () => Speak(msg));
+    }
+
+    public static string GetStatusMessage()
+    {
+        return getStatusMessage();
     }
 
     void OnDestroy()
@@ -96,13 +121,6 @@ public class WindowsVoice : MonoBehaviour
             Debug.Log("Speech destroyed");
             theVoice = null;
         }
-    }
-
-    public static string GetStatusMessage()
-    {
-        StringBuilder sb = new StringBuilder(40);
-        statusMessage(sb, 40);
-        return sb.ToString();
     }
 }
 #endif
