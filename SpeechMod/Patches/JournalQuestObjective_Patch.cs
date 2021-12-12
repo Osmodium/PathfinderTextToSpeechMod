@@ -40,14 +40,13 @@ namespace SpeechMod.Patches
                 var tmpTransform = textMeshPro.transform;
                 if (!ShouldAddButton(tmpTransform))
                     continue;
-                
+
                 GameObject button = null;
                 try
                 {
-                    button = tmpTransform.Find(m_ButtonName).gameObject;
+                    button = tmpTransform?.Find(m_ButtonName)?.gameObject;
                 }
-                catch
-                { } // Sigh...
+                catch {} // Sigh...
 
                 if (button != null)
                 {
@@ -57,7 +56,8 @@ namespace SpeechMod.Patches
                     button.transform.localRotation = Quaternion.Euler(0, 0, 90);
                     tmpTransform.gameObject.RectAlignTopLeft();
                     button.RectAlignTopLeft();
-                    button.transform.localPosition = GetNewPosition(tmpTransform, ref isFirst);
+                    SetNewPosition(tmpTransform, button.transform, ref isFirst);
+                    button.SetActive(true);
                     continue;
                 }
 
@@ -72,7 +72,7 @@ namespace SpeechMod.Patches
                 button.transform.localRotation = Quaternion.Euler(0, 0, 90);
                 tmpTransform.gameObject.RectAlignTopLeft();
                 button.RectAlignTopLeft();
-                button.transform.localPosition = GetNewPosition(tmpTransform, ref isFirst);
+                SetNewPosition(tmpTransform, button.transform, ref isFirst);
                 button.SetActive(true);
             }
 
@@ -89,6 +89,7 @@ namespace SpeechMod.Patches
         {
             switch (transform.name)
             {
+                case "LastChapterLabel":
                 case "DescriptionLabel":
                 case "Label":
                     return true;
@@ -97,25 +98,37 @@ namespace SpeechMod.Patches
             }
         }
 
-        private static Vector3 GetNewPosition(Transform transform, ref bool isFirst)
+        private static void SetNewPosition(Transform tmpTransform, Transform transform, ref bool isFirst)
         {
-            switch (transform.name)
+            switch (tmpTransform.name)
             {
                 case "LastChapterLabel":
-                    return new Vector3(-72, -35, 0);
+                    transform.localPosition = new Vector3(-72, -35, 0);
+                    break;
                 case "TitleLabel":
-                    return new Vector3(0, -42, 0);
+                    transform.localPosition = new Vector3(0, -42, 0);
+                    break;
                 case "DescriptionLabel":
-                {
-                    if (!isFirst)
-                        return new Vector3(-35, -24, 0);
-                    isFirst = false;
-                    return new Vector3(-10, -24, 0);
-                }
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                        transform.localPosition = new Vector3(-10, -24, 0);
+                        break;
+                    }
+                    transform.localPosition = new Vector3(-35, -24, 0);
+                    break;
                 case "Label":
-                    return new Vector3(-82, -26, 0);
+                    GameObject ipi = null;
+                    try
+                    {
+                        ipi = tmpTransform.parent.Find("InProgressImage").gameObject;
+                    }
+                    catch { }//sigh
+                    transform.localPosition = new Vector3(-82, ipi.transform.InverseTransformPoint(ipi.transform.position).y - 26, 0);
+                    break;
                 default:
-                    return Vector3.zero;
+                    transform.localPosition = Vector3.zero;
+                    break;
             }
         }
     }
