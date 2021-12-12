@@ -20,6 +20,7 @@ Version: 0.9.5
  - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
  - No stopping of voice implemented yet.
  - Pressing multiple times queues the text to be spoken after the current one has played through.
+ - There'a currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
 
 ### How to use
 
@@ -38,6 +39,16 @@ When inspecting an item (through *right-click->Info*) *hover* over text (not all
 
 ![Some of the texts are not supported yet. Try hovering different parts to see which are supported](http://www.dashvoid.com/speechmod/itemtext.png)
 
+#### 4) Journal Quest text
+In the journal, each of the bigger text blocks and important stuff can be played through the play button adjacent to the text.
+
+![The most important parts of the journal text is supported.](http://www.dashvoid.com/speechmod/journaltext_0_9_5.png)
+
+#### 5) Encyclopedia text
+In the encyclopedia the text blocks (defined by Owlcat) can be played by pressing the play button adjacent to the text.
+
+![All text parts in the encyclopedia is supported.](http://www.dashvoid.com/speechmod/encyclopediatext_0_9_5.png)
+
 ### Settings
 The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
 - **Speech rate**: The speed of the voice the higher number, the faster the speech. From -10 to 10, 1 is default.
@@ -46,8 +57,9 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - **Voice**: Select from the three Microsoft built-in voices available.
 - **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
+- **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
 
-![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings.png)
+![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings_0_9_5.png)
 
 ### Motivation
 *Why did I create this mod?*
