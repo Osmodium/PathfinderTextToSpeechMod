@@ -3,29 +3,25 @@
 
 namespace WindowsVoice 
 {
-    char* convertWstring(wstring wStr)
+    char* convertWstring(wstring w_str)
     {
-        const wchar_t* input = wStr.c_str();
-
-        // Count required buffer size (plus one for null-terminator).
-        size_t size = (wcslen(input) + 1) * sizeof(wchar_t);
+        const wchar_t* input = w_str.c_str();
+        const size_t size = (wcslen(input) + 1) * sizeof(wchar_t);
         char* buffer = new char[size];
 
 #ifdef __STDC_LIB_EXT1__
         // wcstombs_s is only guaranteed to be available if __STDC_LIB_EXT1__ is defined
         size_t convertedSize;
-        std::wcstombs_s(&convertedSize, buffer, size, input, size);
+        wcstombs_s(&convertedSize, buffer, size, input, size);
 #else
-        std::wcstombs(buffer, input, size);
+        wcstombs(buffer, input, size);
 #endif
         return buffer;
-        // Free allocated memory:
-        // delete buffer;
     }
 
-    void speechThreadFunc(int rate, int volume)
+    void speechThreadFunc(const int rate, const int volume)
     {
-        ISpVoice* pVoice = NULL;
+        ISpVoice* pVoice = nullptr;
 
         if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
         {
@@ -33,52 +29,20 @@ namespace WindowsVoice
             return;
         }
 
-        HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void**)&pVoice);
+        const HRESULT hr = CoCreateInstance(CLSID_SpVoice, nullptr, CLSCTX_ALL, IID_ISpVoice, reinterpret_cast<void**>(&pVoice));
         if (!SUCCEEDED(hr))
         {
-            LPSTR pText = 0;
+	        const LPSTR pText = 0;
 
             ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, NULL);
+                            nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, nullptr);
             LocalFree(pText);
             theStatusMessage = L"Failed to create Voice instance.";
             return;
         }
-        theStatusMessage = L"Speech ready.";
-        /*
-            //std::cout << "Speech ready.\n";
-            wchar_t* priorText = nullptr;
-            while (!shouldTerminate)
-            {
-              wchar_t* wText = NULL;
-              if (!theSpeechQueue.empty())
-              {
-                theMutex.lock();
-                wText = theSpeechQueue.front();
-                theSpeechQueue.pop_front();
-                theMutex.unlock();
-              }
-              if (wText)
-              {
-                if (priorText == nullptr || lstrcmpW(wText, priorText) != 0)
-                {
-                  pVoice->Speak(wText, SPF_IS_XML, NULL);
-                  Sleep(250);
-                  delete[] priorText;
-                  priorText = wText;
-                }
-                else
-                  delete[] wText;
-              }
-              else
-              {
-                delete[] priorText;
-                priorText = nullptr;
-                Sleep(50);
-              }
-            }
-            pVoice->Release();
-        */
+
+    	theStatusMessage = L"Speech ready.";
+
         pVoice->SetRate(rate);
         pVoice->SetVolume(volume);
 
@@ -93,8 +57,8 @@ namespace WindowsVoice
                     theStatusMessage = L"Error: SPRS_IS_SPEAKING but text is NULL";
                 else
                 {
-                    theStatusMessage = L"Speaking: ";
-                    theStatusMessage.append(priorText);
+                    theStatusMessage = L"Speaking";
+                    //theStatusMessage.append(priorText);
                     if (!theSpeechQueue.empty())
                     {
                         theMutex.lock();
@@ -109,11 +73,11 @@ namespace WindowsVoice
             }
             else
             {
-                theStatusMessage = L"Waiting.";
-                if (priorText != NULL)
+                theStatusMessage = L"Waiting";
+                if (priorText != nullptr)
                 {
                     delete[] priorText;
-                    priorText = NULL;
+                    priorText = nullptr;
                 }
                 if (!theSpeechQueue.empty())
                 {
@@ -121,7 +85,7 @@ namespace WindowsVoice
                     priorText = theSpeechQueue.front();
                     theSpeechQueue.pop_front();
                     theMutex.unlock();
-                    pVoice->Speak(priorText, SPF_IS_XML | SPF_ASYNC, NULL);
+                    pVoice->Speak(priorText, SPF_IS_XML | SPF_ASYNC, nullptr);
                 }
             }
             Sleep(50);
@@ -136,8 +100,8 @@ namespace WindowsVoice
     {
         if (text)
         {
-            int len = strlen(text) + 1;
-            wchar_t* wText = new wchar_t[len];
+	        const int len = strlen(text) + 1;
+	        const auto wText = new wchar_t[len];
 
             memset(wText, 0, len);
             ::MultiByteToWideChar(CP_UTF8, NULL, text, -1, wText, len);
@@ -164,7 +128,7 @@ namespace WindowsVoice
             return;
         }
         theStatusMessage = L"Starting Windows Voice.";
-        theSpeechThread = new thread(WindowsVoice::speechThreadFunc, rate, volume);
+        theSpeechThread = new thread(speechThreadFunc, rate, volume);
     }
 
     void destroySpeech()
@@ -190,16 +154,14 @@ namespace WindowsVoice
         {
             theStatusMessage = L"WindowsVoice not yet initialized!";
         }
-
         return convertWstring(theStatusMessage);
     }
      
     char* getVoicesAvailable()
     {
         wstring voices;
-
-        HRESULT hr = S_OK;
-        CComPtr<ISpObjectTokenCategory> cpSpCategory = NULL;
+        HRESULT hr;
+        CComPtr<ISpObjectTokenCategory> cpSpCategory = nullptr;
         if (SUCCEEDED(hr = SpGetCategoryFromId(SPCAT_VOICES, &cpSpCategory)))
         {
             CComPtr<IEnumSpObjectTokens> cpSpEnumTokens;
@@ -210,18 +172,16 @@ namespace WindowsVoice
                 CComPtr<ISpObjectToken> pSpTok;
                 for (int i = 0; i < vCount; ++i)
                 {
-                    cpSpEnumTokens->Next(1, &pSpTok, NULL);
+                    cpSpEnumTokens->Next(1, &pSpTok, nullptr);
                     WCHAR* description;
                     if (SUCCEEDED(hr = SpGetDescription(pSpTok, &description)))
                     {
                         voices.append(wstring(description) + L"\n");
                     }
-                    // NOTE:  IEnumSpObjectTokens::Next will *overwrite* the pointer; must manually release
                     pSpTok.Release();
                 }
             }
         }
-
         return convertWstring(voices);
     }
 }
@@ -230,10 +190,10 @@ BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)
 {
     switch (ul_reason_for_call)
     {
-    case DLL_PROCESS_ATTACH:
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
+	    case DLL_PROCESS_ATTACH:
+	    case DLL_THREAD_ATTACH:
+	    case DLL_THREAD_DETACH:
+	    case DLL_PROCESS_DETACH:
         break;
     }
 

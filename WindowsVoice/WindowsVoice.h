@@ -12,8 +12,6 @@
 #pragma warning(disable:4996)
 #include <sphelper.h>
 #pragma warning(default: 4996)
-#include <vector>
-//#include <Windows.h>
 
 using namespace std;
 
@@ -33,5 +31,3 @@ namespace WindowsVoice {
   bool shouldTerminate = false;
   wstring theStatusMessage;
 }
-
-#define length(array) ((sizeof(array)) / (sizeof(array[0])))

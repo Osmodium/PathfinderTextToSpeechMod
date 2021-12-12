@@ -1,0 +1,15 @@
+SpeechMod 
+
+Version 0.9.5 Changelog
+
+- Added a slider to adjust the pitch of the voice.
+- Voices to choose from in the settings now correctly displays current available voices.
+- Added play buttons to Journal Quest entries.
+- Added play buttons to Encyclopedia entries.
+    NOTE: There'a currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
+- List of phonetical replacements is now stored in a json file; PhoneticDictionary.json. 
+    The dictionary is case sensitive.
+    Can be reloaded from the UMM while playing.
+- Added and updated some words in the phonetic dictionary.
+
+Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues
