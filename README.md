@@ -1,3 +1,4 @@
+
 # SpeechMod - Windows only
 By [Osmodium](https://github.com/Osmodium)
 
@@ -50,6 +51,7 @@ In the encyclopedia the text blocks (defined by Owlcat) can be played by pressin
 ![All text parts in the encyclopedia is supported.](http://www.dashvoid.com/speechmod/encyclopediatext_0_9_5.png)
 
 ### Settings
+
 The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
 - **Speech rate**: The speed of the voice the higher number, the faster the speech. From -10 to 10, 1 is default.
 - **Speech volume**: The volume of the voice from 0 to 100.
