@@ -21,7 +21,7 @@ Version: 0.9.5
  - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
  - No stopping of voice implemented yet.
  - Pressing multiple times queues the text to be spoken after the current one has played through.
- - There'a currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
+ - There's currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
 
 ### How to use
 
