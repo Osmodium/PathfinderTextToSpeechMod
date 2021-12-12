@@ -1,0 +1,10 @@
+SpeechMod 
+
+Version 0.9.5 Changelog
+
+- Added a slider to adjust the pitch of the voice.
+- Voices to choose from in the settings now correctly displays current available voices.
+- List of phonetical replacements is now stored in a json file; PhoneticDictionary.json. Requires a restart if modified.
+- Change license to MIT.
+
+Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues

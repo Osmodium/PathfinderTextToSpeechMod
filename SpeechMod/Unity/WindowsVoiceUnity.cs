@@ -10,43 +10,16 @@ namespace SpeechMod.Unity
     /// Credit to Chad Weisshaar for the base from https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
     /// </summary>
 
-#if FAKE_WINDOWS_VOICE
-public class WindowsVoice : MonoBehaviour
-{
-  public TextMeshProUGUI DebugOutput = null;
-
-  public static WindowsVoice theVoice = null;
-  void OnEnable () 
-  {
-    if (theVoice == null)
-      theVoice = this;
-  }
-  public static void speak(string msg, float delay = 0f) {
-    if (Timeline.theTimeline.QReprocessingEvents)
-      return;
-
-    if (delay == 0f)
-    {
-      if (theVoice.DebugOutput != null)
-        theVoice.DebugOutput.text = msg;
-      else
-        Debug.Log("SPEAK: " + msg);
-    }
-    else
-      theVoice.ExecuteLater(delay, () => speak(msg));
-  }
-}
-#else
     public static class Utility
     {
-        public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action fn)
+        public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
         {
-            return behaviour.StartCoroutine(_realExecute(delay, fn));
+            return behaviour.StartCoroutine(_realExecute(delay, action));
         }
-        static IEnumerator _realExecute(float delay, Action fn)
+        static IEnumerator _realExecute(float delay, Action action)
         {
             yield return new WaitForSeconds(delay);
-            fn();
+            action?.Invoke();
         }
     }
 
@@ -65,22 +38,31 @@ public class WindowsVoice : MonoBehaviour
         [DllImport("WindowsVoice")]
         private static extern string getVoicesAvailable();
 
-        public static WindowsVoiceUnity theVoice = null;
+        private static WindowsVoiceUnity m_TheVoice;
+
+        public static bool IsSpeaking
+        {
+            get
+            {
+                string theStatus = getStatusMessage();
+                return !string.IsNullOrWhiteSpace(theStatus) && theStatus.Equals("Speaking");
+            }
+        }
+
+        private static void Init()
+        {
+            initSpeech(1, 100);
+        }
 
         void Start()
         {
-            if (theVoice == null)
+            if (m_TheVoice == null)
             {
-                theVoice = this;
-                initSpeech(1, 100);
+                m_TheVoice = this;
+                Init();
             }
-            //else
-            //Destroy(gameObject);
-        }
-
-        public void Test()
-        {
-            Speak("Testing");
+            else
+                Destroy(gameObject);
         }
 
         public static string[] GetAvailableVoices()
@@ -89,7 +71,7 @@ public class WindowsVoice : MonoBehaviour
             if (string.IsNullOrWhiteSpace(voicesDelim))
                 return Array.Empty<string>();
             string[] voices = voicesDelim.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            for(int i = 0; i < voices.Length; ++i)
+            for (int i = 0; i < voices.Length; ++i)
             {
                 if (!voices[i].Contains('-'))
                     continue;
@@ -103,7 +85,7 @@ public class WindowsVoice : MonoBehaviour
             if (delay == 0f)
                 addToSpeechQueue(msg);
             else
-                theVoice.ExecuteLater(delay, () => Speak(msg));
+                m_TheVoice.ExecuteLater(delay, () => Speak(msg));
         }
 
         public static string GetStatusMessage()
@@ -111,16 +93,29 @@ public class WindowsVoice : MonoBehaviour
             return getStatusMessage();
         }
 
+        public static void Stop()
+        {
+            if (!IsSpeaking)
+                return;
+
+            destroySpeech();
+            Init();
+        }
+
+        public static void ClearQueue()
+        {
+            clearSpeechQueue();
+        }
+
         void OnDestroy()
         {
-            if (theVoice == this)
+            if (m_TheVoice == this)
             {
                 Debug.Log("Destroying speech");
                 destroySpeech();
                 Debug.Log("Speech destroyed");
-                theVoice = null;
+                m_TheVoice = null;
             }
         }
     }
-#endif
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using SpeechMod.Unity;
+using SpeechMod.Voice;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
@@ -18,7 +19,7 @@ namespace SpeechMod
         public static bool Enabled;
 
         public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
-        
+
         public static string ChosenVoice => Settings.AvailableVoices[Settings.ChosenVoice];
 
         public static Color ChosenColor => new Color(Settings.ChosenColorR, Settings.ChosenColorG, Settings.ChosenColorB, Settings.ChosenColorA);
@@ -49,16 +50,15 @@ namespace SpeechMod
             }
 #endif
             if (availableVoices == null || availableVoices.Length == 0)
-            { 
+            {
                 Logger.Warning("No voices available found! Diabling mod!");
                 return false;
             }
-            
+
             Logger.Log("Setting available voices list...");
             Settings.AvailableVoices = availableVoices;
 
-            Logger.Log("Loading phonetic dictionary...");
-            Speech.Speech.LoadDictionary();
+            Speech.LoadDictionary();
 
             Debug.Log("Speech Mod Initialized!");
 
@@ -73,8 +73,7 @@ namespace SpeechMod
 
         private static void OnGui(UnityModManager.ModEntry modEntry)
         {
-            // TODO list of voices to choose from.
-
+            GUILayout.BeginVertical("", GUI.skin.box);
             GUILayout.BeginHorizontal();
             GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
             GUILayout.Space(10);
@@ -101,9 +100,12 @@ namespace SpeechMod
             //GUILayout.Label($"{ChosenVoice}", GUILayout.ExpandWidth(false));
             Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings.AvailableVoices, 3);
             GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
 
+            GUILayout.BeginVertical("", GUI.skin.box);
             GUILayout.BeginHorizontal();
-            Settings.ColorOnHover = GUILayout.Toggle(Settings.ColorOnHover, "Enable color on hover");
+            GUILayout.Label("Color on text hover", GUILayout.ExpandWidth(false));
+            Settings.ColorOnHover = GUILayout.Toggle(Settings.ColorOnHover, "Enabled");
             GUILayout.EndHorizontal();
 
             if (Settings.ColorOnHover)
@@ -126,9 +128,12 @@ namespace SpeechMod
                 GUILayout.Box(ColorPreview, GUILayout.Width(20));
                 GUILayout.EndHorizontal();
             }
+            GUILayout.EndVertical();
 
+            GUILayout.BeginVertical("", GUI.skin.box);
             GUILayout.BeginHorizontal();
-            Settings.FontStyleOnHover = GUILayout.Toggle(Settings.FontStyleOnHover, "Enable font style on hover");
+            GUILayout.Label("Font style on text hover", GUILayout.ExpandWidth(false));
+            Settings.FontStyleOnHover = GUILayout.Toggle(Settings.FontStyleOnHover, "Enabled");
             GUILayout.EndHorizontal();
 
             if (Settings.FontStyleOnHover)
@@ -140,6 +145,16 @@ namespace SpeechMod
                 }
                 GUILayout.EndHorizontal();
             }
+            GUILayout.EndVertical();
+
+            GUILayout.BeginVertical("", GUI.skin.box);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Phonetic dictionary", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false)))
+                Speech.LoadDictionary();
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
         }
 
         private static Texture2D ColorPreview

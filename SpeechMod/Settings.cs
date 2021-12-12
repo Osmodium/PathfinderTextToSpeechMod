@@ -4,7 +4,7 @@ namespace SpeechMod
 {
     public class Settings : UnityModManager.ModSettings
     {
-        public int Rate = 1;
+        public int Rate = 0;
         public int Volume = 100;
         public int Pitch = 0;
 

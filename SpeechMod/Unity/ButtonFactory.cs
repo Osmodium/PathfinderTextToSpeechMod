@@ -1,4 +1,6 @@
 ﻿using Kingmaker;
+using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
+using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,48 +9,31 @@ namespace SpeechMod.Unity
 {
     public static class ButtonFactory
     {
-        private static GameObject Button
-        {
-            get
-            {
-                return Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View/ButtonEdge").gameObject;
-            }
-        }
-
-        public static GameObject CreateButton()
-        {
-            return Object.Instantiate(Button);
-        }
-
-        public static GameObject CreateButton(Transform parent)
-        {
-            return Object.Instantiate(Button, parent);
-        }
-
-        public static GameObject CreatePlayButton(UnityAction call)
-        {
-            var buttonGameObject = CreateButton();
-
-            SetAction(buttonGameObject, call);
-
-            return buttonGameObject;
-        }
+        private static GameObject ArrowButton => Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View/ButtonEdge").gameObject;
 
         public static GameObject CreatePlayButton(Transform parent, UnityAction call)
         {
-            var buttonGameObject = CreateButton(parent);
+            return CreatePlayButton(parent, call, null, null);
+        }
 
-            SetAction(buttonGameObject, call);
-
+        public static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
+        {
+            var buttonGameObject = GameObject.Instantiate(ArrowButton, parent);
+            SetAction(buttonGameObject, call, text, toolTip);
             return buttonGameObject;
         }
 
-        private static void SetAction(GameObject buttonGameObject, UnityAction call)
+        private static void SetAction(GameObject buttonGameObject, UnityAction call, string text, string toolTip)
         {
             var button = buttonGameObject.GetComponent<OwlcatButton>();
             button.OnLeftClick.RemoveAllListeners();
             button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
             button.OnLeftClick.AddListener(call);
+
+            if (!string.IsNullOrWhiteSpace(text))
+                button.SetTooltip(new TooltipTemplateSimple(text, toolTip), new TooltipConfig { 
+                    InfoCallMethod = InfoCallMethod.None
+                });
         }
     }
 }

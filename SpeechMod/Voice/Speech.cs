@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using SpeechMod.Unity;
 using Debug = UnityEngine.Debug;
 
-namespace SpeechMod.Speech
+namespace SpeechMod.Voice
 {
     public static class Speech
     {
@@ -20,6 +20,7 @@ namespace SpeechMod.Speech
 
         public static void LoadDictionary()
         {
+            Main.Logger.Log("Loading phonetic dictionary...");
             try
             {
                 string file = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName), @"Mods", @"SpeechMod", @"PhoneticDictionary.json");
@@ -29,8 +30,25 @@ namespace SpeechMod.Speech
             catch (Exception ex)
             {
                 Main.Logger.LogException(ex);
+                Main.Logger.Log("Loading backup dictionary!");
                 LoadBackupDictionary();
             }
+//#if DEBUG
+            foreach (var entry in _phoneticDictionary)
+            {
+                Main.Logger.Log($"{entry.Key}={entry.Value}");
+            }
+//#endif
+        }
+
+        public static bool IsSpeaking()
+        {
+            return WindowsVoiceUnity.IsSpeaking;
+        }
+
+        public static void Stop()
+        {
+            WindowsVoiceUnity.Stop();
         }
 
         public static void Speak(string text)
@@ -41,16 +59,20 @@ namespace SpeechMod.Speech
                 return;
             }
 
-            // TODO: Load replaces into a dictionary from a json file so they can be added and altered more easily.
+            Debug.Log(text);
+
+            text = text.Replace("\"", "");
+            text = text.Replace("\n", ". ");
+
             foreach (var pair in _phoneticDictionary)
             {
                 text = text.Replace(pair.Key, pair.Value);
             }
 
             string textToSpeak = $"{ _voice }{ _pitch }{ _rate }{ _volume }{ text }</voice>";
-#if DEBUG
-            Main.Logger.Log(textToSpeak);
-#endif
+//#if DEBUG
+            Debug.Log(textToSpeak);
+//#endif
             WindowsVoiceUnity.Speak(textToSpeak);
         }
 

@@ -2,26 +2,27 @@
 using Kingmaker;
 using Kingmaker.UI;
 using SpeechMod.Unity;
+using SpeechMod.Voice;
 using UnityEngine;
 
 namespace SpeechMod
 {
     [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
-    static class DialogCurrentPart_Patch
+    public static class DialogCurrentPart_Patch
     {
         static void Postfix()
         {
             if (!Main.Enabled)
                 return;
 
-            AddWindowsVoice();
+            AddUiElements();
 
             AddDialogSpeechButton();
         }
-
-        private static void AddWindowsVoice()
+        
+        private static void AddUiElements()
         {
-            Debug.Log("Adding WindowsVoice gameobject.");
+            Debug.Log("Adding SpeechMod UI elements.");
 
             var windowsVoiceGameObject = new GameObject("WindowsVoice");
             windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
@@ -36,7 +37,7 @@ namespace SpeechMod
 
             var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
             {
-                Speech.Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
+                Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
             });
 
             buttonGameObject.name = "SpeechButton";
