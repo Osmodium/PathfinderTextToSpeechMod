@@ -30,15 +30,15 @@ namespace SpeechMod.Voice
             catch (Exception ex)
             {
                 Main.Logger.LogException(ex);
-                Main.Logger.Log("Loading backup dictionary!");
+                Main.Logger.Warning("Loading backup dictionary!");
                 LoadBackupDictionary();
             }
-//#if DEBUG
+#if DEBUG
             foreach (var entry in _phoneticDictionary)
             {
                 Main.Logger.Log($"{entry.Key}={entry.Value}");
             }
-//#endif
+#endif
         }
 
         public static bool IsSpeaking()
@@ -55,12 +55,13 @@ namespace SpeechMod.Voice
         {
             if (string.IsNullOrEmpty(text))
             {
-                Debug.LogWarning("No display text in the curren cue of the dialog controller!");
+                Main.Logger.Warning("No display text in the curren cue of the dialog controller!");
                 return;
             }
 
+#if DEBUG
             Debug.Log(text);
-
+#endif
             text = text.Replace("\"", "");
             text = text.Replace("\n", ". ");
 
@@ -70,9 +71,9 @@ namespace SpeechMod.Voice
             }
 
             string textToSpeak = $"{ _voice }{ _pitch }{ _rate }{ _volume }{ text }</voice>";
-//#if DEBUG
+#if DEBUG
             Debug.Log(textToSpeak);
-//#endif
+#endif
             WindowsVoiceUnity.Speak(textToSpeak);
         }
 

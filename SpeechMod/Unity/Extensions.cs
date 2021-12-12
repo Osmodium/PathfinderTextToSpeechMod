@@ -28,13 +28,14 @@ namespace SpeechMod.Unity
 
             if (skipEventAssignment)
             {
+#if DEBUG
                 Debug.Log("Skipping event assignment!");
+#endif
                 return;
             }
 
             textMeshPro.OnPointerEnterAsObservable().Subscribe(_ =>
             {
-                Debug.Log("Enter");
                 if (Main.Settings.FontStyleOnHover)
                 {
                     for (int i = 0; i < Main.Settings.FontStyles.Length; i++)
@@ -50,113 +51,111 @@ namespace SpeechMod.Unity
 
             textMeshPro.OnPointerExitAsObservable().Subscribe(_ =>
             {
-                Debug.Log("Exit");
                 textMeshPro.fontStyle = defaultValues.FontStyles;
                 textMeshPro.color = defaultValues.Color;
             });
 
             textMeshPro.OnPointerClickAsObservable().Subscribe(clickEvent =>
             {
-                Debug.Log("Click");
                 if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
                     Speech.Speak(textMeshPro.text);
             });
         }
 
-        ////------------Top-------------------
-        //public static void RectAlignTopLeft(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(0, 1);
-        //    var anchorMax = new Vector2(0, 1);
-        //    var pivot = new Vector2(0, 1);
+        //------------Top-------------------
+        public static void RectAlignTopLeft(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(0, 1);
+            var anchorMax = new Vector2(0, 1);
+            var pivot = new Vector2(0, 1);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        //public static void RectAlignTopMiddle(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(0.5f, 1);
-        //    var anchorMax = new Vector2(0.5f, 1);
-        //    var pivot = new Vector2(0.5f, 1);
+        public static void RectAlignTopMiddle(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(0.5f, 1);
+            var anchorMax = new Vector2(0.5f, 1);
+            var pivot = new Vector2(0.5f, 1);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        //public static void RectAlignTopRight(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(1, 1);
-        //    var anchorMax = new Vector2(1, 1);
-        //    var pivot = new Vector2(1, 1);
+        public static void RectAlignTopRight(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(1, 1);
+            var anchorMax = new Vector2(1, 1);
+            var pivot = new Vector2(1, 1);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        ////------------Middle-------------------
-        //public static void RectAlignMiddleLeft(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(0, 0.5f);
-        //    var anchorMax = new Vector2(0, 0.5f);
-        //    var pivot = new Vector2(0, 0.5f);
+        //------------Middle-------------------
+        public static void RectAlignMiddleLeft(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(0, 0.5f);
+            var anchorMax = new Vector2(0, 0.5f);
+            var pivot = new Vector2(0, 0.5f);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        //public static void RectAlignMiddle(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(0.5f, 0.5f);
-        //    var anchorMax = new Vector2(0.5f, 0.5f);
-        //    var pivot = new Vector2(0.5f, 0.5f);
+        public static void RectAlignMiddle(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(0.5f, 0.5f);
+            var anchorMax = new Vector2(0.5f, 0.5f);
+            var pivot = new Vector2(0.5f, 0.5f);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        //public static void RectAlignMiddleRight(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(1, 0.5f);
-        //    var anchorMax = new Vector2(1, 0.5f);
-        //    var pivot = new Vector2(1, 0.5f);
+        public static void RectAlignMiddleRight(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(1, 0.5f);
+            var anchorMax = new Vector2(1, 0.5f);
+            var pivot = new Vector2(1, 0.5f);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        ////------------Bottom-------------------
-        //public static void RectAlignBottomLeft(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(0, 0);
-        //    var anchorMax = new Vector2(0, 0);
-        //    var pivot = new Vector2(0, 0);
+        //------------Bottom-------------------
+        public static void RectAlignBottomLeft(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(0, 0);
+            var anchorMax = new Vector2(0, 0);
+            var pivot = new Vector2(0, 0);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        //public static void RectAlignBottomMiddle(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(0.5f, 0);
-        //    var anchorMax = new Vector2(0.5f, 0);
-        //    var pivot = new Vector2(0.5f, 0);
+        public static void RectAlignBottomMiddle(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(0.5f, 0);
+            var anchorMax = new Vector2(0.5f, 0);
+            var pivot = new Vector2(0.5f, 0);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        //public static void RectAlignBottomRight(this GameObject uiObject)
-        //{
-        //    var anchorMin = new Vector2(1, 0);
-        //    var anchorMax = new Vector2(1, 0);
-        //    var pivot = new Vector2(1, 0);
+        public static void RectAlignBottomRight(this GameObject uiObject)
+        {
+            var anchorMin = new Vector2(1, 0);
+            var anchorMax = new Vector2(1, 0);
+            var pivot = new Vector2(1, 0);
 
-        //    SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
-        //}
+            SetRectAlign(uiObject, anchorMin, anchorMax, pivot);
+        }
 
-        //private static void SetRectAlign(GameObject uiObject, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
-        //{
-        //    RectTransform uitransform = uiObject.GetComponent<RectTransform>();
+        private static void SetRectAlign(GameObject uiObject, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot)
+        {
+            RectTransform uitransform = uiObject.GetComponent<RectTransform>();
 
-        //    if (uitransform == null)
-        //        return;
+            if (uitransform == null)
+                return;
 
-        //    uitransform.anchorMin = anchorMin;
-        //    uitransform.anchorMax = anchorMax;
-        //    uitransform.pivot = pivot;
-        //}
+            uitransform.anchorMin = anchorMin;
+            uitransform.anchorMax = anchorMax;
+            uitransform.pivot = pivot;
+        }
     }
 }

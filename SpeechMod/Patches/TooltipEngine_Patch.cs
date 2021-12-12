@@ -1,12 +1,8 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.Tooltip.Bricks;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
-using System;
 using SpeechMod.Unity;
-using SpeechMod.Voice;
 using TMPro;
-using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
 
 namespace SpeechMod
