@@ -10,6 +10,8 @@ namespace SpeechMod
     [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
     public static class DialogCurrentPart_Patch
     {
+        private static readonly string WindowsVoiceName = "WindowsVoice";
+
         static void Postfix()
         {
             if (!Main.Enabled)
@@ -24,7 +26,22 @@ namespace SpeechMod
         {
             Debug.Log("Adding SpeechMod UI elements.");
 
-            var windowsVoiceGameObject = new GameObject("WindowsVoice");
+            GameObject windowsVoice = null;
+            try
+            {
+                windowsVoice = Object.FindObjectOfType<WindowsVoiceUnity>()?.gameObject;
+            }
+            catch{} // Sigh
+
+            if (windowsVoice != null)
+            {
+                Debug.Log($"{nameof(WindowsVoiceUnity)} found!");
+                return;
+            }
+
+            Debug.Log($"Adding {nameof(WindowsVoiceUnity)}...");
+
+            var windowsVoiceGameObject = new GameObject(WindowsVoiceName);
             windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
             Object.DontDestroyOnLoad(windowsVoiceGameObject);
         }
