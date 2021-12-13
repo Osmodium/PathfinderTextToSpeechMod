@@ -23,6 +23,7 @@ Version: 0.9.5
  - Pressing multiple times queues the text to be spoken after the current one has played through.
  - There's currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
  - No support for full screen text (events) yet. Working on it.
+ - No support for chapter changes. Working on it.
 
 ### How to use
 
