@@ -10,7 +10,7 @@ namespace SpeechMod
     [HarmonyPatch(typeof(TooltipEngine), "GetBrickView")]
     static class TooltipEngine_Patch
     {
-        static void Postfix(ref MonoBehaviour __result)
+        public static void Postfix(ref MonoBehaviour __result)
         {
             if (!Main.Enabled)
                 return;

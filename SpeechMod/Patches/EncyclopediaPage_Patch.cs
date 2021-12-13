@@ -14,7 +14,7 @@ namespace SpeechMod.Patches
     {
         private static readonly string m_ButtonName = "EncyclopediaSpeechButton";
 
-        static void Postfix()
+        public static void Postfix()
         {
 
             var bodyGroup = Game.Instance.UI.Canvas.transform.Find("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");

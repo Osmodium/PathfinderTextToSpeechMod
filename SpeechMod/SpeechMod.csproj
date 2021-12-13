@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Patches\BookEventView_Patch.cs" />
     <Compile Include="Patches\EncyclopediaPage_Patch.cs" />
     <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
     <Compile Include="Unity\ButtonFactory.cs" />
