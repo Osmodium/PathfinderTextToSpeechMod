@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace SpeechMod.Patches
 {
-
     [HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
     public static class EncyclopediaPage_Patch
     {
@@ -31,7 +30,7 @@ namespace SpeechMod.Patches
                 return;
             }
 
-            var allTexts = content.gameObject.GetComponentsInChildren<TextMeshProUGUI>(true);
+            var allTexts = content.gameObject?.GetComponentsInChildren<TextMeshProUGUI>(true);
             if (allTexts == null || allTexts.Length == 0)
             {
                 Debug.Log("Couldn't any TextMeshProUGUI...");
@@ -45,7 +44,7 @@ namespace SpeechMod.Patches
                 GameObject button = null;
                 try
                 {
-                    button = parent.Find(m_ButtonName).gameObject;
+                    button = parent.Find(m_ButtonName)?.gameObject;
                 }
                 catch
                 { } // Sigh...
