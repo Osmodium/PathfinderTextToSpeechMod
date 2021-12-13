@@ -14,7 +14,7 @@ namespace SpeechMod.Patches
     {
         private static readonly string m_ButtonName = "JQSpeechButton";
 
-        static void Postfix()
+        public static void Postfix()
         {
 #if DEBUG
             Debug.Log("JournalQuestObjectivePCView_BindViewImplementation");

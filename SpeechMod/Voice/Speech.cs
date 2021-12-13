@@ -81,13 +81,17 @@ namespace SpeechMod.Voice
         {
             _phoneticDictionary = new Dictionary<string, string>
             {
-                { "—", "," },
-                { "Kenabres", "Keenaaabres" },
-                { "Iomedae", "I,omedaee" },
+                { "—", "<silence msec=\"500\"/>" },
+                { "Kenabres", "Ken-aabres" },
+                { "Iomedae", "I-o-mædæ" },
                 { "Golarion", "Goolaarion" },
                 { "Sovyrian", "Sovyyrian" },
                 { "Rovagug", "Rovaagug" },
-                { "Irabeth", "Iira,beth" }
+                { "Irabeth", "Iira-beth" },
+                { "Terendelev", "Ter-end-elev" },
+                { "Arendae", "Aren-dæ" },
+                { "tieflings", "teeflings" },
+                { "Deskari", "Dess-kaari "}
             };
         }
     }
