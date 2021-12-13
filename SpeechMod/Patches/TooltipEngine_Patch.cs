@@ -18,7 +18,7 @@ namespace SpeechMod
             if (__result == null)
                 return;
 
-            // TODO: Possibly add more types
+            // TODO: Possibly add more types, however it seems the text in those are split
             if (!(__result is TooltipBrickTextView view))
                 return;
 

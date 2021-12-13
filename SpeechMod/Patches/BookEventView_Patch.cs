@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.Dialog.BookEvent;
-using Kingmaker.UI.MVVM._PCView.Dialog.Dialog;
 using SpeechMod.Unity;
 using TMPro;
 using UnityEngine;

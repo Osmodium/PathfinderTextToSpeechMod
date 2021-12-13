@@ -46,7 +46,7 @@ namespace SpeechMod.Patches
                 {
                     button = tmpTransform?.Find(m_ButtonName)?.gameObject;
                 }
-                catch {} // Sigh...
+                catch { } // Sigh...
 
                 if (button != null)
                 {
