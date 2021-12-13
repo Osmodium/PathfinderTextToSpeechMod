@@ -23,7 +23,7 @@ namespace SpeechMod.Voice
             Main.Logger.Log("Loading phonetic dictionary...");
             try
             {
-                string file = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName), @"Mods", @"SpeechMod", @"PhoneticDictionary.json");
+                string file = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? throw new FileNotFoundException("Path to Pathfinder could not be found!"), @"Mods", @"SpeechMod", @"PhoneticDictionary.json");
                 string json = File.ReadAllText(file, Encoding.UTF8);
                 _phoneticDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
             }
