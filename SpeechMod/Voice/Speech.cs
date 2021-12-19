@@ -35,7 +35,7 @@ namespace SpeechMod.Voice
                 LoadBackupDictionary();
             }
 #if DEBUG
-            foreach (var entry in _phoneticDictionary)
+            foreach (var entry in m_PhoneticDictionary)
             {
                 Main.Logger.Log($"{entry.Key}={entry.Value}");
             }

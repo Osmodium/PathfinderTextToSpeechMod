@@ -13,7 +13,7 @@ namespace SpeechMod.Patches
         public static void Postfix()
         {
 #if DEBUG
-            Debug.Log($"{nameof(DialogCueView)}_BindViewImplementation_Postfix");
+            Debug.Log($"{nameof(BookEventView)}_SetCues_Postfix");
 #endif
             var cuesBlock = Game.Instance.UI.Canvas.transform.Find("BookEventPCView/ContentWrapper/Window/Content/CuesBlock");
             if (cuesBlock == null)
