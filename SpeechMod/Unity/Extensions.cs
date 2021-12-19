@@ -12,9 +12,18 @@ namespace SpeechMod.Unity
         public static void HookupTextToSpeech(this TextMeshProUGUI textMeshPro)
         {
             if (textMeshPro == null)
+            {
+                Debug.LogWarning("No TextMeshProUGUI!");
                 return;
+            }
 
             var textMeshProTransform = textMeshPro.transform;
+            if (textMeshProTransform == null)
+            {
+                Debug.LogWarning("Transform on TextMeshProUGUI is null!");
+                return;
+            }
+
             var skipEventAssignment = false;
 
             var defaultValues = textMeshProTransform.GetComponent<TextMeshProValues>();
