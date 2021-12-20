@@ -1,5 +1,6 @@
 ﻿using SpeechMod.Voice;
 using System;
+using JetBrains.Annotations;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -50,7 +51,7 @@ namespace SpeechMod.Unity
                 defaultValues = textMeshProTransform.gameObject?.AddComponent<TextMeshProValues>();
             else
                 skipEventAssignment = true;
-            
+
             defaultValues.FontStyles = textMeshPro.fontStyle;
             defaultValues.Color = textMeshPro.color;
 
@@ -62,32 +63,38 @@ namespace SpeechMod.Unity
                 return;
             }
 
-            textMeshPro.OnPointerEnterAsObservable().Subscribe(_ =>
-            {
-                if (Main.Settings.FontStyleOnHover)
+            textMeshPro.OnPointerEnterAsObservable().Subscribe(
+                _ =>
                 {
-                    for (int i = 0; i < Main.Settings.FontStyles.Length; i++)
+                    if (Main.Settings.FontStyleOnHover)
                     {
-                        if (Main.Settings.FontStyles[i])
-                            textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames[i], true);
+                        for (int i = 0; i < Main.Settings.FontStyles.Length; i++)
+                        {
+                            if (Main.Settings.FontStyles[i])
+                                textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames[i], true);
+                        }
                     }
+
+                    if (Main.Settings.ColorOnHover)
+                        textMeshPro.color = Main.ChosenColor;
                 }
+            );
 
-                if (Main.Settings.ColorOnHover)
-                    textMeshPro.color = Main.ChosenColor;
-            });
+            textMeshPro.OnPointerExitAsObservable().Subscribe(
+                _ =>
+                {
+                    textMeshPro.fontStyle = defaultValues.FontStyles;
+                    textMeshPro.color = defaultValues.Color;
+                }
+            );
 
-            textMeshPro.OnPointerExitAsObservable().Subscribe(_ =>
-            {
-                textMeshPro.fontStyle = defaultValues.FontStyles;
-                textMeshPro.color = defaultValues.Color;
-            });
-
-            textMeshPro.OnPointerClickAsObservable().Subscribe(clickEvent =>
-            {
-                if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
-                    Speech.Speak(textMeshPro.text);
-            });
+            textMeshPro.OnPointerClickAsObservable().Subscribe(
+                clickEvent =>
+                {
+                    if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
+                        Speech.Speak(textMeshPro.text);
+                }
+            );
         }
 
         //------------Top-------------------
@@ -202,5 +209,16 @@ namespace SpeechMod.Unity
 
             return null;
         }
+        
+        public static void DestroyComponents<T>(this GameObject obj) where T : UnityEngine.Object
+        {
+            var componentList = obj.GetComponents<T>();
+            foreach (var c in componentList)
+                GameObject.DestroyImmediate(c);
+        }
+
+        public static GameObject ChildObject(this GameObject obj, string path) => obj.ChildTransform(path)?.gameObject;
+
+        [CanBeNull] public static Transform ChildTransform(this GameObject obj, string path) => obj.transform.Find(path);
     }
 }

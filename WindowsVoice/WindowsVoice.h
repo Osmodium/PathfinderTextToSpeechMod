@@ -16,18 +16,22 @@
 using namespace std;
 
 namespace WindowsVoice {
-  extern "C" {
-    DLL_API void __cdecl initSpeech(int rate, int volume);
-    DLL_API void __cdecl addToSpeechQueue(const char* text);
-    DLL_API void __cdecl clearSpeechQueue();
-    DLL_API void __cdecl destroySpeech();
-    DLL_API char* __cdecl getStatusMessage();
-    DLL_API char* __cdecl getVoicesAvailable();
-  }
+	extern "C" {
+		DLL_API void __cdecl initSpeech(int rate, int volume);
+		DLL_API void __cdecl addToSpeechQueue(const char* text);
+		DLL_API void __cdecl clearSpeechQueue();
+		DLL_API void __cdecl destroySpeech();
+		DLL_API char* __cdecl getStatusMessage();
+		DLL_API char* __cdecl getVoicesAvailable();
+		DLL_API UINT32 __cdecl getLength();
+		DLL_API UINT32 __cdecl getPosition();
+	}
 
-  mutex theMutex;
-  list<wchar_t*> theSpeechQueue;
-  thread* theSpeechThread = nullptr;
-  bool shouldTerminate = false;
-  wstring theStatusMessage;
+	mutex theMutex;
+	list<wchar_t*> theSpeechQueue;
+	thread* theSpeechThread = nullptr;
+	bool shouldTerminate = false;
+	wstring theStatusMessage;
+	ULONG length = 0;
+	ULONG position = 0;
 }

@@ -37,6 +37,10 @@ namespace SpeechMod.Unity
         private static extern string getStatusMessage();
         [DllImport("WindowsVoice")]
         private static extern string getVoicesAvailable();
+        [DllImport("WindowsVoice")]
+        private static extern int getLength();
+        [DllImport("WindowsVoice")]
+        private static extern int getPosition();
 
         private static WindowsVoiceUnity m_TheVoice;
 
@@ -56,13 +60,15 @@ namespace SpeechMod.Unity
 
         void Start()
         {
-            if (m_TheVoice == null)
+            if (m_TheVoice != null)
+            {
+                Destroy(gameObject);
+            }
+            else
             {
                 m_TheVoice = this;
                 Init();
             }
-            else
-                Destroy(gameObject);
         }
 
         public static string[] GetAvailableVoices()
@@ -93,6 +99,14 @@ namespace SpeechMod.Unity
             return getStatusMessage();
         }
 
+        public static float GetNormalizedProgress()
+        {
+            int length = getLength();
+            int position = getPosition();
+
+            return (float)(position - length)/(length);
+        }
+
         public static void Stop()
         {
             if (!IsSpeaking)
@@ -105,6 +119,11 @@ namespace SpeechMod.Unity
         public static void ClearQueue()
         {
             clearSpeechQueue();
+        }
+
+        void OnGUI()
+        {
+
         }
 
         void OnDestroy()
