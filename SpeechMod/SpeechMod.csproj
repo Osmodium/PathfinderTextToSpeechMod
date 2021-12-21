@@ -79,7 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Unity\Extensions.cs" />
-    <Compile Include="Unity\PlayBackControl.cs" />
+    <Compile Include="Unity\PlaybackControl.cs" />
     <Compile Include="Voice\Speech.cs" />
     <Compile Include="Patches\TooltipEngine_Patch.cs" />
     <Compile Include="Unity\TextMeshProValues.cs" />

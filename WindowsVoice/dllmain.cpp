@@ -3,7 +3,7 @@
 
 namespace WindowsVoice
 {
-	char* convertWstring(wstring w_str)
+	char* convertWstring(const wstring w_str)
 	{
 		const wchar_t* input = w_str.c_str();
 		const size_t size = (wcslen(input) + 1) * sizeof(wchar_t);
@@ -21,13 +21,13 @@ namespace WindowsVoice
 
 	void speechThreadFunc(const int rate, const int volume)
 	{
-		ISpVoice* pVoice = nullptr;
-
 		if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
 		{
 			theStatusMessage = L"Failed to initialize COM for Voice.";
 			return;
 		}
+
+		ISpVoice* pVoice = nullptr;
 
 		const HRESULT hr = CoCreateInstance(CLSID_SpVoice, nullptr, CLSCTX_ALL, IID_ISpVoice, reinterpret_cast<void**>(&pVoice));
 		if (!SUCCEEDED(hr))
@@ -45,7 +45,7 @@ namespace WindowsVoice
 
 		pVoice->SetRate(rate);
 		pVoice->SetVolume(volume);
-
+		
 		SPVOICESTATUS voiceStatus;
 		wchar_t* priorText = nullptr;
 		while (!shouldTerminate)
@@ -59,8 +59,8 @@ namespace WindowsVoice
 				{
 					theStatusMessage = L"Speaking";
 					//theStatusMessage.append(priorText);
-					length = voiceStatus.ulInputSentLen;
-					position = voiceStatus.ulInputSentPos;
+					wordLength = voiceStatus.ulInputWordLen;
+					wordPosition = voiceStatus.ulInputWordPos;
 					if (!theSpeechQueue.empty())
 					{
 						theMutex.lock();
@@ -141,6 +141,8 @@ namespace WindowsVoice
 			return;
 		}
 		theStatusMessage = L"Destroying speech.";
+		wordLength = 0;
+		wordPosition = 0;
 		shouldTerminate = true;
 		theSpeechThread->join();
 		theSpeechQueue.clear();
@@ -187,14 +189,14 @@ namespace WindowsVoice
 		return convertWstring(voices);
 	}
 
-	UINT32 getLength()
+	UINT32 getWordLength()
 	{
-		return length;
+		return wordLength;
 	}
 
-	UINT32 getPosition()
+	UINT32 getWordPosition()
 	{
-		return position;
+		return wordPosition;
 	}
 }
 

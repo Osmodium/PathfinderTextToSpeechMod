@@ -38,11 +38,12 @@ namespace SpeechMod.Unity
         [DllImport("WindowsVoice")]
         private static extern string getVoicesAvailable();
         [DllImport("WindowsVoice")]
-        private static extern int getLength();
+        private static extern int getWordLength();
         [DllImport("WindowsVoice")]
-        private static extern int getPosition();
+        private static extern int getWordPosition();
 
         private static WindowsVoiceUnity m_TheVoice;
+        private static int m_CurrentWordCount;
 
         public static bool IsSpeaking
         {
@@ -60,6 +61,7 @@ namespace SpeechMod.Unity
 
         void Start()
         {
+            m_CurrentWordCount = 0;
             if (m_TheVoice != null)
             {
                 Destroy(gameObject);
@@ -86,12 +88,13 @@ namespace SpeechMod.Unity
             return voices;
         }
 
-        public static void Speak(string msg, float delay = 0f)
+        public static void Speak(string text, int length, float delay = 0f)
         {
+            m_CurrentWordCount = length;
             if (delay == 0f)
-                addToSpeechQueue(msg);
+                addToSpeechQueue(text);
             else
-                m_TheVoice.ExecuteLater(delay, () => Speak(msg));
+                m_TheVoice.ExecuteLater(delay, () => Speak(text, length));
         }
 
         public static string GetStatusMessage()
@@ -99,12 +102,15 @@ namespace SpeechMod.Unity
             return getStatusMessage();
         }
 
+        public static int WordPosition => getWordPosition();
+
+        public static int WordCount => m_CurrentWordCount;
+
+        public static int WordLength => getWordLength();
+
         public static float GetNormalizedProgress()
         {
-            int length = getLength();
-            int position = getPosition();
-
-            return (float)(position - length)/(length);
+            return 1-(float)(m_CurrentWordCount - getWordPosition()) / m_CurrentWordCount;
         }
 
         public static void Stop()
@@ -119,11 +125,6 @@ namespace SpeechMod.Unity
         public static void ClearQueue()
         {
             clearSpeechQueue();
-        }
-
-        void OnGUI()
-        {
-
         }
 
         void OnDestroy()

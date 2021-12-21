@@ -52,6 +52,16 @@ namespace SpeechMod.Voice
             WindowsVoiceUnity.Stop();
         }
 
+        public static int Length(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return 0;
+
+            var arr = new[] { "—", "-", "\"" };
+
+            return arr.Aggregate(text, (current, t) => current.Replace(t, "")).Length;
+        }
+
         public static void Speak(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -59,20 +69,27 @@ namespace SpeechMod.Voice
                 Main.Logger?.Warning("No display text in the curren cue of the dialog controller!");
                 return;
             }
-
+            
 #if DEBUG
             Debug.Log(text);
 #endif
             text = text.Replace("\"", "");
             text = text.Replace("\n", ". ");
-            
+            while (text.Contains(".."))
+            {
+                text = text.Replace("..", ".");
+            }
+
+            if (text.StartsWith("."))
+                text = text.Remove(0, 1);
+
             text = m_PhoneticDictionary?.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
 
             string textToSpeak = $"{ Voice }{ Pitch }{ Rate }{ Volume }{ text }</voice>";
 #if DEBUG
             Debug.Log(textToSpeak);
 #endif
-            WindowsVoiceUnity.Speak(textToSpeak);
+            WindowsVoiceUnity.Speak(textToSpeak, Length(textToSpeak));
         }
 
         private static void LoadBackupDictionary()

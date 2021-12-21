@@ -75,7 +75,7 @@ namespace SpeechMod
 
         private static void AddStaticUI()
         {
-            PlayBackControl.TryInstantiate();
+            PlaybackControl.TryInstantiate();
         }
     }
 }

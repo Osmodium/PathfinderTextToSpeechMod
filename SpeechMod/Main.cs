@@ -6,6 +6,7 @@ using SpeechMod.Voice;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
+using Extensions = SpeechMod.Unity.Extensions;
 
 namespace SpeechMod
 {
@@ -22,8 +23,6 @@ namespace SpeechMod
 
         public static string ChosenVoice => Settings.AvailableVoices[Settings.ChosenVoice];
 
-        public static Color ChosenColor => new Color(Settings.ChosenColorR, Settings.ChosenColorG, Settings.ChosenColorB, Settings.ChosenColorA);
-
         private static bool Load(UnityModManager.ModEntry modEntry)
         {
             Debug.Log("Speech Mod Initializing...");
@@ -31,6 +30,7 @@ namespace SpeechMod
             Logger = modEntry.Logger;
 
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
+            UpdateColors();
 
             modEntry.OnToggle = OnToggle;
             modEntry.OnGUI = OnGui;
@@ -97,38 +97,13 @@ namespace SpeechMod
             GUILayout.BeginHorizontal();
             GUILayout.Label("Voice", GUILayout.ExpandWidth(false));
             GUILayout.Space(10);
-            //GUILayout.Label($"{ChosenVoice}", GUILayout.ExpandWidth(false));
             Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings.AvailableVoices, 3);
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
 
-            GUILayout.BeginVertical("", GUI.skin.box);
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Color on text hover", GUILayout.ExpandWidth(false));
-            Settings.ColorOnHover = GUILayout.Toggle(Settings.ColorOnHover, "Enabled");
-            GUILayout.EndHorizontal();
+            AddColorPicker("Color on text hover", ref Settings.ColorOnHover, "Hover color", ref Settings.HoverColorR, ref Settings.HoverColorG, ref Settings.HoverColorB, ref Settings.HoverColorA);
 
-            if (Settings.ColorOnHover)
-            {
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("Hover color", GUILayout.ExpandWidth(false));
-                GUILayout.Space(10);
-                GUILayout.Label("R ", GUILayout.ExpandWidth(false));
-                Settings.ChosenColorR = GUILayout.HorizontalSlider(Settings.ChosenColorR, 0, 1);
-                GUILayout.Space(10);
-                GUILayout.Label("G", GUILayout.ExpandWidth(false));
-                Settings.ChosenColorG = GUILayout.HorizontalSlider(Settings.ChosenColorG, 0, 1);
-                GUILayout.Space(10);
-                GUILayout.Label("B", GUILayout.ExpandWidth(false));
-                Settings.ChosenColorB = GUILayout.HorizontalSlider(Settings.ChosenColorB, 0, 1);
-                GUILayout.Space(10);
-                GUILayout.Label("A", GUILayout.ExpandWidth(false));
-                Settings.ChosenColorA = GUILayout.HorizontalSlider(Settings.ChosenColorA, 0, 1);
-                GUILayout.Space(10);
-                GUILayout.Box(ColorPreview, GUILayout.Width(20));
-                GUILayout.EndHorizontal();
-            }
-            GUILayout.EndVertical();
+            AddColorPicker("Show playback progress", ref Settings.ShowPlaybackProgress, "Playback progress color", ref Settings.PlaybackColorR, ref Settings.PlaybackColorG, ref Settings.PlaybackColorB, ref Settings.PlaybackColorA);
 
             GUILayout.BeginVertical("", GUI.skin.box);
             GUILayout.BeginHorizontal();
@@ -157,25 +132,60 @@ namespace SpeechMod
             GUILayout.EndVertical();
         }
 
-        private static Texture2D ColorPreview
+        private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b, ref float a)
         {
-            get
+            GUILayout.BeginVertical("", GUI.skin.box);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(enableLabel, GUILayout.ExpandWidth(false));
+            enabledBool = GUILayout.Toggle(enabledBool, "Enabled");
+            GUILayout.EndHorizontal();
+
+            if (enabledBool)
             {
-                var texture = new Texture2D(20, 20);
-                for (int y = 0; y < texture.height; y++)
-                {
-                    for (int x = 0; x < texture.width; x++)
-                    {
-                        texture.SetPixel(x, y, ChosenColor);
-                    }
-                }
-                texture.Apply();
-                return texture;
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(colorLabel, GUILayout.ExpandWidth(false));
+                GUILayout.Space(10);
+                GUILayout.Label("R ", GUILayout.ExpandWidth(false));
+                r = GUILayout.HorizontalSlider(r, 0, 1);
+                GUILayout.Space(10);
+                GUILayout.Label("G", GUILayout.ExpandWidth(false));
+                g = GUILayout.HorizontalSlider(g, 0, 1);
+                GUILayout.Space(10);
+                GUILayout.Label("B", GUILayout.ExpandWidth(false));
+                b = GUILayout.HorizontalSlider(b, 0, 1);
+                GUILayout.Space(10);
+                GUILayout.Label("A", GUILayout.ExpandWidth(false));
+                a = GUILayout.HorizontalSlider(a, 0, 1);
+                GUILayout.Space(10);
+                GUILayout.Box(GetColorPreview(ref r, ref g, ref b, ref a), GUILayout.Width(20));
+                GUILayout.EndHorizontal();
             }
+            GUILayout.EndVertical();
+        }
+
+        private static Texture2D GetColorPreview(ref float r, ref float g, ref float b, ref float a)
+        {
+            var texture = new Texture2D(20, 20);
+            for (int y = 0; y < texture.height; y++)
+            {
+                for (int x = 0; x < texture.width; x++)
+                {
+                    texture.SetPixel(x, y, new Color(r, g, b, a));
+                }
+            }
+            texture.Apply();
+            return texture;
+        }
+
+        private static void UpdateColors()
+        {
+            PlaybackControl.UpdatePlaybackProgessColor();
+            Extensions.UpdateHoverColor();
         }
 
         private static void OnSaveGui(UnityModManager.ModEntry modEntry)
         {
+            UpdateColors();
             Settings.Save(modEntry);
         }
     }

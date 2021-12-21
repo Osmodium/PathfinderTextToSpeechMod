@@ -23,8 +23,8 @@ namespace WindowsVoice {
 		DLL_API void __cdecl destroySpeech();
 		DLL_API char* __cdecl getStatusMessage();
 		DLL_API char* __cdecl getVoicesAvailable();
-		DLL_API UINT32 __cdecl getLength();
-		DLL_API UINT32 __cdecl getPosition();
+		DLL_API UINT32 __cdecl getWordLength();
+		DLL_API UINT32 __cdecl getWordPosition();
 	}
 
 	mutex theMutex;
@@ -32,6 +32,6 @@ namespace WindowsVoice {
 	thread* theSpeechThread = nullptr;
 	bool shouldTerminate = false;
 	wstring theStatusMessage;
-	ULONG length = 0;
-	ULONG position = 0;
+	ULONG wordLength = 0;
+	ULONG wordPosition = 0;
 }

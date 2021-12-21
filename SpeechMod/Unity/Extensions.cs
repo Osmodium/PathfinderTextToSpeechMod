@@ -1,6 +1,5 @@
 ﻿using SpeechMod.Voice;
 using System;
-using JetBrains.Annotations;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -10,6 +9,14 @@ namespace SpeechMod.Unity
 {
     public static class Extensions
     {
+    
+    	private static Color m_HoverColor = Color.blue;
+
+        public static void UpdateHoverColor()
+        {
+            m_HoverColor = new Color(Main.Settings.HoverColorR, Main.Settings.HoverColorG, Main.Settings.HoverColorB, Main.Settings.HoverColorA);
+        }
+        
         public static Transform GetParentRecursive(this Transform transform, string name)
         {
             if (transform?.parent == null)
@@ -76,7 +83,7 @@ namespace SpeechMod.Unity
                     }
 
                     if (Main.Settings.ColorOnHover)
-                        textMeshPro.color = Main.ChosenColor;
+                        textMeshPro.color = m_HoverColor;
                 }
             );
 
@@ -193,6 +200,72 @@ namespace SpeechMod.Unity
             uitransform.pivot = pivot;
         }
 
+        public static void SetDefaultScale(this RectTransform trans)
+        {
+            trans.localScale = new Vector3(1, 1, 1);
+        }
+        public static void SetPivotAndAnchors(this RectTransform trans, Vector2 aVec)
+        {
+            trans.pivot = aVec;
+            trans.anchorMin = aVec;
+            trans.anchorMax = aVec;
+        }
+
+        public static Vector2 GetSize(this RectTransform trans)
+        {
+            return trans.rect.size;
+        }
+        public static float GetWidth(this RectTransform trans)
+        {
+            return trans.rect.width;
+        }
+        public static float GetHeight(this RectTransform trans)
+        {
+            return trans.rect.height;
+        }
+
+        public static void SetPositionOfPivot(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x, newPos.y, trans.localPosition.z);
+        }
+
+        public static void SetLeftBottomPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetLeftTopPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetRightBottomPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetRightTopPosition(this RectTransform trans, Vector2 newPos)
+        {
+            trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        }
+
+        public static void SetSize(this RectTransform trans, Vector2 newSize)
+        {
+            Vector2 oldSize = trans.rect.size;
+            Vector2 deltaSize = newSize - oldSize;
+            trans.offsetMin -= new Vector2(deltaSize.x * trans.pivot.x, deltaSize.y * trans.pivot.y);
+            trans.offsetMax += new Vector2(deltaSize.x * (1f - trans.pivot.x), deltaSize.y * (1f - trans.pivot.y));
+        }
+
+        public static void SetWidth(this RectTransform trans, float newSize)
+        {
+            SetSize(trans, new Vector2(newSize, trans.rect.size.y));
+        }
+        public static void SetHeight(this RectTransform trans, float newSize)
+        {
+            SetSize(trans, new Vector2(trans.rect.size.x, newSize));
+        }
+        
         public static Transform TryFind(this Transform transform, string n)
         {
             if (string.IsNullOrWhiteSpace(n) || transform == null)
@@ -209,16 +282,5 @@ namespace SpeechMod.Unity
 
             return null;
         }
-        
-        public static void DestroyComponents<T>(this GameObject obj) where T : UnityEngine.Object
-        {
-            var componentList = obj.GetComponents<T>();
-            foreach (var c in componentList)
-                GameObject.DestroyImmediate(c);
-        }
-
-        public static GameObject ChildObject(this GameObject obj, string path) => obj.ChildTransform(path)?.gameObject;
-
-        [CanBeNull] public static Transform ChildTransform(this GameObject obj, string path) => obj.transform.Find(path);
     }
 }
