@@ -16,7 +16,7 @@ namespace SpeechMod.Unity
             return CreatePlayButton(parent, call, null, null);
         }
 
-        public static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
+        private static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
         {
             var buttonGameObject = GameObject.Instantiate(ArrowButton, parent);
             SetAction(buttonGameObject, call, text, toolTip);
@@ -29,6 +29,7 @@ namespace SpeechMod.Unity
             button.OnLeftClick.RemoveAllListeners();
             button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
             button.OnLeftClick.AddListener(call);
+            button.ResetOnDisable = true;
 
             if (!string.IsNullOrWhiteSpace(text))
                 button.SetTooltip(new TooltipTemplateSimple(text, toolTip), new TooltipConfig { 

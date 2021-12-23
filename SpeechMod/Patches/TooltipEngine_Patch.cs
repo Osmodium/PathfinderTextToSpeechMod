@@ -45,7 +45,7 @@ namespace SpeechMod
         // TODO: Better way of telling if inside hover tooltip.
         private static bool IsInvalid(Transform parent)
         {
-            return parent == null;
+            return parent is null;
         }
     }
 }

@@ -9,6 +9,25 @@ namespace SpeechMod.Unity
 {
     public static class Extensions
     {
+        public static Transform GetParentRecursive(this Transform transform, string name)
+        {
+            if (transform?.parent == null)
+                return null;
+
+            if (transform.parent.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                return transform.parent;
+
+            return transform.parent.GetParentRecursive(name);
+        }
+
+        public static void HookupTextToSpeech(this TextMeshProUGUI[] textMeshPros)
+        {
+            foreach (var textMeshPro in textMeshPros)
+            {
+                textMeshPro.HookupTextToSpeech();
+            }
+        }
+
         public static void HookupTextToSpeech(this TextMeshProUGUI textMeshPro)
         {
             if (textMeshPro == null)
