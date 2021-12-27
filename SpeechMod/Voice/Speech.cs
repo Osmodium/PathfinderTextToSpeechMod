@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using SpeechMod.Unity;
@@ -11,30 +12,30 @@ namespace SpeechMod.Voice
 {
     public static class Speech
     {
-        private static Dictionary<string, string> _phoneticDictionary;
+        private static Dictionary<string, string> m_PhoneticDictionary;
 
-        private static string _voice => $"<voice required=\"Name={ Main.ChosenVoice }\">";
-        private static string _pitch => $"<pitch absmiddle=\"{ Main.Settings.Pitch }\"/>";
-        private static string _rate => $"<rate absspeed=\"{ Main.Settings.Rate }\"/>";
-        private static string _volume => $"<volume level=\"{ Main.Settings.Volume }\"/>";
+        private static string Voice => $"<voice required=\"Name={ Main.ChosenVoice }\">";
+        private static string Pitch => $"<pitch absmiddle=\"{ Main.Settings.Pitch }\"/>";
+        private static string Rate => $"<rate absspeed=\"{ Main.Settings.Rate }\"/>";
+        private static string Volume => $"<volume level=\"{ Main.Settings.Volume }\"/>";
 
         public static void LoadDictionary()
         {
-            Main.Logger.Log("Loading phonetic dictionary...");
+            Main.Logger?.Log("Loading phonetic dictionary...");
             try
             {
-                string file = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName), @"Mods", @"SpeechMod", @"PhoneticDictionary.json");
+                string file = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? throw new FileNotFoundException("Path to Pathfinder could not be found!"), @"Mods", @"SpeechMod", @"PhoneticDictionary.json");
                 string json = File.ReadAllText(file, Encoding.UTF8);
-                _phoneticDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                m_PhoneticDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
             }
             catch (Exception ex)
             {
-                Main.Logger.LogException(ex);
-                Main.Logger.Warning("Loading backup dictionary!");
+                Main.Logger?.LogException(ex);
+                Main.Logger?.Warning("Loading backup dictionary!");
                 LoadBackupDictionary();
             }
 #if DEBUG
-            foreach (var entry in _phoneticDictionary)
+            foreach (var entry in m_PhoneticDictionary)
             {
                 Main.Logger.Log($"{entry.Key}={entry.Value}");
             }
@@ -55,7 +56,7 @@ namespace SpeechMod.Voice
         {
             if (string.IsNullOrEmpty(text))
             {
-                Main.Logger.Warning("No display text in the curren cue of the dialog controller!");
+                Main.Logger?.Warning("No display text in the curren cue of the dialog controller!");
                 return;
             }
 
@@ -64,13 +65,10 @@ namespace SpeechMod.Voice
 #endif
             text = text.Replace("\"", "");
             text = text.Replace("\n", ". ");
+            
+            text = m_PhoneticDictionary?.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
 
-            foreach (var pair in _phoneticDictionary)
-            {
-                text = text.Replace(pair.Key, pair.Value);
-            }
-
-            string textToSpeak = $"{ _voice }{ _pitch }{ _rate }{ _volume }{ text }</voice>";
+            string textToSpeak = $"{ Voice }{ Pitch }{ Rate }{ Volume }{ text }</voice>";
 #if DEBUG
             Debug.Log(textToSpeak);
 #endif
@@ -79,15 +77,19 @@ namespace SpeechMod.Voice
 
         private static void LoadBackupDictionary()
         {
-            _phoneticDictionary = new Dictionary<string, string>
+            m_PhoneticDictionary = new Dictionary<string, string>
             {
-                { "—", "," },
-                { "Kenabres", "Keenaaabres" },
-                { "Iomedae", "I,omedaee" },
+                { "—", "<silence msec=\"500\"/>" },
+                { "Kenabres", "Ken-aabres" },
+                { "Iomedae", "I-o-mædæ" },
                 { "Golarion", "Goolaarion" },
                 { "Sovyrian", "Sovyyrian" },
                 { "Rovagug", "Rovaagug" },
-                { "Irabeth", "Iira,beth" }
+                { "Irabeth", "Iira-beth" },
+                { "Terendelev", "Ter-end-elev" },
+                { "Arendae", "Aren-dæ" },
+                { "tieflings", "teeflings" },
+                { "Deskari", "Dess-kaari "}
             };
         }
     }

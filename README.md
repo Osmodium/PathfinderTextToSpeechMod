@@ -1,9 +1,8 @@
-
 # SpeechMod - Windows only
 By [Osmodium](https://github.com/Osmodium)
 
-## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) to the dialog that is currently in focus and various text blocks when inspecting items (Info).
-Version: 0.9.5
+## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech).
+Version: 0.9.6
 
 **Disclamer: for Windows version only**
 
@@ -18,12 +17,15 @@ Version: 0.9.5
 
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/PathfinderTextToSpeechMod/issues)*
 
+#### Limitations:
  - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
- - No stopping of voice implemented yet.
- - Pressing multiple times queues the text to be spoken after the current one has played through.
  - There's currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
- - No support for full screen text (events) yet. Working on it.
- - No support for chapter changes. Working on it.
+
+#### Issues todo:
+ - Pressing multiple times queues the text to be spoken after the current one has played through.
+ - No stopping of voice.
+ - No support for chapter changes (although they seem to be narrated).
+ - No support for tutorial popups.
 
 ### How to use
 
@@ -51,6 +53,16 @@ In the journal, each of the bigger text blocks and important stuff can be played
 In the encyclopedia the text blocks (defined by Owlcat) can be played by pressing the play button adjacent to the text.
 
 ![All text parts in the encyclopedia is supported.](http://www.dashvoid.com/speechmod/encyclopediatext_0_9_5.png)
+
+#### 6) Book Event text
+When encountering a book event, the text can be played by hovering the text part (it will apply the chosen hover effect) and left-clicking.
+
+![All text parts in a book event is supported. You might even get to know what the cut text says ;)](http://www.dashvoid.com/speechmod/eventbook_0_9_6.png)
+
+#### 7) Messagebox text
+The various pop-up boxes that eventually shows up throughout the game, can be played when hovered and left-clicked.
+
+![Some texts might be so important that I decided to add support for them.](http://www.dashvoid.com/speechmod/messagemodal_0_9_6.png)
 
 ### Settings
 

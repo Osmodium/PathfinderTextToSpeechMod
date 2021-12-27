@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Encyclopedia;
 using SpeechMod.Unity;
@@ -8,44 +9,49 @@ using UnityEngine;
 
 namespace SpeechMod.Patches
 {
-
     [HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
     public static class EncyclopediaPage_Patch
     {
         private static readonly string m_ButtonName = "EncyclopediaSpeechButton";
 
-        static void Postfix()
+        public static void Postfix()
         {
-
             var bodyGroup = Game.Instance.UI.Canvas.transform.Find("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
             if (bodyGroup == null)
             {
+#if DEBUG
                 Debug.Log("Couldn't find BodyGroup...");
+#endif
                 return;
             }
 
             var content = bodyGroup.Find("ObjectivesGroup/StandardScrollView/Viewport/Content");
             if (content == null)
             {
+#if DEBUG
                 Debug.Log("Couldn't any TextMeshProUGUI...");
+#endif
                 return;
             }
 
-            var allTexts = content.gameObject.GetComponentsInChildren<TextMeshProUGUI>(true);
+            // Only get the texts that is not in the unit view.
+            var allTexts = content.gameObject?.GetComponentsInChildren<TextMeshProUGUI>(true).Where(t => t.transform.name.Equals("Text")).ToArray();
             if (allTexts == null || allTexts.Length == 0)
             {
-                Debug.Log("Couldn't any TextMeshProUGUI...");
+#if DEBUG
+                Debug.Log("Couldn't find any TextMeshProUGUI...");
+#endif
                 return;
             }
 
             foreach (var textMeshPro in allTexts)
             {
                 var parent = textMeshPro.transform;
-
+                
                 GameObject button = null;
                 try
                 {
-                    button = parent.Find(m_ButtonName).gameObject;
+                    button = parent.Find(m_ButtonName)?.gameObject;
                 }
                 catch
                 { } // Sigh...

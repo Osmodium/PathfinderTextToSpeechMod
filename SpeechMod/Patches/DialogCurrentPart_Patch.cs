@@ -12,7 +12,7 @@ namespace SpeechMod
     {
         private static readonly string WindowsVoiceName = "WindowsVoice";
 
-        static void Postfix()
+        public static void Postfix()
         {
             if (!Main.Enabled)
                 return;
