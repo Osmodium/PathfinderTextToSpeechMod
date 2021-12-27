@@ -3,7 +3,9 @@ SpeechMod
 Version 0.9.6 Changelog
 
 - Added support for book-events.
+- Added support for message boxes.
 - Fix encyclopedia creature page bug.
 - Added and updated some words in the phonetic dictionary.
+- Various slight optimizations and stability fixes.
 
 Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues
