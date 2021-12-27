@@ -14,7 +14,7 @@ namespace SpeechMod.Patches
     {
         private static readonly string m_ButtonName = "JQSpeechButton";
 
-        static void Postfix()
+        public static void Postfix()
         {
 #if DEBUG
             Debug.Log("JournalQuestObjectivePCView_BindViewImplementation");
@@ -46,7 +46,7 @@ namespace SpeechMod.Patches
                 {
                     button = tmpTransform?.Find(m_ButtonName)?.gameObject;
                 }
-                catch {} // Sigh...
+                catch { } // Sigh...
 
                 if (button != null)
                 {

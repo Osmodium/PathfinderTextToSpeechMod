@@ -10,7 +10,7 @@ namespace SpeechMod
     [HarmonyPatch(typeof(TooltipEngine), "GetBrickView")]
     static class TooltipEngine_Patch
     {
-        static void Postfix(ref MonoBehaviour __result)
+        public static void Postfix(ref MonoBehaviour __result)
         {
             if (!Main.Enabled)
                 return;
@@ -18,7 +18,7 @@ namespace SpeechMod
             if (__result == null)
                 return;
 
-            // TODO: Possibly add more types
+            // TODO: Possibly add more types, however it seems the text in those are split
             if (!(__result is TooltipBrickTextView view))
                 return;
 
@@ -45,7 +45,7 @@ namespace SpeechMod
         // TODO: Better way of telling if inside hover tooltip.
         private static bool IsInvalid(Transform parent)
         {
-            return parent == null;
+            return parent is null;
         }
     }
 }

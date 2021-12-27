@@ -16,7 +16,7 @@ namespace SpeechMod.Unity
             return CreatePlayButton(parent, call, null, null);
         }
 
-        public static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
+        private static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
         {
             var buttonGameObject = GameObject.Instantiate(ArrowButton, parent);
             SetAction(buttonGameObject, call, text, toolTip);
