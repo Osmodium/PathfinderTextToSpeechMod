@@ -29,7 +29,6 @@ namespace SpeechMod.Unity
             button.OnLeftClick.RemoveAllListeners();
             button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
             button.OnLeftClick.AddListener(call);
-            button.ResetOnDisable = true;
 
             if (!string.IsNullOrWhiteSpace(text))
                 button.SetTooltip(new TooltipTemplateSimple(text, toolTip), new TooltipConfig { 
