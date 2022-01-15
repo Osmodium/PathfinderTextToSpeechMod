@@ -20,7 +20,7 @@ namespace SpeechMod.Patches
             Debug.Log("JournalQuestObjectivePCView_BindViewImplementation");
 #endif
 
-            var bodyGroup = Game.Instance.UI.Canvas.transform.Find("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup");
+            var bodyGroup = Game.Instance.UI.Canvas.transform.TryFind("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup");
             if (bodyGroup == null)
             {
                 Debug.Log("Couldn't find BodyGroup...");
@@ -41,12 +41,7 @@ namespace SpeechMod.Patches
                 if (!ShouldAddButton(tmpTransform))
                     continue;
 
-                GameObject button = null;
-                try
-                {
-                    button = tmpTransform?.Find(m_ButtonName)?.gameObject;
-                }
-                catch { } // Sigh...
+                var button = tmpTransform?.TryFind(m_ButtonName)?.gameObject;
 
                 if (button != null)
                 {
@@ -118,12 +113,7 @@ namespace SpeechMod.Patches
                     transform.localPosition = new Vector3(-35, -24, 0);
                     break;
                 case "Label":
-                    GameObject ipi = null;
-                    try
-                    {
-                        ipi = tmpTransform.parent.Find("InProgressImage").gameObject;
-                    }
-                    catch { }//sigh
+                    var ipi = tmpTransform.parent.TryFind("InProgressImage").gameObject;
                     transform.localPosition = new Vector3(-82, ipi.transform.InverseTransformPoint(ipi.transform.position).y - 26, 0);
                     break;
                 default:

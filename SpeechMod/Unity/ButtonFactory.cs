@@ -9,7 +9,7 @@ namespace SpeechMod.Unity
 {
     public static class ButtonFactory
     {
-        private static GameObject ArrowButton => Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View/ButtonEdge").gameObject;
+        private static GameObject ArrowButton => Game.Instance.UI.Canvas.transform.TryFind("DialogPCView/Body/View/Scroll View/ButtonEdge").gameObject;
 
         public static GameObject CreatePlayButton(Transform parent, UnityAction call)
         {

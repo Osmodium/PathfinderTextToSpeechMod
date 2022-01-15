@@ -185,5 +185,22 @@ namespace SpeechMod.Unity
             uitransform.anchorMax = anchorMax;
             uitransform.pivot = pivot;
         }
+
+        public static Transform TryFind(this Transform transform, string n)
+        {
+            if (string.IsNullOrWhiteSpace(n) || transform == null)
+                return null;
+
+            try
+            {
+                return transform.Find(n);
+            }
+            catch
+            {
+                Debug.Log("TryFind found nothing!");
+            }
+
+            return null;
+        }
     }
 }

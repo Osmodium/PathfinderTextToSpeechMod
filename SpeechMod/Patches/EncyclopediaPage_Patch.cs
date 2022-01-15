@@ -16,7 +16,7 @@ namespace SpeechMod.Patches
 
         public static void Postfix()
         {
-            var bodyGroup = Game.Instance.UI.Canvas.transform.Find("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
+            var bodyGroup = Game.Instance.UI.Canvas.transform.TryFind("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
             if (bodyGroup == null)
             {
 #if DEBUG
@@ -25,7 +25,7 @@ namespace SpeechMod.Patches
                 return;
             }
 
-            var content = bodyGroup.Find("ObjectivesGroup/StandardScrollView/Viewport/Content");
+            var content = bodyGroup.TryFind("ObjectivesGroup/StandardScrollView/Viewport/Content");
             if (content == null)
             {
 #if DEBUG
@@ -48,14 +48,8 @@ namespace SpeechMod.Patches
             {
                 var parent = textMeshPro.transform;
                 
-                GameObject button = null;
-                try
-                {
-                    button = parent.Find(m_ButtonName)?.gameObject;
-                }
-                catch
-                { } // Sigh...
-
+                var button = parent.TryFind(m_ButtonName)?.gameObject;
+                
                 if (button != null)
                 {
 #if DEBUG

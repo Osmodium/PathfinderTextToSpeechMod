@@ -25,7 +25,7 @@ namespace SpeechMod
             if (IsInvalid(view.transform?.parent))
                 return;
 
-            var textMeshProTransform = view.gameObject?.transform?.Find("Text (TMP)");
+            var textMeshProTransform = view.gameObject?.transform?.TryFind("Text (TMP)");
             if (textMeshProTransform == null)
             {
                 Debug.LogWarning("No TextMeshProUGUI found!");
