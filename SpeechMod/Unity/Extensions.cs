@@ -191,19 +191,16 @@ namespace SpeechMod.Unity
             if (string.IsNullOrWhiteSpace(n) || transform == null)
                 return null;
 
-            Transform returnTransform;
-
             try
             {
-                returnTransform = transform.Find(n);
+                return transform.Find(n);
             }
             catch
             {
                 Debug.Log("TryFind found nothing!");
-                returnTransform = null;
             }
 
-            return returnTransform;
+            return null;
         }
     }
 }

@@ -1,5 +1,6 @@
 {
-  "—": "<silence msec=\"500\"/>",
+  "—": " <silence msec=\"300\"/> ",
+  "...": " <silence msec=\"500\"/> ",
   "Kenabres": "Ken-aabres",
   "Iomedae": "I-o-mædæ",
   "Golarion": "Goolaarion",
@@ -10,10 +11,15 @@
   "Arendae": "Aren-dæ",
   "tieflings": "teeflings",
   "Deskari": "Dess-kaari",
-  "Iomedae's": "I-o-mædaae's",
+  "Iomedae's": "I-o-mædaes",
   "aasimar": "aasee-maar",
   "0th": "zero-eth",
   "Staunton": "Staanton",
   "Minagho": "Meenaago",
-  "Drezen": "Dræzen"
+  "Drezen": "Dræzen",
+  "Kemh": "Kæhm",
+  "Sosiel": "Soseel",
+  "Kitrane": "Keetraanæ",
+  "Silaena": "Seelæna",
+  "Aroden": "Aro-den"
 }
