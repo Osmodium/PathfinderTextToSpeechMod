@@ -1,0 +1,9 @@
+SpeechMod 
+
+Version 0.9.7 Changelog
+
+- Fix book events when traveling on the map.
+- Added and updated some words in the phonetic dictionary.
+- Various slight optimizations and stability fixes.
+
+Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues
