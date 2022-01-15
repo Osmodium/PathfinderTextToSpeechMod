@@ -50,7 +50,13 @@ namespace SpeechMod
         {
             Debug.Log("Adding speech button to dialog ui.");
 
-            var parent = Game.Instance.UI.Canvas.transform.Find("DialogPCView/Body/View/Scroll View");
+            var parent = Game.Instance.UI.Canvas.transform.TryFind("DialogPCView/Body/View/Scroll View");
+
+            if (parent == null)
+            {
+                Debug.LogWarning("Parent not found!");
+                return;
+            }
 
             var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
             {

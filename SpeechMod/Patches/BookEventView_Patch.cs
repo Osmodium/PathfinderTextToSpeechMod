@@ -12,18 +12,25 @@ namespace SpeechMod.Patches
     {
         public static void Postfix()
         {
+            var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
+
 #if DEBUG
-            Debug.Log($"{nameof(BookEventView)}_SetCues_Postfix");
+            Debug.Log($"{nameof(BookEventView)}_SetCues_Postfix @ {sceneName}");
 #endif
-            var cuesBlock = Game.Instance.UI.Canvas.transform.Find("BookEventPCView/ContentWrapper/Window/Content/CuesBlock");
+            Transform cuesBlock = null;
+
+            if (sceneName == "UI_Globalmap_Scene")
+                cuesBlock = Game.Instance.UI.GlobalMapUI.transform.TryFind("BookEventView/ContentWrapper/Window/Content/CuesBlock"); // In map   
+            else if (sceneName == "UI_Ingame_Scene")
+                cuesBlock = Game.Instance.UI.Canvas.transform.TryFind("BookEventPCView/ContentWrapper/Window/Content/CuesBlock"); // Normal
+
             if (cuesBlock == null)
             {
-                Debug.Log("CuesBlock not found!");
+                Debug.LogWarning("CuesBlock not found!");
                 return;
             }
 
             var allTexts = cuesBlock.GetComponentsInChildren<TextMeshProUGUI>();
-
             foreach (var text in allTexts)
             {
                 text.HookupTextToSpeech();

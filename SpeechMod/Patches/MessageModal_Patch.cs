@@ -15,8 +15,8 @@ namespace SpeechMod.Patches
 #if DEBUG
             Debug.Log($"{nameof(MessageModalPCView)}_BindViewImplementation_Postfix");
 #endif
-            //CommonPCView(Clone)/FadeCanvas/MessageModalPCView/WindowContainer/Layout/
-            var labelMessage = Game.Instance.UI.FadeCanvas.transform.Find("MessageModalPCView/WindowContainer/Layout/Label_Message");
+
+            var labelMessage = Game.Instance.UI.FadeCanvas.transform.TryFind("MessageModalPCView/WindowContainer/Layout/Label_Message");
             if (labelMessage == null)
             {
                 Debug.Log("labelMessage not found!");
