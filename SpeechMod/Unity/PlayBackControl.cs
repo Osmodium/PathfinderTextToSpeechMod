@@ -1,4 +1,5 @@
-﻿using Kingmaker;
+﻿using System.Collections;
+using Kingmaker;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
@@ -38,9 +39,9 @@ namespace SpeechMod.Unity
 
         public static PlaybackControl Instance;
 
-        private GameObject m_ImageGameObject;
+        private GameObject m_ProgressBarGameObject;
         private RectTransform m_ImageRectTransform;
-        private Image m_Image;
+        private Image m_Progressbar;
         private GameObject m_TextGameObject;
         private TextMeshProUGUI m_TextMeshProUGUI;
         private GameObject m_StopButton;
@@ -66,26 +67,27 @@ namespace SpeechMod.Unity
             rectTransform.pivot = new Vector2(0, 1);
             rectTransform.anchoredPosition = Vector2.zero;
 
-            m_ImageGameObject = new GameObject("ProgressImage")
+            m_ProgressBarGameObject = new GameObject("ProgressImage")
             {
                 layer = Game.Instance.UI.Canvas.gameObject.layer
             };
-            m_ImageGameObject.SetActive(false);
-            m_ImageGameObject.transform.SetParent(transform);
-            m_ImageGameObject.transform.localPosition = Vector3.zero;
-            m_ImageGameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            m_ProgressBarGameObject.SetActive(false);
+            m_ProgressBarGameObject.transform.SetParent(transform);
+            m_ProgressBarGameObject.transform.localPosition = Vector3.zero;
+            m_ProgressBarGameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            m_ProgressBarGameObject.transform.localScale = new Vector3(0, 1, 1);
 
-            m_ImageRectTransform = m_ImageGameObject.AddComponent<RectTransform>();
+            m_ImageRectTransform = m_ProgressBarGameObject.AddComponent<RectTransform>();
             m_ImageRectTransform.SetSize(Vector2.zero);
             m_ImageRectTransform.anchorMin = new Vector2(0, 1);
             m_ImageRectTransform.anchorMax = Vector2.one;
             m_ImageRectTransform.pivot = new Vector2(0, 1);
             m_ImageRectTransform.anchoredPosition = Vector2.zero;
             m_ImageRectTransform.SetHeight(5);
-            m_Image = m_ImageGameObject.AddComponent<Image>();
-            m_ImageGameObject.transform.localScale = new Vector3(0, 1, 1);
+            m_Progressbar = m_ProgressBarGameObject.AddComponent<Image>();
 
-            m_StopButton = ButtonFactory.CreateSquareButton();
+            //m_StopButton = ButtonFactory.CreateSquareButton();
+            m_StopButton = ButtonFactory.CreatePlayButton(transform, StopPlayback);
             var buttonRectTransform = m_StopButton.GetComponent<RectTransform>();
             buttonRectTransform.anchorMin = new Vector2(0, 1);
             buttonRectTransform.anchorMax = new Vector2(0, 1);
@@ -94,12 +96,21 @@ namespace SpeechMod.Unity
             m_StopButton.transform.localPosition = Vector3.zero;
             m_StopButton.transform.localRotation = Quaternion.Euler(Vector3.zero);
             m_StopButton.transform.localScale = Vector3.one;
+            DestroyImmediate(m_StopButton.transform.GetChild(0));
 
-            OwlcatButton owlCatButton = m_StopButton.GetComponentInChildren<OwlcatButton>();
-            owlCatButton.OnLeftClick.AddListener(StopPlayback);
-            owlCatButton.SetTooltip(new TooltipTemplateSimple("Stop TTS Playback", "Stops the current text to speech playback."), new TooltipConfig {
-                InfoCallMethod = InfoCallMethod.None
-            });
+            var staticRoot = Game.Instance.UI.Canvas.transform;
+            var failedImagePrefab = staticRoot.Find("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup/ObjectivesGroup/StandardScrollView/Viewport/Content/JournalQuestObjectiveView/MultiButton/FailedImage");
+            var failedImageTransform = Instantiate(failedImagePrefab);
+            failedImageTransform.SetParent(m_StopButton.transform);
+            failedImageTransform.localPosition = Vector3.zero;
+            failedImageTransform.localRotation = Quaternion.Euler(Vector3.zero);
+            failedImageTransform.localScale = Vector3.zero;
+
+            //OwlcatButton owlCatButton = m_StopButton.GetComponentInChildren<OwlcatButton>();
+            //owlCatButton.OnLeftClick.AddListener(StopPlayback);
+            //owlCatButton.SetTooltip(new TooltipTemplateSimple("Stop TTS Playback", "Stops the current text to speech playback."), new TooltipConfig {
+            //    InfoCallMethod = InfoCallMethod.None
+            //});
 
 #if DEBUG
             m_TextGameObject = new GameObject("Text");
@@ -119,7 +130,7 @@ namespace SpeechMod.Unity
 #endif
         }
 
-        public void LateUpdate()
+        public void Update()
         {
             if (WindowsVoiceUnity.IsSpeaking)
             {
@@ -130,10 +141,10 @@ namespace SpeechMod.Unity
                     m_TextGameObject.SetActive(true);
                 m_TextMeshProUGUI.text = $"{WindowsVoiceUnity.WordPosition}/{WindowsVoiceUnity.WordCount} : {WindowsVoiceUnity.GetNormalizedProgress()}";
 #endif
-                if (!m_ImageGameObject.activeSelf)
-                    m_ImageGameObject.SetActive(true);
-                m_Image.color = m_PlaybackProgressColor;
-                m_ImageGameObject.transform.localScale = Vector3.Slerp(m_ImageGameObject.transform.localScale, new Vector3(WindowsVoiceUnity.GetNormalizedProgress(), 1, 1), 0.1f);
+                if (!m_ProgressBarGameObject.activeSelf)
+                    m_ProgressBarGameObject.SetActive(true);
+                m_Progressbar.color = m_PlaybackProgressColor;
+                m_ProgressBarGameObject.transform.localScale = Vector3.Slerp(m_ProgressBarGameObject.transform.localScale, new Vector3(WindowsVoiceUnity.GetNormalizedProgress(), 1, 1), 0.05f);
 
                 if (!m_StopButton.activeSelf)
                     m_StopButton.SetActive(true);
@@ -144,11 +155,11 @@ namespace SpeechMod.Unity
             if (m_TextGameObject.activeSelf)
                 m_TextGameObject.SetActive(false);
 #endif
-            m_ImageGameObject.transform.localScale = Vector3.Slerp(m_ImageGameObject.transform.localScale, new Vector3(1, 1, 1), 0.1f);
-            if (m_ImageGameObject.activeSelf)
+            //m_ProgressBarGameObject.transform.localScale = Vector3.Slerp(m_ProgressBarGameObject.transform.localScale, new Vector3(1, 1, 1), 0.05f);
+            if (m_ProgressBarGameObject.activeSelf)
             {
-                m_ImageGameObject.SetActive(false);
-                m_ImageGameObject.transform.localScale = new Vector3(0, 1, 1);
+                m_ProgressBarGameObject.SetActive(false);
+                m_ProgressBarGameObject.transform.localScale = new Vector3(0, 1, 1);
             }
 
             if (m_StopButton.activeSelf)

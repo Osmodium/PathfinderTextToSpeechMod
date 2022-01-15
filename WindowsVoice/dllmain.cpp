@@ -23,7 +23,8 @@ namespace WindowsVoice
 	{
 		if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
 		{
-			theStatusMessage = L"Failed to initialize COM for Voice.";
+			theStatusMessage = L"Error: Failed to initialize COM for Voice.";
+			speechState = speech_state_enum::error;
 			return;
 		}
 
@@ -37,11 +38,13 @@ namespace WindowsVoice
 			::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 				nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, nullptr);
 			LocalFree(pText);
-			theStatusMessage = L"Failed to create Voice instance.";
+			theStatusMessage = L"Error: Failed to create Voice instance.";
+			speechState = speech_state_enum::error;
 			return;
 		}
 
 		theStatusMessage = L"Speech ready.";
+		speechState = speech_state_enum::ready;
 
 		pVoice->SetRate(rate);
 		pVoice->SetVolume(volume);
@@ -54,11 +57,15 @@ namespace WindowsVoice
 			if (voiceStatus.dwRunningState == SPRS_IS_SPEAKING)
 			{
 				if (priorText == nullptr)
+				{
 					theStatusMessage = L"Error: SPRS_IS_SPEAKING but text is NULL";
+					speechState = speech_state_enum::error;
+				}
 				else
 				{
-					theStatusMessage = L"Speaking";
-					//theStatusMessage.append(priorText);
+					theStatusMessage = L"Speaking: ";
+					theStatusMessage.append(priorText);
+					speechState = speech_state_enum::speaking;
 					wordLength = voiceStatus.ulInputWordLen;
 					wordPosition = voiceStatus.ulInputWordPos;
 					if (!theSpeechQueue.empty())
@@ -76,6 +83,7 @@ namespace WindowsVoice
 			else
 			{
 				theStatusMessage = L"Waiting";
+				speechState = speech_state_enum::ready;
 				if (priorText != nullptr)
 				{
 					delete[] priorText;
@@ -96,6 +104,7 @@ namespace WindowsVoice
 		pVoice->Release();
 
 		theStatusMessage = L"Speech thread terminated.";
+		speechState = speech_state_enum::terminated;
 	}
 
 	void addToSpeechQueue(const char* text)
@@ -137,7 +146,7 @@ namespace WindowsVoice
 	{
 		if (theSpeechThread == nullptr)
 		{
-			theStatusMessage = L"Speach thread already destroyed or not started.";
+			theStatusMessage = L"Warning: Speach thread already destroyed or not started.";
 			return;
 		}
 		theStatusMessage = L"Destroying speech.";
@@ -150,6 +159,7 @@ namespace WindowsVoice
 		theSpeechThread = nullptr;
 		CoUninitialize();
 		theStatusMessage = L"Speech destroyed.";
+		speechState = speech_state_enum::uninitialized;
 	}
 
 	char* getStatusMessage()
@@ -159,6 +169,11 @@ namespace WindowsVoice
 			theStatusMessage = L"WindowsVoice not yet initialized!";
 		}
 		return convertWstring(theStatusMessage);
+	}
+
+	UINT32 getSpeechState()
+	{
+		return static_cast<UINT32>(speechState);
 	}
 
 	char* getVoicesAvailable()

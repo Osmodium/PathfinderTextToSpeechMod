@@ -90,6 +90,8 @@ namespace SpeechMod.Unity
 
         public static void Speak(string text, int length, float delay = 0f)
         {
+            Stop();
+
             m_CurrentWordCount = length;
             if (delay == 0f)
                 addToSpeechQueue(text);

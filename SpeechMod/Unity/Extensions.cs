@@ -9,8 +9,7 @@ namespace SpeechMod.Unity
 {
     public static class Extensions
     {
-    
-    	private static Color m_HoverColor = Color.blue;
+        private static Color m_HoverColor = Color.blue;
 
         public static void UpdateHoverColor()
         {

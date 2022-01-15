@@ -1,13 +1,9 @@
 ﻿using Kingmaker;
-using Kingmaker.UI;
-using Kingmaker.UI.Common;
-using Kingmaker.UI.MVVM._PCView.IngameMenu;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace SpeechMod.Unity
 {
@@ -45,34 +41,12 @@ namespace SpeechMod.Unity
         public static GameObject CreateSquareButton()
         {
             if (m_ButtonPrefab != null)
-                return GameObject.Instantiate(m_ButtonPrefab);
+                return Object.Instantiate(m_ButtonPrefab);
 
             var staticRoot = Game.Instance.UI.Canvas.transform;
-            var hudLayout = staticRoot.Find("HUDLayout/");
-            
-
-            var buttonPanelRect = hudLayout.Find("IngameMenuView/ButtonsPart");
-            
-            var buttonsContainer = buttonPanelRect.Find("Container").gameObject;
-            var buttonsRect = buttonsContainer.transform as RectTransform;
-            //buttonsRect.anchoredPosition = Vector2.zero;
-            //buttonsRect.sizeDelta = new Vector2(47.7f * 8, buttonsRect.sizeDelta.y);
-
-            buttonsContainer.GetComponent<GridLayoutGroup>().startCorner = GridLayoutGroup.Corner.LowerLeft;
-
-            m_ButtonPrefab = buttonsContainer.transform.GetChild(0).gameObject;
-            m_ButtonPrefab.SetActive(false);
-            return GameObject.Instantiate(m_ButtonPrefab);
-            //prefab.SetActive(false);
-
-//            int toRemove = buttonsContainer.transform.childCount;
-
-////Loop from 1 and destroy child[1] since we want to keep child[0] as our prefab, which is super hacky but.
-//            for (int i = 1; i < toRemove; i++)
-//            {
-//                Object.DestroyImmediate(buttonsContainer.transform.GetChild(1).gameObject);
-//            }
-
+            var buttonsContainer = staticRoot.Find("HUDLayout/IngameMenuView/ButtonsPart/Container");
+            m_ButtonPrefab = buttonsContainer.GetChild(0).gameObject;
+            return Object.Instantiate(m_ButtonPrefab);
         }
     }
 }

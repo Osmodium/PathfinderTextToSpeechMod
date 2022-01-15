@@ -25,7 +25,10 @@ namespace WindowsVoice {
 		DLL_API char* __cdecl getVoicesAvailable();
 		DLL_API UINT32 __cdecl getWordLength();
 		DLL_API UINT32 __cdecl getWordPosition();
+		DLL_API UINT32 __cdecl getSpeechState();
 	}
+
+	enum class speech_state_enum { uninitialized, ready, speaking, terminated, error };
 
 	mutex theMutex;
 	list<wchar_t*> theSpeechQueue;
@@ -34,4 +37,5 @@ namespace WindowsVoice {
 	wstring theStatusMessage;
 	ULONG wordLength = 0;
 	ULONG wordPosition = 0;
+	speech_state_enum speechState = speech_state_enum::uninitialized;
 }
