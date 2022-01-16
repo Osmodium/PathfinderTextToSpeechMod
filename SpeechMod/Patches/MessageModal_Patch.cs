@@ -19,16 +19,11 @@ namespace SpeechMod.Patches
             var labelMessage = Game.Instance.UI.FadeCanvas.transform.TryFind("MessageModalPCView/WindowContainer/Layout/Label_Message");
             if (labelMessage == null)
             {
-                Debug.Log("labelMessage not found!");
+                Debug.Log("Label_Message not found!");
                 return;
             }
 
-            var allTexts = labelMessage.GetComponentsInChildren<TextMeshProUGUI>();
-
-            foreach (var text in allTexts)
-            {
-                text.HookupTextToSpeech();
-            }
+            labelMessage.HookupTextToSpeechOnTransform();
         }
     }
 }

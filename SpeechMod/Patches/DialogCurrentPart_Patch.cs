@@ -4,7 +4,6 @@ using Kingmaker.UI;
 using SpeechMod.Unity;
 using SpeechMod.Voice;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SpeechMod
 {
@@ -46,7 +45,7 @@ namespace SpeechMod
             windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
             Object.DontDestroyOnLoad(windowsVoiceGameObject);
 
-            AddStaticUI();
+            //PlaybackControl.TryInstantiate();
         }
 
         private static void AddDialogSpeechButton()
@@ -71,11 +70,6 @@ namespace SpeechMod
             buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
 
             buttonGameObject.SetActive(true);
-        }
-
-        private static void AddStaticUI()
-        {
-            PlaybackControl.TryInstantiate();
         }
     }
 }

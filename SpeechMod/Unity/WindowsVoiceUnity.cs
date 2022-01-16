@@ -92,6 +92,8 @@ namespace SpeechMod.Unity
         {
             Stop();
 
+            PlaybackControl.TryInstantiate();
+
             m_CurrentWordCount = length;
             if (delay == 0f)
                 addToSpeechQueue(text);

@@ -30,11 +30,7 @@ namespace SpeechMod.Patches
                 return;
             }
 
-            var allTexts = cuesBlock.GetComponentsInChildren<TextMeshProUGUI>();
-            foreach (var text in allTexts)
-            {
-                text.HookupTextToSpeech();
-            }
+            cuesBlock.HookupTextToSpeechOnTransform();
         }
     }
 }

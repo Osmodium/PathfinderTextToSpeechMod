@@ -1,4 +1,5 @@
 ﻿using Kingmaker;
+using Kingmaker.UI.Common;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
@@ -11,7 +12,8 @@ namespace SpeechMod.Unity
     {
         private static GameObject m_ButtonPrefab = null;
 
-        private static GameObject ArrowButton => Game.Instance.UI.Canvas.transform.TryFind("DialogPCView/Body/View/Scroll View/ButtonEdge").gameObject;
+        private const string ARROW_BUTTON_PATH = "DialogPCView/Body/View/Scroll View/ButtonEdge";
+        private static GameObject ArrowButton => UIUtility.IsGlobalMap() ? Game.Instance.UI.GlobalMapUI.transform.TryFind(ARROW_BUTTON_PATH).gameObject : Game.Instance.UI.Canvas.transform.TryFind(ARROW_BUTTON_PATH).gameObject;
 
         public static GameObject CreatePlayButton(Transform parent, UnityAction call)
         {
@@ -20,7 +22,15 @@ namespace SpeechMod.Unity
 
         private static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
         {
-            var buttonGameObject = GameObject.Instantiate(ArrowButton, parent);
+            if (ArrowButton == null)
+            {
+#if DEBUG                
+                Debug.LogWarning("ArrowButton is null!");
+                return null;
+#endif
+            }
+
+            var buttonGameObject = Object.Instantiate(ArrowButton, parent);
             SetAction(buttonGameObject, call, text, toolTip);
             return buttonGameObject;
         }
@@ -44,7 +54,7 @@ namespace SpeechMod.Unity
                 return Object.Instantiate(m_ButtonPrefab);
 
             var staticRoot = Game.Instance.UI.Canvas.transform;
-            var buttonsContainer = staticRoot.Find("HUDLayout/IngameMenuView/ButtonsPart/Container");
+            var buttonsContainer = staticRoot.TryFind("HUDLayout/IngameMenuView/ButtonsPart/Container");
             m_ButtonPrefab = buttonsContainer.GetChild(0).gameObject;
             return Object.Instantiate(m_ButtonPrefab);
         }

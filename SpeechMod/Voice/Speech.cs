@@ -75,13 +75,7 @@ namespace SpeechMod.Voice
 #endif
             text = text.Replace("\"", "");
             text = text.Replace("\n", ". ");
-            while (text.Contains(".."))
-            {
-                text = text.Replace("..", ".");
-            }
-
-            if (text.StartsWith("."))
-                text = text.Remove(0, 1);
+            text = text.Trim().Trim('.');
 
             text = m_PhoneticDictionary?.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
 

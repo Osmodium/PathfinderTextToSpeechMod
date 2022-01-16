@@ -4,6 +4,7 @@ using TMPro;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SpeechMod.Unity
 {
@@ -25,6 +26,18 @@ namespace SpeechMod.Unity
                 return transform.parent;
 
             return transform.parent.GetParentRecursive(name);
+        }
+
+        public static void HookupTextToSpeechOnTransform(this Transform transform)
+        {
+            if (transform == null)
+            {
+                Debug.LogWarning("Can't hook up text to speech on null transform!");
+                return;
+            }
+
+            var allTexts = transform.GetComponentsInChildren<TextMeshProUGUI>();
+            allTexts.HookupTextToSpeech();
         }
 
         public static void HookupTextToSpeech(this TextMeshProUGUI[] textMeshPros)
