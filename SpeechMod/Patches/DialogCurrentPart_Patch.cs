@@ -5,71 +5,40 @@ using SpeechMod.Unity;
 using SpeechMod.Voice;
 using UnityEngine;
 
-namespace SpeechMod
+namespace SpeechMod;
+
+[HarmonyPatch(typeof(StaticCanvas), "Initialize")]
+public static class DialogCurrentPart_Patch
 {
-    [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
-    public static class DialogCurrentPart_Patch
+    public static void Postfix()
     {
-        private static readonly string WindowsVoiceName = "WindowsVoice";
+        if (!Main.Enabled)
+            return;
 
-        public static void Postfix()
+        AddDialogSpeechButton();
+    }
+
+    private static void AddDialogSpeechButton()
+    {
+        Debug.Log("Adding speech button to dialog ui.");
+
+        var parent = Game.Instance.UI.Canvas.transform.TryFind("DialogPCView/Body/View/Scroll View");
+
+        if (parent == null)
         {
-            if (!Main.Enabled)
-                return;
-
-            AddUiElements();
-
-            AddDialogSpeechButton();
-        }
-        
-        private static void AddUiElements()
-        {
-            Debug.Log("Adding SpeechMod UI elements.");
-
-            GameObject windowsVoice = null;
-            try
-            {
-                windowsVoice = Object.FindObjectOfType<WindowsVoiceUnity>()?.gameObject;
-            }
-            catch{} // Sigh
-
-            if (windowsVoice != null)
-            {
-                Debug.Log($"{nameof(WindowsVoiceUnity)} found!");
-                return;
-            }
-
-            Debug.Log($"Adding {nameof(WindowsVoiceUnity)}...");
-
-            var windowsVoiceGameObject = new GameObject(WindowsVoiceName);
-            windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
-            Object.DontDestroyOnLoad(windowsVoiceGameObject);
-
-            //PlaybackControl.TryInstantiate();
+            Debug.LogWarning("Parent not found!");
+            return;
         }
 
-        private static void AddDialogSpeechButton()
+        var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
         {
-            Debug.Log("Adding speech button to dialog ui.");
+            Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
+        });
 
-            var parent = Game.Instance.UI.Canvas.transform.TryFind("DialogPCView/Body/View/Scroll View");
+        buttonGameObject.name = "SpeechButton";
+        buttonGameObject.transform.localPosition = new Vector3(-493, 164, 0);
+        buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
 
-            if (parent == null)
-            {
-                Debug.LogWarning("Parent not found!");
-                return;
-            }
-
-            var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
-            {
-                Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
-            });
-
-            buttonGameObject.name = "SpeechButton";
-            buttonGameObject.transform.localPosition = new Vector3(-493, 164, 0);
-            buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
-
-            buttonGameObject.SetActive(true);
-        }
+        buttonGameObject.SetActive(true);
     }
 }

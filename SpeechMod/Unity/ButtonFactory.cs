@@ -6,57 +6,56 @@ using Owlcat.Runtime.UI.Controls.Button;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace SpeechMod.Unity
+namespace SpeechMod.Unity;
+
+public static class ButtonFactory
 {
-    public static class ButtonFactory
+    private static GameObject m_ButtonPrefab = null;
+
+    private static GameObject ArrowButton => UIUtility.IsGlobalMap() ? Game.Instance?.UI?.GlobalMapUI?.transform.TryFind(Constants.ARROW_BUTTON_PATH)?.gameObject : Game.Instance?.UI?.Canvas?.transform?.TryFind(Constants.ARROW_BUTTON_PATH)?.gameObject;
+
+    public static GameObject CreatePlayButton(Transform parent, UnityAction call)
     {
-        private static GameObject m_ButtonPrefab = null;
+        return CreatePlayButton(parent, call, null, null);
+    }
 
-        private const string ARROW_BUTTON_PATH = "DialogPCView/Body/View/Scroll View/ButtonEdge";
-        private static GameObject ArrowButton => UIUtility.IsGlobalMap() ? Game.Instance.UI.GlobalMapUI.transform.TryFind(ARROW_BUTTON_PATH).gameObject : Game.Instance.UI.Canvas.transform.TryFind(ARROW_BUTTON_PATH).gameObject;
-
-        public static GameObject CreatePlayButton(Transform parent, UnityAction call)
+    private static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
+    {
+        if (ArrowButton == null)
         {
-            return CreatePlayButton(parent, call, null, null);
-        }
-
-        private static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
-        {
-            if (ArrowButton == null)
-            {
-#if DEBUG                
+#if DEBUG
                 Debug.LogWarning("ArrowButton is null!");
                 return null;
 #endif
-            }
-
-            var buttonGameObject = Object.Instantiate(ArrowButton, parent);
-            SetAction(buttonGameObject, call, text, toolTip);
-            return buttonGameObject;
         }
 
-        private static void SetAction(GameObject buttonGameObject, UnityAction call, string text, string toolTip)
-        {
-            var button = buttonGameObject.GetComponent<OwlcatButton>();
-            button.OnLeftClick.RemoveAllListeners();
-            button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
-            button.OnLeftClick.AddListener(call);
+        var buttonGameObject = Object.Instantiate(ArrowButton, parent);
+        SetAction(buttonGameObject, call, text, toolTip);
+        return buttonGameObject;
+    }
 
-            if (!string.IsNullOrWhiteSpace(text))
-                button.SetTooltip(new TooltipTemplateSimple(text, toolTip), new TooltipConfig { 
-                    InfoCallMethod = InfoCallMethod.None
-                });
-        }
+    private static void SetAction(GameObject buttonGameObject, UnityAction call, string text, string toolTip)
+    {
+        var button = buttonGameObject.GetComponent<OwlcatButton>();
+        button.OnLeftClick.RemoveAllListeners();
+        button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
+        button.OnLeftClick.AddListener(call);
 
-        public static GameObject CreateSquareButton()
-        {
-            if (m_ButtonPrefab != null)
-                return Object.Instantiate(m_ButtonPrefab);
+        if (!string.IsNullOrWhiteSpace(text))
+            button.SetTooltip(new TooltipTemplateSimple(text, toolTip), new TooltipConfig
+            {
+                InfoCallMethod = InfoCallMethod.None
+            });
+    }
 
-            var staticRoot = Game.Instance.UI.Canvas.transform;
-            var buttonsContainer = staticRoot.TryFind("HUDLayout/IngameMenuView/ButtonsPart/Container");
-            m_ButtonPrefab = buttonsContainer.GetChild(0).gameObject;
+    public static GameObject CreateSquareButton()
+    {
+        if (m_ButtonPrefab != null)
             return Object.Instantiate(m_ButtonPrefab);
-        }
+
+        var staticRoot = Game.Instance.UI.Canvas.transform;
+        var buttonsContainer = staticRoot.TryFind("HUDLayout/IngameMenuView/ButtonsPart/Container");
+        m_ButtonPrefab = buttonsContainer.GetChild(0).gameObject;
+        return Object.Instantiate(m_ButtonPrefab);
     }
 }

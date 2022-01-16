@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Security.Cryptography;
 using Kingmaker;
 using Kingmaker.UI.Common;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
@@ -10,76 +12,73 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityModManagerNet;
 
-namespace SpeechMod.Unity
+namespace SpeechMod.Unity;
+
+public class PlaybackControl : MonoBehaviour
 {
-    public class PlaybackControl : MonoBehaviour
+    //public static PlaybackControl Instance;
+    private static Color m_PlaybackProgressColor = Color.green;
+
+    public static void UpdatePlaybackProgessColor()
     {
-        //public static PlaybackControl Instance;
-        private static Color m_PlaybackProgressColor = Color.green;
-        
-        public static void UpdatePlaybackProgessColor()
+        m_PlaybackProgressColor = new Color(Main.Settings.PlaybackColorR, Main.Settings.PlaybackColorG, Main.Settings.PlaybackColorB, Main.Settings.PlaybackColorA);
+    }
+
+    public static void TryInstantiate()
+    {
+        //if (Instance != null)
+        //    return;
+#if DEBUG
+        Debug.Log($"{nameof(PlaybackControl)}_TryInstantiate @ {Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName}");
+#endif
+        var canvasTransform = UIUtility.IsGlobalMap() ? Game.Instance.UI?.GlobalMapUI?.transform : Game.Instance.UI?.Canvas?.transform;
+
+        if (canvasTransform == null)
         {
-            m_PlaybackProgressColor = new Color(Main.Settings.PlaybackColorR, Main.Settings.PlaybackColorG, Main.Settings.PlaybackColorB, Main.Settings.PlaybackColorA);
+            Debug.LogWarning("Could not find canvas for scene!");
+            return;
         }
 
-        public static void TryInstantiate()
+        Debug.Log(canvasTransform.name + "/" + canvasTransform.parent.name);
+
+        try
         {
-            //if (Instance != null)
-            //    return;
-#if DEBUG
-            Debug.Log($"{nameof(PlaybackControl)}_TryInstantiate @ {Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName}");
-#endif
-            var canvasTransform = UIUtility.IsGlobalMap() ? Game.Instance.UI.GlobalMapUI.transform : Game.Instance.UI.Canvas.transform;
-
-            Debug.Log(canvasTransform.name + "/" + canvasTransform.parent.name);
-
-            //var root = Game.Instance.UI.Canvas.transform;
-            //if (root == null || !root.gameObject.activeInHierarchy)
-            //    root = Game.Instance.UI.GlobalMapCanvas.transform;
-
-            if (canvasTransform == null)
-            {
-                Debug.LogWarning("Could not find canvas for scene!");
-            }
 
             var canvasGameObject = new GameObject("SpeechModStaticUI")
             {
-                layer = UIUtility.IsGlobalMap() ? Game.Instance.UI.GlobalMapUI.gameObject.layer : Game.Instance.UI.Canvas.gameObject.layer
+                layer = canvasTransform.gameObject.layer
             };
             canvasGameObject.transform.SetParent(canvasTransform.transform);
             canvasGameObject.transform.localPosition = Vector3.zero;
             canvasGameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
             canvasGameObject.transform.localScale = Vector3.one;
-            canvasGameObject.gameObject.AddComponent<PlaybackControl>();
+            var playbackControl = canvasGameObject.gameObject.AddComponent<PlaybackControl>();
+            playbackControl.Initialize();
+
         }
-
-        private bool m_HasSpoken;
-        private GameObject m_ProgressBarGameObject;
-        private RectTransform m_ImageRectTransform;
-        private Image m_Progressbar;
-        private GameObject m_TextGameObject;
-        private TextMeshProUGUI m_TextMeshProUGUI;
-        private GameObject m_StopButton;
-
-        public void Awake()
+        catch
         {
-            m_HasSpoken = false;
-            Debug.Log($"{nameof(PlaybackControl)} Awake");
-            //if (Instance != null)
-            //    Destroy(gameObject);
-            //else
-            //    Instance = this;
+            Debug.Log($"{nameof(PlaybackControl)}_TryInstantiate: Failed!");
         }
+    }
 
-        public void OnDestroy()
-        {
-            //if (Instance == this)
-            //    Instance = null;
-            Debug.Log($"{nameof(PlaybackControl)} OnDestroy");
-        }
+    private bool m_HasSpoken;
+    private GameObject m_ProgressBarGameObject;
+    private RectTransform m_ImageRectTransform;
+    private Image m_Progressbar;
+    private GameObject m_TextGameObject;
+    private TextMeshProUGUI m_TextMeshProUGUI;
+    private GameObject m_StopButton;
 
-        public void Start()
+    public void Initialize()
+    {
+        try
         {
+            var uiGameObject = UIUtility.IsGlobalMap() ? Game.Instance?.UI?.GlobalMapUI?.gameObject : Game.Instance?.UI?.Canvas?.gameObject;
+
+            if (uiGameObject == null)
+                return;
+
             var rectTransform = gameObject.AddComponent<RectTransform>();
             rectTransform.transform.localPosition = Vector3.zero;
             rectTransform.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -93,7 +92,7 @@ namespace SpeechMod.Unity
 
             m_ProgressBarGameObject = new GameObject("ProgressImage")
             {
-                layer = UIUtility.IsGlobalMap() ? Game.Instance.UI.GlobalMapUI.gameObject.layer : Game.Instance.UI.Canvas.gameObject.layer
+                layer = uiGameObject.layer
             };
             m_ProgressBarGameObject.SetActive(false);
             m_ProgressBarGameObject.transform.SetParent(transform);
@@ -112,30 +111,33 @@ namespace SpeechMod.Unity
 
             //m_StopButton = ButtonFactory.CreateSquareButton();
             m_StopButton = ButtonFactory.CreatePlayButton(transform, StopPlayback);
-            m_StopButton.SetActive(false);
-            var buttonRectTransform = m_StopButton.GetComponent<RectTransform>();
-            buttonRectTransform.anchorMin = new Vector2(0, 1);
-            buttonRectTransform.anchorMax = new Vector2(0, 1);
-            buttonRectTransform.pivot = new Vector2(0, 1);
-            m_StopButton.transform.SetParent(transform);
-            m_StopButton.transform.localPosition = Vector3.zero;
-            m_StopButton.transform.localRotation = Quaternion.Euler(Vector3.zero);
-            m_StopButton.transform.localScale = Vector3.one;
-            //DestroyImmediate(m_StopButton.transform.GetChild(0));
+            if (m_StopButton != null)
+            {
+                m_StopButton.SetActive(false);
+                var buttonRectTransform = m_StopButton.GetComponent<RectTransform>();
+                buttonRectTransform.anchorMin = new Vector2(0, 1);
+                buttonRectTransform.anchorMax = new Vector2(0, 1);
+                buttonRectTransform.pivot = new Vector2(0, 1);
+                m_StopButton.transform.SetParent(transform);
+                m_StopButton.transform.localPosition = Vector3.zero;
+                m_StopButton.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                m_StopButton.transform.localScale = Vector3.one;
+                //DestroyImmediate(m_StopButton.transform.GetChild(0));
 
-            var staticRoot = UIUtility.IsGlobalMap() ? Game.Instance.UI.GlobalMapUI.transform : Game.Instance.UI.Canvas.transform;
-            var failedImagePrefab = staticRoot.TryFind("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup/ObjectivesGroup/StandardScrollView/Viewport/Content/JournalQuestObjectiveView/MultiButton/FailedImage");
-            if (failedImagePrefab == null)
-            {
-                Debug.LogWarning("Can't find failed image prefab!");
-            }
-            else
-            {
-                var failedImageTransform = Instantiate(failedImagePrefab);
-                failedImageTransform.SetParent(m_StopButton.transform);
-                failedImageTransform.localPosition = Vector3.zero;
-                failedImageTransform.localRotation = Quaternion.Euler(Vector3.zero);
-                failedImageTransform.localScale = Vector3.zero;
+                var staticRoot = uiGameObject.transform;
+                var failedImagePrefab = staticRoot.TryFind("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup/ObjectivesGroup/StandardScrollView/Viewport/Content/JournalQuestObjectiveView/MultiButton/FailedImage");
+                if (failedImagePrefab == null)
+                {
+                    Debug.LogWarning("Can't find failed image prefab!");
+                }
+                else
+                {
+                    var failedImageTransform = Instantiate(failedImagePrefab);
+                    failedImageTransform.SetParent(m_StopButton.transform);
+                    failedImageTransform.localPosition = Vector3.zero;
+                    failedImageTransform.localRotation = Quaternion.Euler(Vector3.zero);
+                    failedImageTransform.localScale = Vector3.zero;
+                }
             }
             //OwlcatButton owlCatButton = m_StopButton.GetComponentInChildren<OwlcatButton>();
             //owlCatButton.OnLeftClick.AddListener(StopPlayback);
@@ -159,100 +161,124 @@ namespace SpeechMod.Unity
             m_TextMeshProUGUI.fontStyle = FontStyles.Bold;
             m_TextMeshProUGUI.text = "DEBUG Playback control";
 #endif
+
+
         }
-
-        public void Update()
+        catch
         {
-            //if (ShouldSkip())
-            //    return;
-
-            if (WindowsVoiceUnity.IsSpeaking)
-            {
-                m_HasSpoken = true;
-                if (!Main.Settings.ShowPlaybackProgress)
-                    return;
-#if DEBUG
-                if (m_TextGameObject != null)
-                {
-                    if (!m_TextGameObject.activeSelf)
-                        m_TextGameObject.SetActive(true);
-                    m_TextMeshProUGUI.text = $"{WindowsVoiceUnity.WordPosition}/{WindowsVoiceUnity.WordCount} : {WindowsVoiceUnity.GetNormalizedProgress()}";
-                }
-#endif
-
-                if (m_ProgressBarGameObject != null)
-                {
-                    if (!m_ProgressBarGameObject.activeSelf)
-                        m_ProgressBarGameObject.SetActive(true);
-                    m_Progressbar.color = m_PlaybackProgressColor;
-                    m_ProgressBarGameObject.transform.localScale = Vector3.Slerp(m_ProgressBarGameObject.transform.localScale, new Vector3(WindowsVoiceUnity.GetNormalizedProgress(), 1, 1), 0.05f);
-                }
-
-                if (m_StopButton != null)
-                {
-                    if (!m_StopButton.activeSelf)
-                        m_StopButton.SetActive(true);
-                }
-            }
-            else
-            {
-#if DEBUG
-                if (m_TextGameObject != null)
-                {
-                    if (m_TextGameObject.activeSelf)
-                        m_TextGameObject.SetActive(false);
-                }
-#endif
-                if (m_ProgressBarGameObject != null)
-                {
-                    //m_ProgressBarGameObject.transform.localScale = Vector3.Slerp(m_ProgressBarGameObject.transform.localScale, new Vector3(1, 1, 1), 0.05f);
-                    if (m_ProgressBarGameObject.activeSelf)
-                    {
-                        m_ProgressBarGameObject.SetActive(false);
-                        m_ProgressBarGameObject.transform.localScale = new Vector3(0, 1, 1);
-                    }
-                }
-
-                if (m_StopButton != null)
-                {
-                    if (m_StopButton.activeSelf)
-                        m_StopButton.SetActive(false);
-                }
-
-                if (m_HasSpoken)
-                    Destroy(gameObject);
-            }
+            Debug.LogWarning($"{nameof(PlaybackControl)}_Initialize: Could not initalize playbackcontrol.");
+            Destroy(gameObject);
         }
+    }
 
-        private bool ShouldSkip()
+    public void Awake()
+    {
+        m_HasSpoken = false;
+        Debug.Log($"{nameof(PlaybackControl)} Awake");
+        //if (Instance != null)
+        //    Destroy(gameObject);
+        //else
+        //    Instance = this;
+    }
+
+    public void OnDestroy()
+    {
+        //if (Instance == this)
+        //    Instance = null;
+        Debug.Log($"{nameof(PlaybackControl)} OnDestroy");
+    }
+
+    public void Update()
+    {
+        //if (ShouldSkip())
+        //    return;
+
+        if (WindowsVoiceUnity.IsSpeaking)
         {
-            bool shouldSkip = false;
+            m_HasSpoken = true;
+            if (!Main.Settings.ShowPlaybackProgress)
+                return;
 #if DEBUG
-            if (m_TextGameObject == null)
+            if (m_TextGameObject != null)
             {
-                Debug.LogWarning($"[{nameof(PlaybackControl)}] m_TextGameObject is null!");
-                shouldSkip = true;
+                if (!m_TextGameObject.activeSelf)
+                    m_TextGameObject.SetActive(true);
+                m_TextMeshProUGUI.text = $"{WindowsVoiceUnity.WordPosition}/{WindowsVoiceUnity.WordCount} : {WindowsVoiceUnity.GetNormalizedProgress()}";
             }
 #endif
 
-            if (m_ProgressBarGameObject == null)
+            if (m_ProgressBarGameObject != null)
             {
-                Debug.LogWarning($"[{nameof(PlaybackControl)}] m_ProgressBarGameObject is null!");
-                shouldSkip = true;
+                if (!m_ProgressBarGameObject.activeSelf)
+                    m_ProgressBarGameObject.SetActive(true);
+                m_Progressbar.color = m_PlaybackProgressColor;
+                m_ProgressBarGameObject.transform.localScale = Vector3.Slerp(m_ProgressBarGameObject.transform.localScale, new Vector3(WindowsVoiceUnity.GetNormalizedProgress(), 1, 1), 0.05f);
             }
 
-            if (m_StopButton == null)
+            if (m_StopButton != null)
             {
-                Debug.LogWarning($"[{nameof(PlaybackControl)}] m_StopButton is null!");
-                shouldSkip = true;
+                if (!m_StopButton.activeSelf)
+                    m_StopButton.SetActive(true);
             }
-
-            return shouldSkip;
         }
-
-        private void StopPlayback()
+        else
         {
-            Speech.Stop();
+#if DEBUG
+            if (m_TextGameObject != null)
+            {
+                if (m_TextGameObject.activeSelf)
+                    m_TextGameObject.SetActive(false);
+            }
+#endif
+            if (m_ProgressBarGameObject != null)
+            {
+                //m_ProgressBarGameObject.transform.localScale = Vector3.Slerp(m_ProgressBarGameObject.transform.localScale, new Vector3(1, 1, 1), 0.05f);
+                if (m_ProgressBarGameObject.activeSelf)
+                {
+                    m_ProgressBarGameObject.SetActive(false);
+                    m_ProgressBarGameObject.transform.localScale = new Vector3(0, 1, 1);
+                }
+            }
+
+            if (m_StopButton != null)
+            {
+                if (m_StopButton.activeSelf)
+                    m_StopButton.SetActive(false);
+            }
+
+            if (m_HasSpoken)
+                Destroy(gameObject);
         }
+    }
+
+    private bool ShouldSkip()
+    {
+        bool shouldSkip = false;
+#if DEBUG
+        if (m_TextGameObject == null)
+        {
+            Debug.LogWarning($"[{nameof(PlaybackControl)}] m_TextGameObject is null!");
+            shouldSkip = true;
+        }
+#endif
+
+        if (m_ProgressBarGameObject == null)
+        {
+            Debug.LogWarning($"[{nameof(PlaybackControl)}] m_ProgressBarGameObject is null!");
+            shouldSkip = true;
+        }
+
+        if (m_StopButton == null)
+        {
+            Debug.LogWarning($"[{nameof(PlaybackControl)}] m_StopButton is null!");
+            shouldSkip = true;
+        }
+
+        return shouldSkip;
+    }
+
+    private void StopPlayback()
+    {
+        Speech.Stop();
     }
 }
