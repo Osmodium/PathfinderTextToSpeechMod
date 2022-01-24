@@ -1,11 +1,10 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace SpeechMod.Unity
+namespace SpeechMod.Unity;
+
+public class TextMeshProValues : MonoBehaviour
 {
-    public class TextMeshProValues : MonoBehaviour
-    {
-        public FontStyles FontStyles { get; set; }
-        public Color Color { get; set; }
-    }
+    public FontStyles FontStyles { get; set; }
+    public Color Color { get; set; }
 }
