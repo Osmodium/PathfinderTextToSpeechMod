@@ -59,6 +59,13 @@ internal static class Main
     private static bool SetAvailableVoices()
     {
         string[] availableVoices = Speech.GetAvailableVoices();
+        
+        if (availableVoices == null || availableVoices.Length == 0)
+        {
+            Logger.Warning("No available voices found! Disabling mod!");
+            return false;
+        }
+
 #if DEBUG
         Logger.Log("Available voices:");
         foreach (var s in availableVoices)
@@ -66,12 +73,6 @@ internal static class Main
             Logger.Log(s);
         }
 #endif
-        if (availableVoices == null || availableVoices.Length == 0)
-        {
-            Logger.Warning("No available voices found! Disabling mod!");
-            return false;
-        }
-
         Logger.Log("Setting available voices list...");
         Settings.AvailableVoices = availableVoices;
 
@@ -133,6 +134,11 @@ internal static class Main
             Settings.Pitch = (int)GUILayout.HorizontalSlider(Settings.Pitch, -10, 10, GUILayout.Width(300f));
             GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
+        }
+        else
+        {
+            Settings.Volume = 100;
+            Settings.Pitch = 0;
         }
 
         GUILayout.BeginHorizontal();
