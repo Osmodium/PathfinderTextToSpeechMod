@@ -32,7 +32,7 @@ public static class DialogCurrentPart_Patch
 
         var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
         {
-            Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
+            Main.Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
         });
 
         buttonGameObject.name = "SpeechButton";

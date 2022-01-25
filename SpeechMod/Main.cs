@@ -1,18 +1,17 @@
 ﻿using HarmonyLib;
-using System;
-using System.Reflection;
 using SpeechMod.Unity;
 using SpeechMod.Voice;
+using System;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
 using Extensions = SpeechMod.Unity.Extensions;
-using Object = UnityEngine.Object;
 
 namespace SpeechMod;
 
 #if DEBUG
-    [EnableReloading]
+[EnableReloading]
 #endif
 internal static class Main
 {
@@ -24,11 +23,16 @@ internal static class Main
 
     public static string ChosenVoice => Settings.AvailableVoices[Settings.ChosenVoice];
 
+    public static ISpeech Speech;
+
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
         Debug.Log("Speech Mod Initializing...");
 
         Logger = modEntry.Logger;
+
+        if (!SetSpeech())
+            return false;
 
         Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
         UpdateColors();
@@ -40,9 +44,21 @@ internal static class Main
         var harmony = new Harmony(modEntry.Info.Id);
         harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-        Logger.Log(WindowsVoiceUnity.GetStatusMessage());
+        Logger.Log(Speech.GetStatusMessage());
 
-        string[] availableVoices = WindowsVoiceUnity.GetAvailableVoices();
+        if (!SetAvailableVoices())
+            return false;
+
+        SpeechExtensions.LoadDictionary();
+
+        Debug.Log("Speech Mod Initialized!");
+
+        return true;
+    }
+
+    private static bool SetAvailableVoices()
+    {
+        string[] availableVoices = Speech.GetAvailableVoices();
 #if DEBUG
         Logger.Log("Available voices:");
         foreach (var s in availableVoices)
@@ -59,37 +75,27 @@ internal static class Main
         Logger.Log("Setting available voices list...");
         Settings.AvailableVoices = availableVoices;
 
-        Speech.LoadDictionary();
-
-        AddUiElements();
-
-        Debug.Log("Speech Mod Initialized!");
-
         return true;
     }
 
-    private static void AddUiElements()
+    private static bool SetSpeech()
     {
-        Debug.Log("Adding SpeechMod UI elements.");
-
-        GameObject windowsVoice = null;
-        try
+        switch (Application.platform)
         {
-            windowsVoice = Object.FindObjectOfType<WindowsVoiceUnity>()?.gameObject;
+            case RuntimePlatform.OSXPlayer:
+                Speech = new AppleSpeech();
+                SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
+                break;
+            case RuntimePlatform.WindowsPlayer:
+                Speech = new WindowsSpeech();
+                SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
+                break;
+            default:
+                Logger.Critical($"SpeechMod is not supported on {Application.platform}!");
+                return false;
         }
-        catch{} // Sigh
 
-        if (windowsVoice != null)
-        {
-            Debug.Log($"{nameof(WindowsVoiceUnity)} found!");
-            return;
-        }
-
-        Debug.Log($"Adding {nameof(WindowsVoiceUnity)}...");
-
-        var windowsVoiceGameObject = new GameObject(Constants.WINDOWS_VOICE_NAME);
-        windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
-        Object.DontDestroyOnLoad(windowsVoiceGameObject);
+        return true;
     }
 
     private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
@@ -101,10 +107,16 @@ internal static class Main
     private static void OnGui(UnityModManager.ModEntry modEntry)
     {
         GUILayout.BeginVertical("", GUI.skin.box);
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        Settings.Rate = (int)GUILayout.HorizontalSlider(Settings.Rate, -10, 10, GUILayout.Width(300f));
+        Settings.Rate = Speech switch
+        {
+            WindowsSpeech => (int)GUILayout.HorizontalSlider(Settings.Rate, -10, 10, GUILayout.Width(300f)), 
+            AppleSpeech => (int)GUILayout.HorizontalSlider(Settings.Rate, 150, 300, GUILayout.Width(300f)), 
+            _ => Settings.Rate
+        };
         GUILayout.Label($" {Settings.Rate}", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
@@ -131,7 +143,7 @@ internal static class Main
         GUILayout.BeginHorizontal();
         GUILayout.Label("Interrupt speech on play");
         GUILayout.Space(10);
-        Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
+        Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
         AddColorPicker("Color on text hover", ref Settings.ColorOnHover, "Hover color", ref Settings.HoverColorR, ref Settings.HoverColorG, ref Settings.HoverColorB, ref Settings.HoverColorA);
@@ -160,7 +172,7 @@ internal static class Main
         GUILayout.Label("Phonetic dictionary", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false)))
-            Speech.LoadDictionary();
+            SpeechExtensions.LoadDictionary();
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
     }

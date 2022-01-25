@@ -64,7 +64,7 @@ public static class JournalQuestObjective_Patch
 #endif
             button = ButtonFactory.CreatePlayButton(tmpTransform.transform, () =>
             {
-                Speech.Speak(textMeshPro.text);
+                Main.Speech.Speak(textMeshPro.text);
             });
             button.name = m_ButtonName;
             button.transform.localRotation = Quaternion.Euler(0, 0, 90);
