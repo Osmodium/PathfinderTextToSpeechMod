@@ -7,73 +7,75 @@ using SpeechMod.Voice;
 using TMPro;
 using UnityEngine;
 
-namespace SpeechMod.Patches
+namespace SpeechMod.Patches;
+
+[HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
+public static class EncyclopediaPage_Patch
 {
-    [HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
-    public static class EncyclopediaPage_Patch
+    private static readonly string m_ButtonName = "EncyclopediaSpeechButton";
+
+    public static void Postfix()
     {
-        private static readonly string m_ButtonName = "EncyclopediaSpeechButton";
+        if (!Main.Enabled)
+            return;
 
-        public static void Postfix()
+        var bodyGroup = Game.Instance.UI.Canvas.transform.TryFind("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
+        if (bodyGroup == null)
         {
-            var bodyGroup = Game.Instance.UI.Canvas.transform.TryFind("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
-            if (bodyGroup == null)
+#if DEBUG
+            Debug.Log("Couldn't find BodyGroup...");
+#endif
+            return;
+        }
+
+        var content = bodyGroup.TryFind("ObjectivesGroup/StandardScrollView/Viewport/Content");
+        if (content == null)
+        {
+#if DEBUG
+            Debug.Log("Couldn't any TextMeshProUGUI...");
+#endif
+            return;
+        }
+
+        // Only get the texts that is not in the unit view.
+        var allTexts = content.gameObject?.GetComponentsInChildren<TextMeshProUGUI>(true).Where(t => t.transform.name.Equals("Text")).ToArray();
+        if (allTexts == null || allTexts.Length == 0)
+        {
+#if DEBUG
+            Debug.Log("Couldn't find any TextMeshProUGUI...");
+#endif
+            return;
+        }
+
+        foreach (var textMeshPro in allTexts)
+        {
+            var parent = textMeshPro.transform;
+
+            var button = parent.TryFind(m_ButtonName)?.gameObject;
+
+            if (button != null)
             {
 #if DEBUG
-                Debug.Log("Couldn't find BodyGroup...");
+                Debug.Log("Button already added, relocating and activating...");
 #endif
-                return;
-            }
-
-            var content = bodyGroup.TryFind("ObjectivesGroup/StandardScrollView/Viewport/Content");
-            if (content == null)
-            {
-#if DEBUG
-                Debug.Log("Couldn't any TextMeshProUGUI...");
-#endif
-                return;
-            }
-
-            // Only get the texts that is not in the unit view.
-            var allTexts = content.gameObject?.GetComponentsInChildren<TextMeshProUGUI>(true).Where(t => t.transform.name.Equals("Text")).ToArray();
-            if (allTexts == null || allTexts.Length == 0)
-            {
-#if DEBUG
-                Debug.Log("Couldn't find any TextMeshProUGUI...");
-#endif
-                return;
-            }
-
-            foreach (var textMeshPro in allTexts)
-            {
-                var parent = textMeshPro.transform;
-                
-                var button = parent.TryFind(m_ButtonName)?.gameObject;
-                
-                if (button != null)
-                {
-#if DEBUG
-                    Debug.Log("Button already added, relocating and activating...");
-#endif
-                    button.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                    button.RectAlignTopLeft();
-                    button.transform.localPosition = new Vector3(-36, -26, 0);
-                    continue;
-                }
-
-#if DEBUG
-                Debug.Log("Adding playbutton...");
-#endif
-                button = ButtonFactory.CreatePlayButton(parent, () =>
-                {
-                    Speech.Speak(textMeshPro.text);
-                });
-                button.name = m_ButtonName;
                 button.transform.localRotation = Quaternion.Euler(0, 0, 90);
                 button.RectAlignTopLeft();
                 button.transform.localPosition = new Vector3(-36, -26, 0);
-                button.gameObject.SetActive(true);
+                continue;
             }
+
+#if DEBUG
+            Debug.Log("Adding playbutton...");
+#endif
+            button = ButtonFactory.CreatePlayButton(parent, () =>
+            {
+                Speech.Speak(textMeshPro.text);
+            });
+            button.name = m_ButtonName;
+            button.transform.localRotation = Quaternion.Euler(0, 0, 90);
+            button.RectAlignTopLeft();
+            button.transform.localPosition = new Vector3(-36, -26, 0);
+            button.gameObject.SetActive(true);
         }
     }
 }
