@@ -26,7 +26,7 @@ namespace SpeechMod.Unity
             }
 
             text = new Regex("<[^>]+>").Replace(text, "");
-            //Process.Start("/usr/bin/killall", "say");
+
             if (m_TheVoice.speechProcess is { HasExited: false })
                 m_TheVoice.speechProcess.Kill();
 
