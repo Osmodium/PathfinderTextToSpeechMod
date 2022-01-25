@@ -21,7 +21,7 @@ namespace SpeechMod.Unity
         {
             text = new Regex("<[^>]+>").Replace(text, "");
             //Process.Start("/usr/bin/killall", "say");
-            m_TheVoice.speechProcess.Kill();
+            m_TheVoice.speechProcess?.Kill();
             string arguments = string.Concat("-v ", Main.ChosenVoice, " -r ", Main.Settings.Rate.ToString(), " ", text.Replace("\"", ""));
             m_TheVoice.speechProcess = Process.Start("/usr/bin/say", arguments);
         }
