@@ -68,7 +68,7 @@ internal static class Main
 #endif
         if (availableVoices == null || availableVoices.Length == 0)
         {
-            Logger.Warning("No voices available found! Diabling mod!");
+            Logger.Warning("No available voices found! Disabling mod!");
             return false;
         }
 
@@ -107,7 +107,6 @@ internal static class Main
     private static void OnGui(UnityModManager.ModEntry modEntry)
     {
         GUILayout.BeginVertical("", GUI.skin.box);
-
         GUILayout.BeginHorizontal();
         GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
@@ -120,31 +119,34 @@ internal static class Main
         GUILayout.Label($" {Settings.Rate}", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        Settings.Volume = (int)GUILayout.HorizontalSlider(Settings.Volume, 0, 100, GUILayout.Width(300f));
-        GUILayout.Label($" {Settings.Volume}", GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
+        if (Speech is WindowsSpeech)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Settings.Volume = (int)GUILayout.HorizontalSlider(Settings.Volume, 0, 100, GUILayout.Width(300f));
+            GUILayout.Label($" {Settings.Volume}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
-        Settings.Pitch = (int)GUILayout.HorizontalSlider(Settings.Pitch, -10, 10, GUILayout.Width(300f));
-        GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
+            Settings.Pitch = (int)GUILayout.HorizontalSlider(Settings.Pitch, -10, 10, GUILayout.Width(300f));
+            GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+        }
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Voice", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings.AvailableVoices, 3);
         GUILayout.EndHorizontal();
-        GUILayout.EndVertical();
-
+        
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Interrupt speech on play");
+        GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue", GUILayout.ExpandWidth(false));
+        Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
         GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
 
         AddColorPicker("Color on text hover", ref Settings.ColorOnHover, "Hover color", ref Settings.HoverColorR, ref Settings.HoverColorG, ref Settings.HoverColorB, ref Settings.HoverColorA);
 
