@@ -22,6 +22,7 @@ public class AppleSpeech : ISpeech
                 Arguments = arguments,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 CreateNoWindow = true
             }
         };
@@ -32,8 +33,10 @@ public class AppleSpeech : ISpeech
         Main.Logger.Log("Process started...");
         
         var output = process.StandardOutput.ReadToEnd();
-        
+        var error = process.StandardError.ReadToEnd();
+
         Main.Logger.Log("output: " + output);
+        Main.Logger.Log("error: " + error);
         Main.Logger.Log("Read output waiting for exit...");
         
         process.WaitForExit();
