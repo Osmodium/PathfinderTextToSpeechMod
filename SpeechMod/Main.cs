@@ -152,17 +152,19 @@ internal static class Main
         }
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Voice", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
+        GUILayout.Label("Voice - Hover to see nationality below", GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
         Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings?.AvailableVoices
                 .Select(v =>
                 {
                     var splitV = v.Split('#');
                     return new GUIContent(splitV[0], splitV[1]);
                 }).ToArray(),
-                Speech is WindowsSpeech ? 3 : 5
+                Speech is WindowsSpeech ? 4 : 5
             );
         GUILayout.EndHorizontal();
+        
         GUILayout.BeginHorizontal();
         GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
@@ -172,8 +174,8 @@ internal static class Main
         GUILayout.BeginHorizontal();
         GUILayout.Label("Test selected voice", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        testText = GUILayout.TextField(testText, GUILayout.ExpandWidth(true));
-        if (GUILayout.Button("Play"))
+        testText = GUILayout.TextField(testText, GUILayout.Width(700f));
+        if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
             Speech.Speak(testText);
         GUILayout.EndHorizontal();
 
