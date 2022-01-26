@@ -1,5 +1,4 @@
-﻿using SpeechMod.Voice;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using UnityEngine;
 
 namespace SpeechMod.Unity
@@ -16,8 +15,8 @@ namespace SpeechMod.Unity
             else
                 m_TheVoice = this;
         }
-        
-        public static void Speak(string text)
+
+        public static void Speak(string text, float delay = 0f)
         {
             if (m_TheVoice == null)
             {
@@ -25,7 +24,11 @@ namespace SpeechMod.Unity
                 return;
             }
 
-            text = text.PrepareSpeechText();
+            if (delay > 0f)
+            {
+                m_TheVoice.ExecuteLater(delay, () => Speak(text));
+                return;
+            }
 
             if (m_TheVoice.speechProcess is { HasExited: false })
                 m_TheVoice.speechProcess.Kill();

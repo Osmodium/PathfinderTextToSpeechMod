@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -9,18 +8,7 @@ namespace SpeechMod.Unity;
 /// <summary>
 /// Credit to Chad Weisshaar for the base from https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
 /// </summary>
-public static class Utility
-{
-    public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
-    {
-        return behaviour.StartCoroutine(_realExecute(delay, action));
-    }
-    static IEnumerator _realExecute(float delay, Action action)
-    {
-        yield return new WaitForSeconds(delay);
-        action?.Invoke();
-    }
-}
+
 
 public class WindowsVoiceUnity : MonoBehaviour
 {
@@ -89,11 +77,17 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static void Speak(string text, int length, float delay = 0f)
     {
+        if (m_TheVoice == null)
+        {
+            Main.Logger.Critical("No voice initialized!");
+            return;
+        }
+
         if (Main.Settings.InterruptPlaybackOnPlay)
             Stop();
 
         m_CurrentWordCount = length;
-        if (delay == 0f)
+        if (delay <= 0f)
             addToSpeechQueue(text);
         else
             m_TheVoice.ExecuteLater(delay, () => Speak(text, length));

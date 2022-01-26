@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Patches\BookEventView_Patch.cs" />
+    <Compile Include="Patches\Dialog_Patch.cs" />
     <Compile Include="Patches\EncyclopediaPage_Patch.cs" />
     <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
     <Compile Include="Patches\MessageModal_Patch.cs" />

@@ -6,9 +6,10 @@ namespace SpeechMod.Voice;
 
 public class AppleSpeech : ISpeech
 {
-    public void Speak(string text)
+    public void Speak(string text, float delay)
     {
-        AppleVoiceUnity.Speak(text);
+        text = text.PrepareSpeechText();
+        AppleVoiceUnity.Speak(text, delay);
     }
 
     public string[] GetAvailableVoices()
