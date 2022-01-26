@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using SpeechMod.Voice;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace SpeechMod.Unity
@@ -25,7 +25,7 @@ namespace SpeechMod.Unity
                 return;
             }
 
-            text = new Regex("<[^>]+>").Replace(text, "");
+            text = text.PrepareSpeechText();
 
             if (m_TheVoice.speechProcess is { HasExited: false })
                 m_TheVoice.speechProcess.Kill();
