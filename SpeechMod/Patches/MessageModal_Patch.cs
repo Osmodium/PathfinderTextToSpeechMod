@@ -2,7 +2,6 @@
 using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.Common.MessageModal;
 using SpeechMod.Unity;
-using TMPro;
 using UnityEngine;
 
 namespace SpeechMod.Patches;

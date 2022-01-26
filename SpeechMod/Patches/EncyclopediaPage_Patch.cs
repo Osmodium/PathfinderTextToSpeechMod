@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Encyclopedia;
 using SpeechMod.Unity;
-using SpeechMod.Voice;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 

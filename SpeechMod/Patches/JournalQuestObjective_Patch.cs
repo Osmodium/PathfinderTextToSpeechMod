@@ -2,7 +2,6 @@
 using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Journal;
 using SpeechMod.Unity;
-using SpeechMod.Voice;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
