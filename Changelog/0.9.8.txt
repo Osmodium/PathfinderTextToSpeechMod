@@ -1,0 +1,10 @@
+SpeechMod 
+
+Version 0.9.8 Changelog
+
+- Added support for Mac OSX, using the installed voices in OSX! No longer Windows only! (I guess only Linux remains)
+- Added testing of selected voice in the settings.
+- Added Windows only setting to control if pressing a playback should queue it or interrupt the current playback. (For OSX it interrupts it)
+- Various slight optimizations and stability fixes.
+
+Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues
