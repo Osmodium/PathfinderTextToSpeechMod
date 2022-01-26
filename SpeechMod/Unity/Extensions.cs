@@ -110,7 +110,7 @@ public static class Extensions
             clickEvent =>
             {
                 if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
-                    Speech.Speak(textMeshPro.text);
+                    Main.Speech.Speak(textMeshPro.text);
             }
         );
     }
