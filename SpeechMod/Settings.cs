@@ -8,7 +8,7 @@ public class Settings : UnityModManager.ModSettings
     public int Volume = 100;
     public int Pitch = 0;
 
-    public string[] AvailableVoices = { "Microsoft Hazel Desktop", "Microsoft David Desktop", "Microsoft Zira Desktop" };
+    public string[] AvailableVoices;
     public int ChosenVoice = 1;
 
     public bool ColorOnHover = false;

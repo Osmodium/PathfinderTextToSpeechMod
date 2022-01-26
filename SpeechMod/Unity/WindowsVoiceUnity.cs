@@ -82,7 +82,7 @@ public class WindowsVoiceUnity : MonoBehaviour
         {
             if (!voices[i].Contains('-'))
                 continue;
-            voices[i] = voices[i].Substring(0, voices[i].IndexOf('-')).Trim();
+            voices[i] = voices[i].Replace(" - ", "#");
         }
         return voices;
     }

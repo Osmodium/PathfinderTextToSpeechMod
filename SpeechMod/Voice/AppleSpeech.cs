@@ -13,44 +13,35 @@ public class AppleSpeech : ISpeech
 
     public string[] GetAvailableVoices()
     {
-        var arguments = "-v '?' | awk '{$2=$3=\"\"; print $1}' | rev | cut -c 1- | rev";
+        string arguments = "say -v '?' | awk '{$3=\"\"; printf \"%s;\", $1\"#\"$2}' | rev | cut -c 1- | rev";
         var process = new Process
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = "/usr/bin/say",
-                Arguments = arguments,
+                FileName = "/bin/bash",
+                Arguments = "-c \"" + arguments + "\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             }
         };
-
-        Main.Logger.Log("Starting process...");
+        
         process.Start();
-        
-        Main.Logger.Log("Process started...");
-        
-        var output = process.StandardOutput.ReadToEnd();
-        var error = process.StandardError.ReadToEnd();
-
-        Main.Logger.Log("output: " + output);
-        Main.Logger.Log("error: " + error);
-        Main.Logger.Log("Read output waiting for exit...");
-        
+        string error = process.StandardError.ReadToEnd();
+        string text = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
-        Main.Logger.Log("Disposing...");
-        
         process.Dispose();
-        Main.Logger.Log("Is null or whitespace check...");
-        
-        if (string.IsNullOrWhiteSpace(output))
-            return null;
-        Main.Logger.Log("Splitting...");
-        
 
-        return output.Split(new[] {";"}, StringSplitOptions.RemoveEmptyEntries);
+        if (string.IsNullOrWhiteSpace(text))
+        {
+#if DEBUG
+            Main.Logger.Warning($"[GetAvailableVoices] {error}");
+#endif
+            return null;
+        }
+
+        return text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     public string GetStatusMessage()
