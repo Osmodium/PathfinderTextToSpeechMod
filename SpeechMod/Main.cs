@@ -1,18 +1,18 @@
 ﻿using HarmonyLib;
-using System;
-using System.Reflection;
 using SpeechMod.Unity;
 using SpeechMod.Voice;
+using System;
+using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
 using Extensions = SpeechMod.Unity.Extensions;
-using Object = UnityEngine.Object;
 
 namespace SpeechMod;
 
 #if DEBUG
-    [EnableReloading]
+[EnableReloading]
 #endif
 internal static class Main
 {
@@ -22,13 +22,20 @@ internal static class Main
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    public static string ChosenVoice => Settings.AvailableVoices[Settings.ChosenVoice];
+    public static string ChosenVoice => Settings?.AvailableVoices?[Settings.ChosenVoice]?.Split('#')[0];
+
+    public static ISpeech Speech;
+
+    private static string testText = "Speech Mod for Pathfinder Wrath of the Righteous";
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
         Debug.Log("Speech Mod Initializing...");
 
         Logger = modEntry.Logger;
+
+        if (!SetSpeech())
+            return false;
 
         Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
         UpdateColors();
@@ -40,56 +47,59 @@ internal static class Main
         var harmony = new Harmony(modEntry.Info.Id);
         harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-        Logger.Log(WindowsVoiceUnity.GetStatusMessage());
+        Logger.Log(Speech.GetStatusMessage());
 
-        string[] availableVoices = WindowsVoiceUnity.GetAvailableVoices();
-#if DEBUG
-        Logger.Log("Available voices:");
-        foreach (var s in availableVoices)
-        {
-            Logger.Log(s);
-        }
-#endif
-        if (availableVoices == null || availableVoices.Length == 0)
-        {
-            Logger.Warning("No voices available found! Diabling mod!");
+        if (!SetAvailableVoices())
             return false;
-        }
 
-        Logger.Log("Setting available voices list...");
-        Settings.AvailableVoices = availableVoices;
-
-        Speech.LoadDictionary();
-
-        AddUiElements();
+        SpeechExtensions.LoadDictionary();
 
         Debug.Log("Speech Mod Initialized!");
 
         return true;
     }
 
-    private static void AddUiElements()
+    private static bool SetAvailableVoices()
     {
-        Debug.Log("Adding SpeechMod UI elements.");
+        var availableVoices = Speech?.GetAvailableVoices();
 
-        GameObject windowsVoice = null;
-        try
+        if (availableVoices == null || availableVoices.Length == 0)
         {
-            windowsVoice = Object.FindObjectOfType<WindowsVoiceUnity>()?.gameObject;
-        }
-        catch{} // Sigh
-
-        if (windowsVoice != null)
-        {
-            Debug.Log($"{nameof(WindowsVoiceUnity)} found!");
-            return;
+            Logger.Warning("No available voices found! Disabling mod!");
+            return false;
         }
 
-        Debug.Log($"Adding {nameof(WindowsVoiceUnity)}...");
+#if DEBUG
+        Logger.Log("Available voices:");
+        foreach (var voice in availableVoices)
+        {
+            Logger.Log(voice);
+        }
+#endif
+        Logger.Log("Setting available voices list...");
+        Settings.AvailableVoices = availableVoices.OrderBy(v => v.Split('#')[1]).ToArray();
 
-        var windowsVoiceGameObject = new GameObject(Constants.WINDOWS_VOICE_NAME);
-        windowsVoiceGameObject.AddComponent<WindowsVoiceUnity>();
-        Object.DontDestroyOnLoad(windowsVoiceGameObject);
+        return true;
+    }
+
+    private static bool SetSpeech()
+    {
+        switch (Application.platform)
+        {
+            case RuntimePlatform.OSXPlayer:
+                Speech = new AppleSpeech();
+                SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
+                break;
+            case RuntimePlatform.WindowsPlayer:
+                Speech = new WindowsSpeech();
+                SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
+                break;
+            default:
+                Logger.Critical($"SpeechMod is not supported on {Application.platform}!");
+                return false;
+        }
+
+        return true;
     }
 
     private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
@@ -101,44 +111,82 @@ internal static class Main
     private static void OnGui(UnityModManager.ModEntry modEntry)
     {
         GUILayout.BeginVertical("", GUI.skin.box);
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        Settings.Rate = (int)GUILayout.HorizontalSlider(Settings.Rate, -10, 10, GUILayout.Width(300f));
+        Settings.Rate = Speech switch
+        {
+            WindowsSpeech => (int)GUILayout.HorizontalSlider(Settings.Rate, -10, 10, GUILayout.Width(300f)),
+            AppleSpeech => (int)GUILayout.HorizontalSlider(Settings.Rate, 150, 300, GUILayout.Width(300f)),
+            _ => Settings.Rate
+        };
         GUILayout.Label($" {Settings.Rate}", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
+        if (Speech is WindowsSpeech)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Settings.Volume = (int)GUILayout.HorizontalSlider(Settings.Volume, 0, 100, GUILayout.Width(300f));
+            GUILayout.Label($" {Settings.Volume}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
+            Settings.Pitch = (int)GUILayout.HorizontalSlider(Settings.Pitch, -10, 10, GUILayout.Width(300f));
+            GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
+            GUILayout.EndHorizontal();
+        }
+        else
+        {
+            Settings.Volume = 100;
+            Settings.Pitch = 0;
+        }
+
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
+        GUILayout.Label("Voice - Hover to see nationality below", GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings?.AvailableVoices
+                .Select(v =>
+                {
+                    var splitV = v.Split('#');
+                    return new GUIContent(splitV[0], splitV[1]);
+                }).ToArray(),
+                Speech is WindowsSpeech ? 4 : 5
+            );
+        GUILayout.EndHorizontal();
+        
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        Settings.Volume = (int)GUILayout.HorizontalSlider(Settings.Volume, 0, 100, GUILayout.Width(300f));
-        GUILayout.Label($" {Settings.Volume}", GUILayout.ExpandWidth(false));
+        GUILayout.Label(GUI.tooltip, GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
-        Settings.Pitch = (int)GUILayout.HorizontalSlider(Settings.Pitch, -10, 10, GUILayout.Width(300f));
-        GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
+        GUILayout.Label("Test selected voice", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        testText = GUILayout.TextField(testText, GUILayout.Width(700f));
+        if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
+            Speech.Speak(testText);
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Voice", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings.AvailableVoices, 3);
-        GUILayout.EndHorizontal();
         GUILayout.EndVertical();
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Interrupt speech on play");
-        GUILayout.Space(10);
-        Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
-        GUILayout.EndHorizontal();
 
         AddColorPicker("Color on text hover", ref Settings.ColorOnHover, "Hover color", ref Settings.HoverColorR, ref Settings.HoverColorG, ref Settings.HoverColorB, ref Settings.HoverColorA);
 
         AddColorPicker("Show playback progress", ref Settings.ShowPlaybackProgress, "Playback progress color", ref Settings.PlaybackColorR, ref Settings.PlaybackColorG, ref Settings.PlaybackColorB, ref Settings.PlaybackColorA);
 
         GUILayout.BeginVertical("", GUI.skin.box);
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Font style on text hover", GUILayout.ExpandWidth(false));
         Settings.FontStyleOnHover = GUILayout.Toggle(Settings.FontStyleOnHover, "Enabled");
@@ -153,15 +201,18 @@ internal static class Main
             }
             GUILayout.EndHorizontal();
         }
+
         GUILayout.EndVertical();
 
         GUILayout.BeginVertical("", GUI.skin.box);
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Phonetic dictionary", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false)))
-            Speech.LoadDictionary();
+            SpeechExtensions.LoadDictionary();
         GUILayout.EndHorizontal();
+
         GUILayout.EndVertical();
     }
 

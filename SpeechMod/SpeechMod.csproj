@@ -77,16 +77,20 @@
     <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
     <Compile Include="Patches\MessageModal_Patch.cs" />
     <Compile Include="Patches\TutorialWindow_Patch.cs" />
+    <Compile Include="Unity\AppleVoiceUnity.cs" />
     <Compile Include="Unity\ButtonFactory.cs" />
     <Compile Include="Patches\DialogCurrentPart_Patch.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Unity\Extensions.cs" />
-    <Compile Include="Voice\Speech.cs" />
+    <Compile Include="Voice\ISpeech.cs" />
+    <Compile Include="Voice\AppleSpeech.cs" />
     <Compile Include="Patches\TooltipEngine_Patch.cs" />
     <Compile Include="Unity\TextMeshProValues.cs" />
     <Compile Include="Unity\WindowsVoiceUnity.cs" />
+    <Compile Include="Voice\SpeechExtensions.cs" />
+    <Compile Include="Voice\WindowsSpeech.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.json">
