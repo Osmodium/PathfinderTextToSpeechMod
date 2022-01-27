@@ -1,5 +1,4 @@
 ﻿using Kingmaker;
-using Kingmaker.UI.Common;
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
@@ -12,7 +11,7 @@ public static class ButtonFactory
 {
     private static GameObject m_ButtonPrefab = null;
 
-    private static GameObject ArrowButton => UIUtility.IsGlobalMap() ? Game.Instance?.UI?.GlobalMapUI?.transform.TryFind(Constants.ARROW_BUTTON_PATH)?.gameObject : Game.Instance?.UI?.Canvas?.transform?.TryFind(Constants.ARROW_BUTTON_PATH)?.gameObject;
+    private static GameObject ArrowButton => UIHelper.TryFindInCanvas(Constants.ARROW_BUTTON_PATH)?.gameObject;
 
     public static GameObject CreatePlayButton(Transform parent, UnityAction call)
     {

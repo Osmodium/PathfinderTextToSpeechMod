@@ -7,7 +7,6 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
-using Extensions = SpeechMod.Unity.Extensions;
 
 namespace SpeechMod;
 
@@ -22,7 +21,7 @@ internal static class Main
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    public static string ChosenVoice => Settings?.AvailableVoices?[Settings.ChosenVoice]?.Split('#')[0];
+    public static string ChosenVoice => Settings?.AvailableVoices?[Settings.NarratorVoice]?.Split('#')[0];
 
     public static ISpeech Speech;
 
@@ -161,7 +160,7 @@ internal static class Main
         GUILayout.Label("Voice - Hover to see nationality below", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings?.AvailableVoices
+        Settings.NarratorVoice = GUILayout.SelectionGrid(Settings.NarratorVoice, Settings?.AvailableVoices
                 .Select(v =>
                 {
                     var splitV = v.Split('#');
@@ -269,7 +268,7 @@ internal static class Main
 
     private static void UpdateColors()
     {
-        Extensions.UpdateHoverColor();
+        UIHelper.UpdateHoverColor();
     }
 
     private static void OnSaveGui(UnityModManager.ModEntry modEntry)

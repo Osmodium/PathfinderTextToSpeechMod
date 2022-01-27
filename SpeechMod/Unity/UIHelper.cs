@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Kingmaker;
+using Kingmaker.UI.Common;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -7,7 +9,7 @@ using UnityEngine;
 
 namespace SpeechMod.Unity;
 
-public static class Extensions
+public static class UIHelper
 {
     private static Color m_HoverColor = Color.blue;
 
@@ -304,5 +306,12 @@ public static class Extensions
         }
 
         return null;
+    }
+
+    public static Transform TryFindInCanvas(string n)
+    {
+        return UIUtility.IsGlobalMap()
+            ? Game.Instance.UI.GlobalMapUI.transform.TryFind(n)
+            : Game.Instance.UI.Canvas.transform.TryFind(n);
     }
 }

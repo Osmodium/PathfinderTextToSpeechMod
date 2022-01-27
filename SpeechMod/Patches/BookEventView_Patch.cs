@@ -13,20 +13,14 @@ public static class BookEventView_Patch
     {
         if (!Main.Enabled)
             return;
-        
+
         var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
 
 #if DEBUG
         Debug.Log($"{nameof(BookEventView)}_SetCues_Postfix @ {sceneName}");
 #endif
 
-        Transform cuesBlock = null;
-
-        if (sceneName == "UI_Globalmap_Scene")
-            cuesBlock = Game.Instance.UI.GlobalMapUI.transform.TryFind("BookEventView/ContentWrapper/Window/Content/CuesBlock"); // In map   
-        else if (sceneName == "UI_Ingame_Scene")
-            cuesBlock = Game.Instance.UI.Canvas.transform.TryFind("BookEventPCView/ContentWrapper/Window/Content/CuesBlock"); // Normal
-
+        Transform cuesBlock = UIHelper.TryFindInCanvas("BookEventView/ContentWrapper/Window/Content/CuesBlock");
         if (cuesBlock == null)
         {
             Debug.LogWarning("CuesBlock not found!");
