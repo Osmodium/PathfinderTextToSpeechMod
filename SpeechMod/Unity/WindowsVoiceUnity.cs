@@ -1,26 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace SpeechMod.Unity;
-
-/// <summary>
-/// Credit to Chad Weisshaar for the base from https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
-/// </summary>
-public static class Utility
-{
-    public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
-    {
-        return behaviour.StartCoroutine(_realExecute(delay, action));
-    }
-    static IEnumerator _realExecute(float delay, Action action)
-    {
-        yield return new WaitForSeconds(delay);
-        action?.Invoke();
-    }
-}
 
 public class WindowsVoiceUnity : MonoBehaviour
 {
@@ -57,6 +40,14 @@ public class WindowsVoiceUnity : MonoBehaviour
     {
         initSpeech(1, 100);
     }
+    private static bool IsVoiceInitialized()
+    {
+        if (m_TheVoice != null)
+            return true;
+
+        Main.Logger.Critical("No voice initialized!");
+        return false;
+    }
 
     void Start()
     {
@@ -89,11 +80,14 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static void Speak(string text, int length, float delay = 0f)
     {
+        if (!IsVoiceInitialized())
+            return;
+
         if (Main.Settings.InterruptPlaybackOnPlay)
             Stop();
 
         m_CurrentWordCount = length;
-        if (delay == 0f)
+        if (delay <= 0f)
             addToSpeechQueue(text);
         else
             m_TheVoice.ExecuteLater(delay, () => Speak(text, length));
@@ -117,6 +111,9 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static void Stop()
     {
+        if (!IsVoiceInitialized())
+            return;
+
         if (!IsSpeaking)
             return;
 

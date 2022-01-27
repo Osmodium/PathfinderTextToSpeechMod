@@ -152,6 +152,12 @@ internal static class Main
         }
 
         GUILayout.BeginHorizontal();
+        GUILayout.Label("Auto play dialog", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Settings.AutoPlay = GUILayout.Toggle(Settings.AutoPlay, "Enabled");
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
         GUILayout.Label("Voice - Hover to see nationality below", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
@@ -172,7 +178,7 @@ internal static class Main
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Test selected voice", GUILayout.ExpandWidth(false));
+        GUILayout.Label("Preivew selected voice", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         testText = GUILayout.TextField(testText, GUILayout.Width(700f));
         if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))

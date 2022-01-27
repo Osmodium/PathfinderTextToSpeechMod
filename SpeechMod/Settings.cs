@@ -11,6 +11,8 @@ public class Settings : UnityModManager.ModSettings
     public string[] AvailableVoices;
     public int ChosenVoice = 1;
 
+    public bool AutoPlay = false;
+
     public bool ColorOnHover = false;
     public float HoverColorR = 0f;
     public float HoverColorG = 0f;

@@ -2,25 +2,33 @@
 using Kingmaker;
 using Kingmaker.UI;
 using SpeechMod.Unity;
-using SpeechMod.Voice;
 using UnityEngine;
 
 namespace SpeechMod;
 
 [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
-public static class DialogCurrentPart_Patch
+public static class StaticCanvas_Patch
 {
     public static void Postfix()
     {
         if (!Main.Enabled)
             return;
 
+        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
+
+#if DEBUG
+        Debug.Log($"{nameof(StaticCanvas)}_Initialize_Postfix @ {sceneName}");
+#endif
+
         AddDialogSpeechButton();
     }
 
     private static void AddDialogSpeechButton()
     {
+
+#if DEBUG
         Debug.Log("Adding speech button to dialog ui.");
+#endif
 
         var parent = Game.Instance.UI.Canvas.transform.TryFind("DialogPCView/Body/View/Scroll View");
 

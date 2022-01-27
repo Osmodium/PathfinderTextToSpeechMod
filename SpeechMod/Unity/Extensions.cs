@@ -1,5 +1,5 @@
-﻿using SpeechMod.Voice;
-using System;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -10,6 +10,17 @@ namespace SpeechMod.Unity;
 public static class Extensions
 {
     private static Color m_HoverColor = Color.blue;
+
+    public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
+    {
+        return behaviour.StartCoroutine(_realExecute(delay, action));
+    }
+
+    static IEnumerator _realExecute(float delay, Action action)
+    {
+        yield return new WaitForSeconds(delay);
+        action?.Invoke();
+    }
 
     public static void UpdateHoverColor()
     {
