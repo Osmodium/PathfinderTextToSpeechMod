@@ -21,7 +21,7 @@ internal static class Main
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    public static string ChosenVoice => Settings?.AvailableVoices?[Settings.NarratorVoice]?.Split('#')[0];
+    public static string ChosenVoice => Settings?.AvailableVoices?[Settings.ChosenVoice]?.Split('#')[0];
 
     public static ISpeech Speech;
 
@@ -160,7 +160,7 @@ internal static class Main
         GUILayout.Label("Voice - Hover to see nationality below", GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        Settings.NarratorVoice = GUILayout.SelectionGrid(Settings.NarratorVoice, Settings?.AvailableVoices
+        Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings?.AvailableVoices
                 .Select(v =>
                 {
                     var splitV = v.Split('#');
