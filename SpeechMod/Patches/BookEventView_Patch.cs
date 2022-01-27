@@ -19,6 +19,7 @@ public static class BookEventView_Patch
 #if DEBUG
         Debug.Log($"{nameof(BookEventView)}_SetCues_Postfix @ {sceneName}");
 #endif
+
         Transform cuesBlock = null;
 
         if (sceneName == "UI_Globalmap_Scene")

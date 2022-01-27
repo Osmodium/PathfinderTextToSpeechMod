@@ -20,7 +20,7 @@ public class WindowsSpeech : ISpeech
         return arr.Aggregate(text, (current, t) => current.Replace(t, "")).Length;
     }
 
-    public void Speak(string text)
+    public void Speak(string text, float delay = 0f)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -38,7 +38,12 @@ public class WindowsSpeech : ISpeech
 #if DEBUG
         UnityEngine.Debug.Log(textToSpeak);
 #endif
-        WindowsVoiceUnity.Speak(textToSpeak, Length(textToSpeak));
+        WindowsVoiceUnity.Speak(textToSpeak, Length(textToSpeak), delay);
+    }
+
+    public void Stop()
+    {
+        WindowsVoiceUnity.Stop();
     }
 
     public string[] GetAvailableVoices()

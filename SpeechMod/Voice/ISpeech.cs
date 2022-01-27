@@ -2,7 +2,8 @@
 
 public interface ISpeech
 {
-    void Speak(string text);
-    string[] GetAvailableVoices();
     string GetStatusMessage();
+    string[] GetAvailableVoices();
+    void Speak(string text, float delay = 0f);
+    void Stop();
 }

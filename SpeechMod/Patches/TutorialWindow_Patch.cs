@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker;
+using Kingmaker.UI;
 using Kingmaker.UI.MVVM._PCView.Tutorial;
 using Kingmaker.UI.MVVM._VM.Tutorial;
 using SpeechMod.Unity;
@@ -35,7 +36,7 @@ public class TutorialWindow_Patch
     private static void HookSmallWindow(Transform smallWindow)
     {
 #if DEBUG
-            Debug.Log("Hooking on SMALL tutorial window!");
+        Debug.Log("Hooking on SMALL tutorial window!");
 #endif
 
         var content = smallWindow.TryFind("Window/Content/Body/ScrollView/ViewPort/Content");
@@ -48,6 +49,26 @@ public class TutorialWindow_Patch
         }
 
         content.HookupTextToSpeechOnTransform();
+
+        var viewPort = smallWindow.TryFind("Window/Content/Body/ScrollView/ViewPort");
+        if (viewPort == null)
+        {
+#if DEBUG
+            Debug.LogWarning("ViewPort of SMALL tutorial window was not found!");
+#endif
+            return;
+        }
+
+        // Disable after first arrangement so when hovering buttons or links the view doesn't jump to top.
+        var vlgw = viewPort.GetComponent<VerticalLayoutGroupWorkaround>();
+        if (vlgw == null)
+            return;
+
+        vlgw.CalculateLayoutInputHorizontal();
+
+        // Delay the disabling of the script until it has had a chance to run.
+        var monoBehaviour = viewPort.GetComponent<MonoBehaviour>();
+        monoBehaviour.ExecuteLater(0.5f, () => { vlgw.enabled = false; });
     }
 
     private static void HookBigWindow(Transform bigWindow)
