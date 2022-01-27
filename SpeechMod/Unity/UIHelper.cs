@@ -314,4 +314,9 @@ public static class UIHelper
             ? Game.Instance.UI.GlobalMapUI.transform.TryFind(n)
             : Game.Instance.UI.Canvas.transform.TryFind(n);
     }
+
+    public static Transform TryFindInFadeCanvas(string n)
+    {
+        return Game.Instance.UI.FadeCanvas.transform.TryFind(n);
+    }
 }

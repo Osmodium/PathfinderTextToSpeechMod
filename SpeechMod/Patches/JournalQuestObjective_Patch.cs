@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Journal;
 using SpeechMod.Unity;
 using TMPro;
@@ -22,7 +21,7 @@ public static class JournalQuestObjective_Patch
         Debug.Log("JournalQuestObjectivePCView_BindViewImplementation");
 #endif
 
-        var bodyGroup = Game.Instance.UI.Canvas.transform.TryFind("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup");
+        var bodyGroup = UIHelper.TryFindInStaticCanvas("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup");
         if (bodyGroup == null)
         {
             Debug.Log("Couldn't find BodyGroup...");

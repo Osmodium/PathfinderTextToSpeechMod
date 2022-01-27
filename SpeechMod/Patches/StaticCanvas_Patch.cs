@@ -30,7 +30,7 @@ public static class StaticCanvas_Patch
         Debug.Log("Adding speech button to dialog ui.");
 #endif
 
-        var parent = Game.Instance.UI.Canvas.transform.TryFind("DialogPCView/Body/View/Scroll View");
+        var parent = UIHelper.TryFindInStaticCanvas("DialogPCView/Body/View/Scroll View");
 
         if (parent == null)
         {

@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Encyclopedia;
 using SpeechMod.Unity;
 using System.Linq;
@@ -18,7 +17,7 @@ public static class EncyclopediaPage_Patch
         if (!Main.Enabled)
             return;
 
-        var bodyGroup = Game.Instance.UI.Canvas.transform.TryFind("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
+        var bodyGroup = UIHelper.TryFindInStaticCanvas("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
         if (bodyGroup == null)
         {
 #if DEBUG
