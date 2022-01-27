@@ -8,10 +8,10 @@ public class Settings : UnityModManager.ModSettings
     public int Volume = 100;
     public int Pitch = 0;
 
+    public bool AutoPlay = false;
+
     public string[] AvailableVoices;
     public int ChosenVoice = 1;
-
-    public bool AutoPlay = false;
 
     public bool ColorOnHover = false;
     public float HoverColorR = 0f;

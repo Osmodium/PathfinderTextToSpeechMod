@@ -7,7 +7,6 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
-using Extensions = SpeechMod.Unity.Extensions;
 
 namespace SpeechMod;
 
@@ -269,7 +268,7 @@ internal static class Main
 
     private static void UpdateColors()
     {
-        Extensions.UpdateHoverColor();
+        UIHelper.UpdateHoverColor();
     }
 
     private static void OnSaveGui(UnityModManager.ModEntry modEntry)
