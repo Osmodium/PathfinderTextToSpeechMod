@@ -11,7 +11,7 @@ public static class ButtonFactory
 {
     private static GameObject m_ButtonPrefab = null;
 
-    private static GameObject ArrowButton => UIHelper.TryFindInCanvas(Constants.ARROW_BUTTON_PATH)?.gameObject;
+    private static GameObject ArrowButton => UIHelper.TryFindInStaticCanvas(Constants.ARROW_BUTTON_PATH)?.gameObject;
 
     public static GameObject CreatePlayButton(Transform parent, UnityAction call)
     {

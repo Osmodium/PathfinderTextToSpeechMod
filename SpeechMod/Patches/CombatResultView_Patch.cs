@@ -20,19 +20,19 @@ namespace SpeechMod.Patches
             Debug.Log($"{nameof(CombatResultPCView)}_BindViewImplementation_Postfix @ {sceneName}");
 #endif
 
-            var description = UIHelper.TryFindInCanvas("CombatResultView/FoundDescription");
+            var description = UIHelper.TryFindInStaticCanvas("CombatResultView/FoundDescription");
             if (description == null)
                 Debug.LogWarning($"{nameof(description)} not found!");
             else
                 description.HookupTextToSpeechOnTransform();
 
-            var experience = UIHelper.TryFindInCanvas("CombatResultView/Experience");
+            var experience = UIHelper.TryFindInStaticCanvas("CombatResultView/Experience");
             if (experience == null)
                 Debug.LogWarning($"{nameof(experience)} not found!");
             else
                 experience.HookupTextToSpeechOnTransform();
 
-            var resource = UIHelper.TryFindInCanvas("CombatResultView/Resource");
+            var resource = UIHelper.TryFindInStaticCanvas("CombatResultView/Resource");
             if (resource == null)
                 Debug.LogWarning($"{nameof(resource)} not found!");
             else

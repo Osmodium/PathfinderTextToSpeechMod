@@ -308,7 +308,7 @@ public static class UIHelper
         return null;
     }
 
-    public static Transform TryFindInCanvas(string n)
+    public static Transform TryFindInStaticCanvas(string n)
     {
         return UIUtility.IsGlobalMap()
             ? Game.Instance.UI.GlobalMapUI.transform.TryFind(n)

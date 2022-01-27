@@ -20,7 +20,7 @@ public static class BookEventView_Patch
         Debug.Log($"{nameof(BookEventView)}_SetCues_Postfix @ {sceneName}");
 #endif
 
-        Transform cuesBlock = UIHelper.TryFindInCanvas("BookEventView/ContentWrapper/Window/Content/CuesBlock");
+        Transform cuesBlock = UIHelper.TryFindInStaticCanvas("BookEventView/ContentWrapper/Window/Content/CuesBlock");
         if (cuesBlock == null)
         {
             Debug.LogWarning("CuesBlock not found!");
