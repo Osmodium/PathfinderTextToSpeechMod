@@ -16,13 +16,19 @@ namespace SpeechMod.Unity
                 m_TheVoice = this;
         }
 
+        private static bool IsVoiceInitialized()
+        {
+            if (m_TheVoice != null)
+                return true;
+
+            Main.Logger.Critical("No voice initialized!");
+            return false;
+        }
+
         public static void Speak(string text, float delay = 0f)
         {
-            if (m_TheVoice == null)
-            {
-                Main.Logger.Critical("No voice initialized!");
+            if (!IsVoiceInitialized())
                 return;
-            }
 
             if (delay > 0f)
             {
@@ -35,6 +41,15 @@ namespace SpeechMod.Unity
 
             string arguments = string.Concat("-v ", Main.ChosenVoice, " -r ", Main.Settings.Rate.ToString(), " ", text.Replace("\"", ""));
             m_TheVoice.speechProcess = Process.Start("/usr/bin/say", arguments);
+        }
+
+        public static void Stop()
+        {
+            if (!IsVoiceInitialized())
+                return;
+
+            if (m_TheVoice.speechProcess is { HasExited: false })
+                m_TheVoice.speechProcess.Kill();
         }
     }
 }

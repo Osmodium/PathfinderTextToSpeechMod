@@ -41,6 +41,11 @@ public class WindowsSpeech : ISpeech
         WindowsVoiceUnity.Speak(textToSpeak, Length(textToSpeak), delay);
     }
 
+    public void Stop()
+    {
+        WindowsVoiceUnity.Stop();
+    }
+
     public string[] GetAvailableVoices()
     {
         return WindowsVoiceUnity.GetAvailableVoices();

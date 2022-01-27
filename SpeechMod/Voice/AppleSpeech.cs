@@ -12,6 +12,11 @@ public class AppleSpeech : ISpeech
         AppleVoiceUnity.Speak(text, delay);
     }
 
+    public void Stop()
+    {
+        AppleVoiceUnity.Stop();
+    }
+
     public string[] GetAvailableVoices()
     {
         string arguments = "say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";

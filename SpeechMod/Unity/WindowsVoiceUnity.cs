@@ -5,11 +5,6 @@ using UnityEngine;
 
 namespace SpeechMod.Unity;
 
-/// <summary>
-/// Credit to Chad Weisshaar for the base from https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/
-/// </summary>
-
-
 public class WindowsVoiceUnity : MonoBehaviour
 {
     [DllImport("WindowsVoice")]
@@ -45,6 +40,14 @@ public class WindowsVoiceUnity : MonoBehaviour
     {
         initSpeech(1, 100);
     }
+    private static bool IsVoiceInitialized()
+    {
+        if (m_TheVoice != null)
+            return true;
+
+        Main.Logger.Critical("No voice initialized!");
+        return false;
+    }
 
     void Start()
     {
@@ -77,11 +80,8 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static void Speak(string text, int length, float delay = 0f)
     {
-        if (m_TheVoice == null)
-        {
-            Main.Logger.Critical("No voice initialized!");
+        if (!IsVoiceInitialized())
             return;
-        }
 
         if (Main.Settings.InterruptPlaybackOnPlay)
             Stop();
@@ -111,6 +111,9 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static void Stop()
     {
+        if (!IsVoiceInitialized())
+            return;
+
         if (!IsSpeaking)
             return;
 
