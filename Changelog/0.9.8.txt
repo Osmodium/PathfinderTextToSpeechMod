@@ -2,9 +2,10 @@ SpeechMod
 
 Version 0.9.8 Changelog
 
-- Added support for Mac OSX, using the installed voices in OSX! No longer Windows only! (I guess only Linux remains)
-- Added testing of selected voice in the settings.
-- Added Windows only setting to control if pressing a playback should queue it or interrupt the current playback. (For OSX it interrupts it)
+- Added support for macOS, using the voices available through the 'say' command! No longer Windows only woo! (I guess only Linux remains)
+- Added text and button to preview the selected voice in the settings.
+- Added Auto play of dialogs when it's not voice acted.
+- Removed ability to queue playback, playing any TTS will interrupt the current playback.
 - Various slight optimizations and stability fixes.
 
 Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues
