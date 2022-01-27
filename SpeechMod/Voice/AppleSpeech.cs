@@ -13,7 +13,7 @@ public class AppleSpeech : ISpeech
 
     public string[] GetAvailableVoices()
     {
-        string arguments = "say -v '?' | awk '{$3=\"\"; printf \"%s;\", $1\"#\"$2}' | rev | cut -c 1- | rev";
+        string arguments = "say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";
         var process = new Process
         {
             StartInfo = new ProcessStartInfo
