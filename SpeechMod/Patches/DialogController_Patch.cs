@@ -28,6 +28,7 @@ namespace SpeechMod.Patches
 
             // Don't stop voice if the dialog is closing or if it is not a normal dialog
             // However the playback will stop if a normal dialog is instigated while a non dialog playback is playing.
+            // This is the same behaviour as in the old Infinity Engine games.
             if (Game.Instance.DialogController.Dialog.GetExitAnswer().Equals(answer) ||
                 Game.Instance.DialogController.Dialog.Type != DialogType.Common)
                 return;
