@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Kingmaker;
+using Kingmaker.Blueprints;
+using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Kingmaker;
-using Kingmaker.Blueprints;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace SpeechMod.Unity
 {

@@ -1,8 +1,8 @@
-﻿using SpeechMod.Unity;
+﻿using Kingmaker;
+using Kingmaker.Blueprints;
+using SpeechMod.Unity;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Kingmaker;
-using Kingmaker.Blueprints;
 
 namespace SpeechMod.Voice;
 
@@ -47,15 +47,15 @@ public class WindowsSpeech : ISpeech
     {
         text = text.Replace("<color=#616060>", $"</voice>{CombinedNarratorVoiceStart}");
         text = text.Replace("</color>", $"</voice>{CombinedDialogVoiceStart}");
-        
+
         if (text.StartsWith("</voice>"))
             text = text.Remove(0, 8);
         else
             text = CombinedDialogVoiceStart + text;
-        
+
         if (text.EndsWith(CombinedDialogVoiceStart))
             text = text.Remove(text.Length - CombinedDialogVoiceStart.Length, CombinedDialogVoiceStart.Length);
-	
+
         if (!text.EndsWith("</voice>"))
             text += "</voice>";
         return text;
@@ -126,7 +126,7 @@ public class WindowsSpeech : ISpeech
 #endif
         WindowsVoiceUnity.Speak(text, Length(text), delay);
     }
-    
+
     public void Stop()
     {
         WindowsVoiceUnity.Stop();

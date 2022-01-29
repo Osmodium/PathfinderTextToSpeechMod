@@ -32,7 +32,7 @@ public class Settings : UnityModManager.ModSettings
     public float PlaybackColorB = 0.7f;
     public float PlaybackColorA = 0.5f;
 
-    //public bool InterruptPlaybackOnPlay = true;
+    public bool InterruptPlaybackOnPlay = true;
 
     public override void Save(UnityModManager.ModEntry modEntry)
     {

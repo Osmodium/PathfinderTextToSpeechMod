@@ -142,11 +142,11 @@ internal static class Main
             GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
 
-            //GUILayout.BeginHorizontal();
-            //GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
-            //GUILayout.Space(10);
-            //Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
-            //GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
+            GUILayout.EndHorizontal();
         }
         else
         {
@@ -164,7 +164,7 @@ internal static class Main
 
         GUILayout.BeginVertical("", GUI.skin.box);
 
-        AddVoiceSelector("Narrator Voice - Hover to see nationality below", ref Settings.NarratorVoice, ref m_NarratorPreviewText);
+        AddVoiceSelector("Narrator Voice - See nationality below", ref Settings.NarratorVoice, ref m_NarratorPreviewText);
         
         GUILayout.EndVertical();
 
@@ -177,8 +177,8 @@ internal static class Main
 
         if (Settings.UseGenderSpecificVoices)
         {
-            AddVoiceSelector("Female Voice - Hover to see nationality below", ref Settings.FemaleVoice, ref m_FemalePreviewText);
-            AddVoiceSelector("Male Voice - Hover to see nationality below", ref Settings.MaleVoice, ref m_MalePreviewText);
+            AddVoiceSelector("Female Voice - See nationality below", ref Settings.FemaleVoice, ref m_FemalePreviewText);
+            AddVoiceSelector("Male Voice - See nationality below", ref Settings.MaleVoice, ref m_MalePreviewText);
         }
 
         GUILayout.EndVertical();
@@ -237,7 +237,7 @@ internal static class Main
         GUILayout.BeginHorizontal();
         GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        GUILayout.Label(GUI.tooltip, GUILayout.ExpandWidth(false));
+        GUILayout.Label(Settings?.AvailableVoices[voice].Split('#')[1], GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
