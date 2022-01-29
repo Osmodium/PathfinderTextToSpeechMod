@@ -60,7 +60,7 @@ namespace SpeechMod.Unity
             }
 
             string arguments = "";
-            text = new Regex("<b><color[^>]+><link([^>]+)?>([^.]+)<\\/link><\\/color></b>").Replace(text, "$2");
+            text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
             text = text.Replace("\\n", "  ");
             text = text.Replace("\n", " ");
             text = text.Replace(";", "");

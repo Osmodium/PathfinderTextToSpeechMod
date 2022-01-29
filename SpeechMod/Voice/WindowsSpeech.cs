@@ -91,7 +91,7 @@ public class WindowsSpeech : ISpeech
 
         text = text.PrepareSpeechText();
 
-        text = new Regex("<b><color[^>]+><link([^>]+)?>([^.]+)<\\/link><\\/color></b>").Replace(text, "$2");
+        text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
 
 #if DEBUG
         UnityEngine.Debug.Log(text);
