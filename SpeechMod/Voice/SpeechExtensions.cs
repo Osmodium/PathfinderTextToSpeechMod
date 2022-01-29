@@ -63,8 +63,6 @@ namespace SpeechMod.Voice
             text = text.Replace("\n", ". ");
             text = text.Trim().Trim('.');
 
-            text = new Regex("<[^>]+>").Replace(text, "");
-
             return m_PhoneticDictionary?.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
         }
 

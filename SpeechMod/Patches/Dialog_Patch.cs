@@ -37,6 +37,6 @@ public static class Dialog_Patch
         if (!string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(key, false)))
             return;
 
-        Main.Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText, 0.5f);
+        Main.Speech.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.DisplayText, 0.5f);
     }
 }

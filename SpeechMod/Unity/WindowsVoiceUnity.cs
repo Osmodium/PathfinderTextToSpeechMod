@@ -84,7 +84,9 @@ public class WindowsVoiceUnity : MonoBehaviour
             return;
 
         //if (Main.Settings.InterruptPlaybackOnPlay)
-        Stop();
+
+        if (IsSpeaking)
+            Stop();
 
         m_CurrentWordCount = length;
         if (delay <= 0f)

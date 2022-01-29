@@ -40,7 +40,7 @@ public static class StaticCanvas_Patch
 
         var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
         {
-            Main.Speech.Speak(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
+            Main.Speech.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
         });
 
         buttonGameObject.name = "SpeechButton";

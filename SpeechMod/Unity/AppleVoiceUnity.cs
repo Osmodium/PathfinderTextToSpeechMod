@@ -39,8 +39,7 @@ namespace SpeechMod.Unity
             if (m_TheVoice.speechProcess is { HasExited: false })
                 m_TheVoice.speechProcess.Kill();
 
-            string arguments = string.Concat("-v ", Main.ChosenVoice, " -r ", Main.Settings.Rate.ToString(), " ", text.Replace("\"", ""));
-            m_TheVoice.speechProcess = Process.Start("/usr/bin/say", arguments);
+            m_TheVoice.speechProcess = Process.Start("/usr/bin/say", text);
         }
 
         public static void Stop()

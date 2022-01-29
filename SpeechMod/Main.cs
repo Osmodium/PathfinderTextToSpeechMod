@@ -21,11 +21,15 @@ internal static class Main
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    public static string ChosenVoice => Settings?.AvailableVoices?[Settings.ChosenVoice]?.Split('#')[0];
+    public static string NarratorVoice => Settings?.AvailableVoices?[Settings.NarratorVoice]?.Split('#')[0];
+    public static string FemaleVoice => Settings?.AvailableVoices?[Settings.FemaleVoice]?.Split('#')[0];
+    public static string MaleVoice => Settings?.AvailableVoices?[Settings.MaleVoice]?.Split('#')[0];
 
     public static ISpeech Speech;
 
-    private static string previewText = "Speech Mod for Pathfinder Wrath of the Righteous";
+    private static string m_NarratorPreviewText = "Speech Mod for Pathfinder Wrath of the Righteous";
+    private static string m_FemalePreviewText = "Female voice speech test";
+    private static string m_MalePreviewText = "Male voice speech test";
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
@@ -149,40 +153,33 @@ internal static class Main
             Settings.Volume = 100;
             Settings.Pitch = 0;
         }
-
+        
         GUILayout.BeginHorizontal();
         GUILayout.Label("Auto play dialog", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         Settings.AutoPlay = GUILayout.Toggle(Settings.AutoPlay, "Enabled");
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Voice - Hover to see nationality below", GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        Settings.ChosenVoice = GUILayout.SelectionGrid(Settings.ChosenVoice, Settings?.AvailableVoices
-                .Select(v =>
-                {
-                    var splitV = v.Split('#');
-                    return new GUIContent(splitV[0], splitV[1]);
-                }).ToArray(),
-                Speech is WindowsSpeech ? 4 : 5
-            );
-        GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        AddVoiceSelector("Narrator Voice - Hover to see nationality below", ref Settings.NarratorVoice, ref m_NarratorPreviewText);
         
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        GUILayout.Label(GUI.tooltip, GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Preivew selected voice", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        previewText = GUILayout.TextField(previewText, GUILayout.Width(700f));
-        if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
-            Speech.Speak(previewText);
+        GUILayout.Label("Use gender specific voices", GUILayout.ExpandWidth(false));
+        Settings.UseGenderSpecificVoices = GUILayout.Toggle(Settings.UseGenderSpecificVoices, "Enabled");
         GUILayout.EndHorizontal();
+
+        if (Settings.UseGenderSpecificVoices)
+        {
+            AddVoiceSelector("Female Voice - Hover to see nationality below", ref Settings.FemaleVoice, ref m_FemalePreviewText);
+            AddVoiceSelector("Male Voice - Hover to see nationality below", ref Settings.MaleVoice, ref m_MalePreviewText);
+        }
 
         GUILayout.EndVertical();
 
@@ -219,6 +216,37 @@ internal static class Main
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
+    }
+
+    private static void AddVoiceSelector(string label, ref int voice, ref string previewString)
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label(label, GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        voice = GUILayout.SelectionGrid(voice, Settings?.AvailableVoices
+                .Select(v =>
+                {
+                    var splitV = v.Split('#');
+                    return new GUIContent(splitV[0], splitV[1]);
+                }).ToArray(),
+            Speech is WindowsSpeech ? 4 : 5
+        );
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Nationality", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        GUILayout.Label(GUI.tooltip, GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Preivew voice", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        previewString = GUILayout.TextField(previewString, GUILayout.Width(700f));
+        if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
+            Speech.SpeakPreview(previewString, Settings?.AvailableVoices?[voice]?.Split('#')[0]);
+        GUILayout.EndHorizontal();
     }
 
     private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b, ref float a)
