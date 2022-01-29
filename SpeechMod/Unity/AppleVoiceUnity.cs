@@ -1,12 +1,16 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+using Kingmaker;
+using Kingmaker.Blueprints;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace SpeechMod.Unity
 {
     public class AppleVoiceUnity : MonoBehaviour
     {
         private static AppleVoiceUnity m_TheVoice;
-        private Process speechProcess;
+        private Process m_SpeechProcess;
 
         void Start()
         {
@@ -36,10 +40,53 @@ namespace SpeechMod.Unity
                 return;
             }
 
-            if (m_TheVoice.speechProcess is { HasExited: false })
-                m_TheVoice.speechProcess.Kill();
+            Stop();
 
-            m_TheVoice.speechProcess = Process.Start("/usr/bin/say", text);
+            m_TheVoice.m_SpeechProcess = Process.Start("/usr/bin/say", text);
+        }
+
+        public static void SpeakDialog(string text, float delay = 0f)
+        {
+            if (!IsVoiceInitialized())
+                return;
+
+            if (delay > 0f)
+            {
+                m_TheVoice.ExecuteLater(delay, () => SpeakDialog(text));
+                return;
+            }
+
+            string arguments = "";
+            text = text.Replace(";", "");
+            while (text.IndexOf("<color=#616060>") != -1)
+            {
+                int Position = text.IndexOf("<color=#616060>");
+                if (Position != 0)
+                {
+                    string arguments_part = text.Substring(0, Position);
+                    text = text.Substring(Position);
+                    arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.Rate} {arguments_part.Replace("\"", "")};";
+                }
+                else
+                {
+                    Position = text.IndexOf("</color>");
+                    string arguments_part2 = text.Substring(0, Position);
+                    text = text.Substring(Position);
+                    arguments = $"{arguments}say -v {(Game.Instance?.DialogController?.CurrentSpeaker.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice)} -r {Main.Settings.Rate} {arguments_part2.Replace("\"", "")};";
+                }
+            }
+
+            text = text.Replace("\"", "");
+            if(!string.IsNullOrWhiteSpace(text))
+                arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.Rate} {text};";
+
+            arguments = new Regex("<[^>]+>").Replace(arguments, "");
+
+            Process.Start("/usr/bin/killall", "bash");
+            Process.Start("/usr/bin/killall", "say");
+            
+            arguments = "-c \"" + arguments + "\"";
+            m_TheVoice.m_SpeechProcess = Process.Start("/bin/bash", arguments);
         }
 
         public static void Stop()
@@ -47,8 +94,8 @@ namespace SpeechMod.Unity
             if (!IsVoiceInitialized())
                 return;
 
-            if (m_TheVoice.speechProcess is { HasExited: false })
-                m_TheVoice.speechProcess.Kill();
+            if (m_TheVoice.m_SpeechProcess is { HasExited: false })
+                m_TheVoice.m_SpeechProcess.Kill();
         }
     }
 }

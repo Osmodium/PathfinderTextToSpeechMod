@@ -15,23 +15,23 @@ public class WindowsSpeech : ISpeech
     private static string Rate => $"<rate absspeed=\"{ Main.Settings.Rate }\"/>";
     private static string Volume => $"<volume level=\"{ Main.Settings.Volume }\"/>";
 
+    private string CombinedNarratorVoiceStart => $"{NarratorVoice}{Pitch}{Rate}{Volume}";
+
     private string CombinedDialogVoiceStart
     {
         get
         {
             if (Game.Instance?.DialogController?.CurrentSpeaker == null)
-                return $"{NarratorVoice}{Pitch}{Rate}{Volume}";
+                return CombinedNarratorVoiceStart;
 
             return Game.Instance.DialogController.CurrentSpeaker.Gender switch
             {
                 Gender.Male => $"{MaleVoice}{Pitch}{Rate}{Volume}",
                 Gender.Female => $"{FemaleVoice}{Pitch}{Rate}{Volume}",
-                _ => $"{NarratorVoice}{Pitch}{Rate}{Volume}"
+                _ => CombinedNarratorVoiceStart
             };
         }
     }
-
-    private string CombinedNarratorVoiceStart => $"{NarratorVoice}{Pitch}{Rate}{Volume}";
 
     public static int Length(string text)
     {
@@ -87,6 +87,9 @@ public class WindowsSpeech : ISpeech
             Speak(text, delay);
 
         text = text.PrepareSpeechText();
+
+        text = new Regex("<link=[^>]+>").Replace(text, "");
+        text = new Regex("</link>").Replace(text, "");
 
 #if DEBUG
         UnityEngine.Debug.Log(text);

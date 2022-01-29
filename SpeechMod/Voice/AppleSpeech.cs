@@ -31,7 +31,7 @@ public class AppleSpeech : ISpeech
             Speak(text, delay);
 
         text = text.PrepareSpeechText();
-        // TODO
+        AppleVoiceUnity.SpeakDialog(text, delay);
     }
 
     public void Speak(string text, float delay)
