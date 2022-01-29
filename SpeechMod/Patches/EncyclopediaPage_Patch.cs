@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using HarmonyLib;
-using Kingmaker;
+﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Encyclopedia;
 using SpeechMod.Unity;
-using SpeechMod.Voice;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -19,7 +17,7 @@ public static class EncyclopediaPage_Patch
         if (!Main.Enabled)
             return;
 
-        var bodyGroup = Game.Instance.UI.Canvas.transform.TryFind("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
+        var bodyGroup = UIHelper.TryFindInStaticCanvas("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
         if (bodyGroup == null)
         {
 #if DEBUG

@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Kingmaker;
 using Kingmaker.UI;
 using Kingmaker.UI.MVVM._PCView.Tutorial;
 using Kingmaker.UI.MVVM._VM.Tutorial;
@@ -20,8 +19,8 @@ public class TutorialWindow_Patch
         Debug.Log($"{nameof(TutorialWindowPCView<TutorialWindowVM>)}_SetPage_Postfix");
 #endif
 
-        var smallWindow = Game.Instance.UI.FadeCanvas.transform.TryFind("TutorialView/SmallWindow");
-        var bigWindow = Game.Instance.UI.FadeCanvas.transform.TryFind("TutorialView/BigWindow");
+        var smallWindow = UIHelper.TryFindInFadeCanvas("TutorialView/SmallWindow");
+        var bigWindow = UIHelper.TryFindInFadeCanvas("TutorialView/BigWindow");
 
         if (smallWindow == null && bigWindow == null)
             Debug.LogWarning("Postfix on SetPage but both small and big tutorial window is null!");
