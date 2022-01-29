@@ -11,7 +11,11 @@ public class Settings : UnityModManager.ModSettings
     public bool AutoPlay = false;
 
     public string[] AvailableVoices;
-    public int ChosenVoice = 1;
+    public int NarratorVoice = 1;
+
+    public bool UseGenderSpecificVoices = false;
+    public int FemaleVoice = 0;
+    public int MaleVoice = 2;
 
     public bool ColorOnHover = false;
     public float HoverColorR = 0f;
@@ -28,7 +32,7 @@ public class Settings : UnityModManager.ModSettings
     public float PlaybackColorB = 0.7f;
     public float PlaybackColorA = 0.5f;
 
-    //public bool InterruptPlaybackOnPlay = true;
+    public bool InterruptPlaybackOnPlay = true;
 
     public override void Save(UnityModManager.ModEntry modEntry)
     {

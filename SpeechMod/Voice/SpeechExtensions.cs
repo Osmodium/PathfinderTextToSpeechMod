@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -62,8 +61,6 @@ namespace SpeechMod.Voice
             text = text.Replace("\"", "");
             text = text.Replace("\n", ". ");
             text = text.Trim().Trim('.');
-
-            text = new Regex("<[^>]+>").Replace(text, "");
 
             return m_PhoneticDictionary?.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
         }

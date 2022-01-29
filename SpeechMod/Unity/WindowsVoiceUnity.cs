@@ -7,34 +7,32 @@ namespace SpeechMod.Unity;
 
 public class WindowsVoiceUnity : MonoBehaviour
 {
-    [DllImport("WindowsVoice")]
+    enum WindowsVoiceStatus { Uninitialized, Ready, Speaking, Terminated, Error }
+
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void initSpeech(int rate, int volume);
-    [DllImport("WindowsVoice")]
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void destroySpeech();
-    [DllImport("WindowsVoice")]
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void addToSpeechQueue(string s);
-    [DllImport("WindowsVoice")]
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void clearSpeechQueue();
-    [DllImport("WindowsVoice")]
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern string getStatusMessage();
-    [DllImport("WindowsVoice")]
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern string getVoicesAvailable();
-    [DllImport("WindowsVoice")]
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordLength();
-    [DllImport("WindowsVoice")]
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordPosition();
+
+    [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    private static extern WindowsVoiceStatus getSpeechState();
 
     private static WindowsVoiceUnity m_TheVoice;
     private static int m_CurrentWordCount;
 
-    public static bool IsSpeaking
-    {
-        get
-        {
-            string theStatus = getStatusMessage();
-            return !string.IsNullOrWhiteSpace(theStatus) && theStatus.Equals("Speaking");
-        }
-    }
+    public static bool IsSpeaking => getSpeechState() == WindowsVoiceStatus.Speaking;
 
     private static void Init()
     {
@@ -83,8 +81,8 @@ public class WindowsVoiceUnity : MonoBehaviour
         if (!IsVoiceInitialized())
             return;
 
-        //if (Main.Settings.InterruptPlaybackOnPlay)
-        Stop();
+        if (Main.Settings.InterruptPlaybackOnPlay && IsSpeaking)
+            Stop();
 
         m_CurrentWordCount = length;
         if (delay <= 0f)
