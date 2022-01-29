@@ -83,13 +83,15 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        if (Main.Settings.UseGenderSpecificVoices)
+        if (!Main.Settings.UseGenderSpecificVoices)
+        {
             Speak(text, delay);
+            return;
+        }
 
         text = text.PrepareSpeechText();
 
-        text = new Regex("<link=[^>]+>").Replace(text, "");
-        text = new Regex("</link>").Replace(text, "");
+        text = new Regex("<b><color[^>]+><link([^>]+)?>([^.]+)<\\/link><\\/color></b>").Replace(text, "$2");
 
 #if DEBUG
         UnityEngine.Debug.Log(text);

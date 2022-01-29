@@ -27,8 +27,11 @@ public class AppleSpeech : ISpeech
             return;
         }
 
-        if (Main.Settings.UseGenderSpecificVoices)
+        if (!Main.Settings.UseGenderSpecificVoices)
+        {
             Speak(text, delay);
+            return;
+        }
 
         text = text.PrepareSpeechText();
         AppleVoiceUnity.SpeakDialog(text, delay);

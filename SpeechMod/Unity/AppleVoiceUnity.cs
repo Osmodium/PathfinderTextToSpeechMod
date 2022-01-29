@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Kingmaker;
 using Kingmaker.Blueprints;
@@ -29,6 +30,8 @@ namespace SpeechMod.Unity
             return false;
         }
 
+        private static string GenderVoice => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice;
+
         public static void Speak(string text, float delay = 0f)
         {
             if (!IsVoiceInitialized())
@@ -57,22 +60,25 @@ namespace SpeechMod.Unity
             }
 
             string arguments = "";
+            text = new Regex("<b><color[^>]+><link([^>]+)?>([^.]+)<\\/link><\\/color></b>").Replace(text, "$2");
+            text = text.Replace("\\n", "  ");
+            text = text.Replace("\n", " ");
             text = text.Replace(";", "");
-            while (text.IndexOf("<color=#616060>") != -1)
+            while (text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase) != -1)
             {
-                int Position = text.IndexOf("<color=#616060>");
-                if (Position != 0)
+                int position = text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase);
+                if (position != 0)
                 {
-                    string arguments_part = text.Substring(0, Position);
-                    text = text.Substring(Position);
-                    arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.Rate} {arguments_part.Replace("\"", "")};";
+                    string argumentsPart = text.Substring(0, position);
+                    text = text.Substring(position);
+                    arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.Rate} {argumentsPart.Replace("\"", "")};";
                 }
                 else
                 {
-                    Position = text.IndexOf("</color>");
-                    string arguments_part2 = text.Substring(0, Position);
-                    text = text.Substring(Position);
-                    arguments = $"{arguments}say -v {(Game.Instance?.DialogController?.CurrentSpeaker.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice)} -r {Main.Settings.Rate} {arguments_part2.Replace("\"", "")};";
+                    position = text.IndexOf("</color>", StringComparison.InvariantCultureIgnoreCase);
+                    string argumentsPart2 = text.Substring(0, position);
+                    text = text.Substring(position);
+                    arguments = $"{arguments}say -v {GenderVoice} -r {Main.Settings.Rate} {argumentsPart2.Replace("\"", "")};";
                 }
             }
 
