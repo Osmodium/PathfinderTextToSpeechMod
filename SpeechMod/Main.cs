@@ -25,7 +25,7 @@ internal static class Main
 
     public static ISpeech Speech;
 
-    private static string testText = "Speech Mod for Pathfinder Wrath of the Righteous";
+    private static string previewText = "Speech Mod for Pathfinder Wrath of the Righteous";
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
@@ -138,11 +138,11 @@ internal static class Main
             GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
             GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
-            GUILayout.Space(10);
-            Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
-            GUILayout.EndHorizontal();
+            //GUILayout.BeginHorizontal();
+            //GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
+            //GUILayout.Space(10);
+            //Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
+            //GUILayout.EndHorizontal();
         }
         else
         {
@@ -179,9 +179,9 @@ internal static class Main
         GUILayout.BeginHorizontal();
         GUILayout.Label("Preivew selected voice", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
-        testText = GUILayout.TextField(testText, GUILayout.Width(700f));
+        previewText = GUILayout.TextField(previewText, GUILayout.Width(700f));
         if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
-            Speech.Speak(testText);
+            Speech.Speak(previewText);
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();

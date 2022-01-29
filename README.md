@@ -1,10 +1,10 @@
-# SpeechMod - Windows only
+# SpeechMod
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech).
-Version: 0.9.7
+Version: 0.9.8
 
-**Disclamer: for Windows version only**
+**Disclaimer: Works on Windows and OSX only**
 
 ### How to install
 
@@ -12,20 +12,19 @@ Version: 0.9.7
  2. Run Unity Mod Manger and set it up to find Pathfinder: Wrath of the Righteous (Second Adventure)
  3. Download the SpeechMod-mod
  4. Install the mod by dragging the zip file from step 3 into the Unity Mod Manager window under the Mods tab. Alternatively locate the zip file after clicking the "Install" button in Unity Mod Manager.
+ 
+ *If running on OSX 64-bit you might need to use the *mono console.exe* command (see UMM documentation for further)
 
 ### Known issues / limitations
 
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/PathfinderTextToSpeechMod/issues)*
 
 #### Limitations:
- - Only works on Windows, since it utilizes the built-in accessibility tool "SAPI" in Windows.
  - There's currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
 
 #### Issues todo:
- - Pressing multiple times queues the text to be spoken after the current one has played through.
  - No stopping of voice.
  - No support for chapter changes (although they seem to be narrated).
- - No support for tutorial popups.
 
 ### How to use
 
@@ -68,14 +67,16 @@ The various pop-up boxes that eventually shows up throughout the game, can be pl
 
 The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
 - **Speech rate**: The speed of the voice the higher number, the faster the speech. From -10 to 10, 1 is default.
-- **Speech volume**: The volume of the voice from 0 to 100.
-- **Speech pitch**: The pitch of the voice from -10 to 10.
-- **Voice**: Select from the three Microsoft built-in voices available.
+- Windows Only:
+	- **Speech volume**: The volume of the voice from 0 to 100.
+	- **Speech pitch**: The pitch of the voice from -10 to 10.
+	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*
+- **Voice**: Select from the built-in voices available.
 - **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
 
-![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings_0_9_5.png)
+![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings_0_9_8.png)
 
 ### Motivation
 *Why did I create this mod?*
@@ -84,8 +85,10 @@ After I started creating this mod, I have thought to myself that if I struggle w
 
 ### Contribute
 If you find a name in the game which is pronounced funny by the voice, you can add it to the PhoneticDictionary.json in the mod folder (don't uninstall the mod as this will be deleted). I don't have a great way of submitting changes to this besides through GitHub pull requests, which is not super user friendly. But let's see if we can build a good pronounciation database for the voice together.
+Also feel free to hit me up with ideas, issues and PRs on GitHub or NexusMods :)
 
 ### Acknowledgments
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
+- [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support MacOSX, and various exploration work.
 - Pathfinder Wrath of The Righteous Discord channel members
 - Join the [Discord](https://discord.gg/EFWq7rJFNN)
