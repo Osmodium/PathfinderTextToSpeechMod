@@ -31,48 +31,48 @@ Version: 1.0.0
 #### 1) Dialog 
 When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
 
-![Playbutton for the current dialog](http://www.dashvoid.com/speechmod/playbutton_dialog.png)
+![Playbutton for the current dialog](http://dashvoid.com/speechmod/playbutton_dialog.png)
 
 #### 2) Book text
 When inspecting a book (through *right-click->Info*) *hover* over the text and *left click*.
 
-![Here the hover behaviour is set to underline the text, see the settings for more custumization](http://www.dashvoid.com/speechmod/booktext.png)
+![Here the hover behaviour is set to underline the text, see the settings for more custumization](http://dashvoid.com/speechmod/booktext.png)
 
 #### 3) Item text
 When inspecting an item (through *right-click->Info*) *hover* over text (not all text is currently supported) and *left click*.
 
-![Some of the texts are not supported yet. Try hovering different parts to see which are supported](http://www.dashvoid.com/speechmod/itemtext.png)
+![Some of the texts are not supported yet. Try hovering different parts to see which are supported](http://dashvoid.com/speechmod/itemtext.png)
 
 #### 4) Journal Quest text
 In the journal, each of the bigger text blocks and important stuff can be played through the play button adjacent to the text.
 
-![The most important parts of the journal text is supported.](http://www.dashvoid.com/speechmod/journaltext_0_9_5.png)
+![The most important parts of the journal text is supported.](http://dashvoid.com/speechmod/journaltext_0_9_5.png)
 
 #### 5) Encyclopedia text
 In the encyclopedia the text blocks (defined by Owlcat) can be played by pressing the play button adjacent to the text.
 
-![All text parts in the encyclopedia is supported.](http://www.dashvoid.com/speechmod/encyclopediatext_0_9_5.png)
+![All text parts in the encyclopedia is supported.](http://dashvoid.com/speechmod/encyclopediatext_0_9_5.png)
 
 #### 6) Book Event text
 When encountering a book event, the text can be played by hovering the text part (it will apply the chosen hover effect) and left-clicking.
 
-![All text parts in a book event is supported. You might even get to know what the cut text says ;)](http://www.dashvoid.com/speechmod/eventbook_0_9_6.png)
+![All text parts in a book event is supported. You might even get to know what the cut text says ;)](http://dashvoid.com/speechmod/eventbook_0_9_6.png)
 
 #### 7) Messagebox text
 The various pop-up boxes that eventually shows up throughout the game, can be played when hovered and left-clicked.
 
-![Some texts might be so important that I decided to add support for them.](http://www.dashvoid.com/speechmod/messagemodal_0_9_6.png)
+![Some texts might be so important that I decided to add support for them.](http://dashvoid.com/speechmod/messagemodal_0_9_6.png)
 
 
 #### 8) Combat Results text
 When your amy has defeated an enemy, the resulting message text is also supported for playback when hovered and left-clicked.
 
-![Some of the combat results from armies might be important.](http://www.dashvoid.com/speechmod/combatresult_1_0_0.png)
+![Some of the combat results from armies might be important.](http://dashvoid.com/speechmod/combatresult_1_0_0.png)
 
 #### 9) Tutorial Windows
 Both big and small tutorial windows text is supported and can be played by hovering and left-clicking.
 
-![Tutorials can be helpful to learn more.](http://www.dashvoid.com/speechmod/tutorialsmall_1_0_0.png)
+![Tutorials can be helpful to learn more.](http://dashvoid.com/speechmod/tutorialsmall_1_0_0.png)
 
 ### Settings
 
@@ -94,7 +94,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
 
-![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings_1_0_0.png)
+![Settings for SpeechMod](http://dashvoid.com/speechmod/settings_1_0_0.png)
 
 ### Motivation
 *Why did I create this mod?*
