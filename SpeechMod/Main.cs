@@ -27,9 +27,9 @@ internal static class Main
 
     public static ISpeech Speech;
 
-    private static string m_NarratorPreviewText = "Speech Mod for Pathfinder Wrath of the Righteous";
-    private static string m_FemalePreviewText = "Female voice speech test";
-    private static string m_MalePreviewText = "Male voice speech test";
+    private static string m_NarratorPreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Narrator voice speech test";
+    private static string m_FemalePreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Female voice speech test";
+    private static string m_MalePreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Male voice speech test";
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
@@ -113,60 +113,7 @@ internal static class Main
 
     private static void OnGui(UnityModManager.ModEntry modEntry)
     {
-        GUILayout.BeginVertical("", GUI.skin.box);
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        Settings.Rate = Speech switch
-        {
-            WindowsSpeech => (int)GUILayout.HorizontalSlider(Settings.Rate, -10, 10, GUILayout.Width(300f)),
-            AppleSpeech => (int)GUILayout.HorizontalSlider(Settings.Rate, 150, 300, GUILayout.Width(300f)),
-            _ => Settings.Rate
-        };
-        GUILayout.Label($" {Settings.Rate}", GUILayout.ExpandWidth(false));
-        GUILayout.EndHorizontal();
-
-        if (Speech is WindowsSpeech)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
-            GUILayout.Space(10);
-            Settings.Volume = (int)GUILayout.HorizontalSlider(Settings.Volume, 0, 100, GUILayout.Width(300f));
-            GUILayout.Label($" {Settings.Volume}", GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
-            Settings.Pitch = (int)GUILayout.HorizontalSlider(Settings.Pitch, -10, 10, GUILayout.Width(300f));
-            GUILayout.Label($" {Settings.Pitch}", GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
-            GUILayout.Space(10);
-            Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
-            GUILayout.EndHorizontal();
-        }
-        else
-        {
-            Settings.Volume = 100;
-            Settings.Pitch = 0;
-        }
-        
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Auto play dialog", GUILayout.ExpandWidth(false));
-        GUILayout.Space(10);
-        Settings.AutoPlay = GUILayout.Toggle(Settings.AutoPlay, "Enabled");
-        GUILayout.EndHorizontal();
-
-        GUILayout.EndVertical();
-
-        GUILayout.BeginVertical("", GUI.skin.box);
-
-        AddVoiceSelector("Narrator Voice - See nationality below", ref Settings.NarratorVoice, ref m_NarratorPreviewText);
-        
-        GUILayout.EndVertical();
+        AddVoiceSelector("Narrator Voice - See nationality below", ref Settings.NarratorVoice, ref m_NarratorPreviewText, ref Settings.NarratorRate, ref Settings.NarratorVolume, ref Settings.NarratorPitch, VoiceType.Narrator);
 
         GUILayout.BeginVertical("", GUI.skin.box);
 
@@ -175,11 +122,30 @@ internal static class Main
         Settings.UseGenderSpecificVoices = GUILayout.Toggle(Settings.UseGenderSpecificVoices, "Enabled");
         GUILayout.EndHorizontal();
 
+        GUILayout.EndVertical();
+
         if (Settings.UseGenderSpecificVoices)
         {
-            AddVoiceSelector("Female Voice - See nationality below", ref Settings.FemaleVoice, ref m_FemalePreviewText);
-            AddVoiceSelector("Male Voice - See nationality below", ref Settings.MaleVoice, ref m_MalePreviewText);
+            AddVoiceSelector("Female Voice - See nationality below", ref Settings.FemaleVoice, ref m_FemalePreviewText, ref Settings.FemaleRate, ref Settings.FemaleVolume, ref Settings.FemalePitch, VoiceType.Female);
+            AddVoiceSelector("Male Voice - See nationality below", ref Settings.MaleVoice, ref m_MalePreviewText, ref Settings.MaleRate, ref Settings.MaleVolume, ref Settings.MalePitch, VoiceType.Male);
         }
+
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        if (Speech is WindowsSpeech)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Interrupt speech on play", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Settings.InterruptPlaybackOnPlay = GUILayout.Toggle(Settings.InterruptPlaybackOnPlay, Settings.InterruptPlaybackOnPlay ? "Interrupt and play" : "Add to queue");
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Auto play dialog", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Settings.AutoPlay = GUILayout.Toggle(Settings.AutoPlay, "Enabled");
+        GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
 
@@ -218,8 +184,10 @@ internal static class Main
         GUILayout.EndVertical();
     }
 
-    private static void AddVoiceSelector(string label, ref int voice, ref string previewString)
+    private static void AddVoiceSelector(string label, ref int voice, ref string previewString, ref int rate, ref int volume, ref int pitch, VoiceType type)
     {
+        GUILayout.BeginVertical("", GUI.skin.box);
+
         GUILayout.BeginHorizontal();
         GUILayout.Label(label, GUILayout.ExpandWidth(false));
         GUILayout.EndHorizontal();
@@ -241,12 +209,42 @@ internal static class Main
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
+        GUILayout.Label("Speech rate", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        rate = Speech switch
+        {
+            WindowsSpeech => (int)GUILayout.HorizontalSlider(rate, -10, 10, GUILayout.Width(300f)),
+            AppleSpeech => (int)GUILayout.HorizontalSlider(rate, 150, 300, GUILayout.Width(300f)),
+            _ => rate
+        };
+        GUILayout.Label($" {rate}", GUILayout.ExpandWidth(false));
+        GUILayout.EndHorizontal();
+
+        if (Speech is WindowsSpeech)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Speech volume", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            volume = (int)GUILayout.HorizontalSlider(volume, 0, 100, GUILayout.Width(300f));
+            GUILayout.Label($" {volume}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Speech pitch", GUILayout.ExpandWidth(false));
+            pitch = (int)GUILayout.HorizontalSlider(pitch, -10, 10, GUILayout.Width(300f));
+            GUILayout.Label($" {pitch}", GUILayout.ExpandWidth(false));
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.BeginHorizontal();
         GUILayout.Label("Preivew voice", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         previewString = GUILayout.TextField(previewString, GUILayout.Width(700f));
         if (GUILayout.Button("Play", GUILayout.ExpandWidth(true)))
-            Speech.SpeakPreview(previewString, Settings?.AvailableVoices?[voice]?.Split('#')[0]);
+            Speech.SpeakPreview(previewString, type);
         GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
     }
 
     private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b, ref float a)

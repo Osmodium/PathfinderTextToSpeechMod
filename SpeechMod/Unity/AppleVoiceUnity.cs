@@ -30,6 +30,7 @@ namespace SpeechMod.Unity
         }
 
         private static string GenderVoice => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice;
+        private static int GenderRate => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.Settings.FemaleRate : Main.Settings.MaleRate;
 
         public static void Speak(string text, float delay = 0f)
         {
@@ -70,20 +71,20 @@ namespace SpeechMod.Unity
                 {
                     string argumentsPart = text.Substring(0, position);
                     text = text.Substring(position);
-                    arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.Rate} {argumentsPart.Replace("\"", "")};";
+                    arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {argumentsPart.Replace("\"", "")};";
                 }
                 else
                 {
                     position = text.IndexOf("</color>", StringComparison.InvariantCultureIgnoreCase);
                     string argumentsPart2 = text.Substring(0, position);
                     text = text.Substring(position);
-                    arguments = $"{arguments}say -v {GenderVoice} -r {Main.Settings.Rate} {argumentsPart2.Replace("\"", "")};";
+                    arguments = $"{arguments}say -v {GenderVoice} -r {GenderRate} {argumentsPart2.Replace("\"", "")};";
                 }
             }
 
             text = text.Replace("\"", "");
             if(!string.IsNullOrWhiteSpace(text))
-                arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.Rate} {text};";
+                arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {text};";
 
             arguments = new Regex("<[^>]+>").Replace(arguments, "");
 
