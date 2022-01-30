@@ -4,10 +4,18 @@ namespace SpeechMod;
 
 public class Settings : UnityModManager.ModSettings
 {
-    public int Rate = 0;
-    public int Volume = 100;
-    public int Pitch = 0;
+    public int NarratorRate = 0;
+    public int NarratorVolume = 100;
+    public int NarratorPitch = 0;
 
+    public int FemaleRate = 0;
+    public int FemaleVolume = 100;
+    public int FemalePitch = 0;
+
+    public int MaleRate = 0;
+    public int MaleVolume = 100;
+    public int MalePitch = 0;
+        
     public bool AutoPlay = false;
 
     public string[] AvailableVoices;

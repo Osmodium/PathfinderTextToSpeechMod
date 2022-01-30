@@ -1,4 +1,5 @@
-﻿using Kingmaker;
+﻿using System;
+using Kingmaker;
 using Kingmaker.Blueprints;
 using SpeechMod.Unity;
 using System.Linq;
@@ -11,11 +12,19 @@ public class WindowsSpeech : ISpeech
     private static string NarratorVoice => $"<voice required=\"Name={ Main.NarratorVoice }\">";
     private static string FemaleVoice => $"<voice required=\"Name={ Main.FemaleVoice }\">";
     private static string MaleVoice => $"<voice required=\"Name={ Main.MaleVoice }\">";
-    private static string Pitch => $"<pitch absmiddle=\"{ Main.Settings.Pitch }\"/>";
-    private static string Rate => $"<rate absspeed=\"{ Main.Settings.Rate }\"/>";
-    private static string Volume => $"<volume level=\"{ Main.Settings.Volume }\"/>";
-
-    private string CombinedNarratorVoiceStart => $"{NarratorVoice}{Pitch}{Rate}{Volume}";
+    private static string NarratorPitch => $"<pitch absmiddle=\"{ Main.Settings.NarratorPitch }\"/>";
+    private static string NarratorRate => $"<rate absspeed=\"{ Main.Settings.NarratorRate }\"/>";
+    private static string NarratorVolume => $"<volume level=\"{ Main.Settings.NarratorVolume }\"/>";
+    private static string FemaleVolume => $"<volume level=\"{ Main.Settings.FemaleVolume }\"/>";
+    private static string FemalePitch => $"<pitch absmiddle=\"{ Main.Settings.FemalePitch }\"/>";
+    private static string FemaleRate => $"<rate absspeed=\"{ Main.Settings.FemaleRate }\"/>";
+    private static string MaleVolume => $"<volume level=\"{ Main.Settings.MaleVolume }\"/>";
+    private static string MalePitch => $"<pitch absmiddle=\"{ Main.Settings.MalePitch }\"/>";
+    private static string MaleRate => $"<rate absspeed=\"{ Main.Settings.MaleRate }\"/>";
+    
+    private string CombinedNarratorVoiceStart => $"{NarratorVoice}{NarratorPitch}{NarratorRate}{NarratorVolume}";
+    private string CombinedFemaleVoiceStart => $"{FemaleVoice}{FemalePitch}{FemaleRate}{FemaleVolume}";
+    private string CombinedMaleVoiceStart => $"{MaleVoice}{MalePitch}{MaleRate}{MaleVolume}";
 
     private string CombinedDialogVoiceStart
     {
@@ -26,8 +35,8 @@ public class WindowsSpeech : ISpeech
 
             return Game.Instance.DialogController.CurrentSpeaker.Gender switch
             {
-                Gender.Male => $"{MaleVoice}{Pitch}{Rate}{Volume}",
-                Gender.Female => $"{FemaleVoice}{Pitch}{Rate}{Volume}",
+                Gender.Female => CombinedFemaleVoiceStart,
+                Gender.Male => CombinedMaleVoiceStart,
                 _ => CombinedNarratorVoiceStart
             };
         }
@@ -61,7 +70,7 @@ public class WindowsSpeech : ISpeech
         return text;
     }
 
-    public void SpeakPreview(string text, string voice)
+    public void SpeakPreview(string text, VoiceType voiceType)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -71,7 +80,22 @@ public class WindowsSpeech : ISpeech
 
         text = text.PrepareSpeechText();
         text = new Regex("<[^>]+>").Replace(text, "");
-        text = $"<voice required=\"Name={voice}\">{Pitch}{Rate}{Volume}{text}</voice>";
+
+        switch (voiceType)
+        {
+            case VoiceType.Narrator:
+                text = $"{CombinedNarratorVoiceStart}{text}</voice>";
+                break;
+            case VoiceType.Female:
+                text = $"{CombinedFemaleVoiceStart}{text}</voice>";
+                break;
+            case VoiceType.Male:
+                text = $"{CombinedMaleVoiceStart}{text}</voice>";
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null);
+        }
+
         WindowsVoiceUnity.Speak(text, Length(text));
     }
 
