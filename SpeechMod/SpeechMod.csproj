@@ -87,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Unity\UIHelper.cs" />
+    <Compile Include="Voice\Enums.cs" />
     <Compile Include="Voice\ISpeech.cs" />
     <Compile Include="Voice\AppleSpeech.cs" />
     <Compile Include="Patches\TooltipEngine_Patch.cs" />

@@ -7,7 +7,7 @@ namespace SpeechMod.Voice;
 
 public class AppleSpeech : ISpeech
 {
-    public void SpeakPreview(string text, string voice)
+    public void SpeakPreview(string text, VoiceType type)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -15,7 +15,21 @@ public class AppleSpeech : ISpeech
             return;
         }
 
-        text = $"-v {voice} -r {Main.Settings.Rate} {text.Replace("\"", "")}";
+        switch (type)
+        {
+            case VoiceType.Narrator:
+                text = $"-v {Main.Settings.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
+                break;
+            case VoiceType.Female:
+                text = $"-v {Main.Settings.FemaleVoice} -r {Main.Settings.FemaleRate} {text.Replace("\"", "")}";
+                break;
+            case VoiceType.Male:
+                text = $"-v {Main.Settings.MaleVoice} -r {Main.Settings.MaleRate} {text.Replace("\"", "")}";
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+
         AppleVoiceUnity.Speak(text);
     }
 
@@ -47,7 +61,7 @@ public class AppleSpeech : ISpeech
 
         text = text.PrepareSpeechText();
         text = new Regex("<[^>]+>").Replace(text, "");
-        text = $"-v {Main.NarratorVoice} -r {Main.Settings.Rate} {text.Replace("\"", "")}";
+        text = $"-v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
         AppleVoiceUnity.Speak(text, delay);
     }
     
