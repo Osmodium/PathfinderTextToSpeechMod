@@ -69,7 +69,7 @@ When your amy has defeated an enemy, the resulting message text is also supporte
 
 ![Some of the combat results from armies might be important.](http://dashvoid.com/speechmod/combatresult_1_0_0.png)
 
-#### 9) Tutorial Windows
+#### 9) Tutorial Windows text
 Both big and small tutorial windows text is supported and can be played by hovering and left-clicking.
 
 ![Tutorials can be helpful to learn more.](http://dashvoid.com/speechmod/tutorialsmall_1_0_0.png)
