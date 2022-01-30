@@ -6,6 +6,8 @@ Version: 1.0.0
 
 **Disclaimer: Works on Windows and macOS only**
 
+**Works with all languages as long as you have a voice in that language installed.**
+
 ### How to install
 
  1. Download and install Unity Mod Manager, make sure it is at least version 0.23.0 (I use 0.23.3)
