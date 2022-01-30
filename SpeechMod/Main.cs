@@ -151,7 +151,7 @@ internal static class Main
 
         AddColorPicker("Color on text hover", ref Settings.ColorOnHover, "Hover color", ref Settings.HoverColorR, ref Settings.HoverColorG, ref Settings.HoverColorB, ref Settings.HoverColorA);
 
-        AddColorPicker("Show playback progress", ref Settings.ShowPlaybackProgress, "Playback progress color", ref Settings.PlaybackColorR, ref Settings.PlaybackColorG, ref Settings.PlaybackColorB, ref Settings.PlaybackColorA);
+        //AddColorPicker("Show playback progress", ref Settings.ShowPlaybackProgress, "Playback progress color", ref Settings.PlaybackColorR, ref Settings.PlaybackColorG, ref Settings.PlaybackColorB, ref Settings.PlaybackColorA);
 
         GUILayout.BeginVertical("", GUI.skin.box);
 

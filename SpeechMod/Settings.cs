@@ -34,11 +34,11 @@ public class Settings : UnityModManager.ModSettings
     public bool FontStyleOnHover = true;
     public bool[] FontStyles = { false, false, false, true, false, false, false, false, false, false, false };
 
-    public bool ShowPlaybackProgress = true;
-    public float PlaybackColorR = 0.7f;
-    public float PlaybackColorG = 0.9f;
-    public float PlaybackColorB = 0.7f;
-    public float PlaybackColorA = 0.5f;
+    //public bool ShowPlaybackProgress = true;
+    //public float PlaybackColorR = 0.7f;
+    //public float PlaybackColorG = 0.9f;
+    //public float PlaybackColorB = 0.7f;
+    //public float PlaybackColorA = 0.5f;
 
     public bool InterruptPlaybackOnPlay = true;
 
