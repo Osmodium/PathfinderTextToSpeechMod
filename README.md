@@ -2,9 +2,9 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech).
-Version: 0.9.8
+Version: 1.0.0
 
-**Disclaimer: Works on Windows and OSX only**
+**Disclaimer: Works on Windows and macOS only**
 
 ### How to install
 
@@ -23,13 +23,13 @@ Version: 0.9.8
  - There's currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
 
 #### Issues todo:
- - No stopping of voice.
+ - No control to stop playback manually (want to do a visualization at some point).
  - No support for chapter changes (although they seem to be narrated).
 
 ### How to use
 
 #### 1) Dialog 
-When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog.
+When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
 
 ![Playbutton for the current dialog](http://www.dashvoid.com/speechmod/playbutton_dialog.png)
 
@@ -63,20 +63,38 @@ The various pop-up boxes that eventually shows up throughout the game, can be pl
 
 ![Some texts might be so important that I decided to add support for them.](http://www.dashvoid.com/speechmod/messagemodal_0_9_6.png)
 
+
+#### 8) Combat Results text
+When your amy has defeated an enemy, the resulting message text is also supported for playback when hovered and left-clicked.
+
+![Some of the combat results from armies might be important.](http://www.dashvoid.com/speechmod/combatresult_1_0_0.png)
+
+#### 9) Tutorial Windows
+Both big and small tutorial windows text is supported and can be played by hovering and left-clicking.
+
+![Tutorials can be helpful to learn more.](http://www.dashvoid.com/speechmod/tutorialsmall_1_0_0.png)
+
 ### Settings
 
 The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
-- **Speech rate**: The speed of the voice the higher number, the faster the speech. From -10 to 10, 1 is default.
+- **Narrator Voice**: The settings for the voice used for either all or non-gender specific text in dialogs when *Use gender specific voices* is turned on.
+	- *Nationality*: Just shows the selected voices nationality.
+	- **Speech rate**: The speed of the voice the higher number, the faster the speech. 
+		- Windows: from -10 to 10 (relative speed from 0). 
+		- macOS: from 150 to 300 (words per minute).
+	- Windows Only:
+		- **Speech volume**: The volume of the voice from 0 to 100.
+		- **Speech pitch**: The pitch of the voice from -10 to 10.
+	-**Preview Voice**: Used to preview the settings of the voice.
+- **Use gender specific voices**: Specify voices for female and male dialog parts. Each of the voices can be adjusted with rate, volume and pitch where available.
 - Windows Only:
-	- **Speech volume**: The volume of the voice from 0 to 100.
-	- **Speech pitch**: The pitch of the voice from -10 to 10.
-	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*
-- **Voice**: Select from the built-in voices available.
+	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*, hope this speaks for itself.
+- **Auto play dialog**: When enabled, dialogs will be played automatically when theres no voice acted dialog.
 - **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
 
-![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings_0_9_8.png)
+![Settings for SpeechMod](http://www.dashvoid.com/speechmod/settings_1_0_0.png)
 
 ### Motivation
 *Why did I create this mod?*
@@ -89,6 +107,6 @@ Also feel free to hit me up with ideas, issues and PRs on GitHub or NexusMods :)
 
 ### Acknowledgments
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
-- [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support MacOSX, and various exploration work.
+- [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support macOS, and various exploration work.
 - Pathfinder Wrath of The Righteous Discord channel members
 - Join the [Discord](https://discord.gg/EFWq7rJFNN)

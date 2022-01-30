@@ -3,9 +3,9 @@ SpeechMod
 Version 1.0.0 Changelog
 
 - Added Auto play feature, of dialogs when it's not voice acted.
-- Added gender specific voices for dialog feature, with individual voice rate, pitch and volume where available.
-- Added text and button to preview the selected voice in the settings.
 - Added support for macOS, using the voices available through the 'say' command! No longer Windows only woo! (I guess only Linux remains)
+- Added text and button to preview the selected voice in the settings.
+- Added individual voice rate, pitch and volume where available.
 - Various slight optimizations and stability fixes.
 
 Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues
