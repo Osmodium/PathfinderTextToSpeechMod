@@ -10,7 +10,7 @@ namespace SpeechMod.Unity
     public class AppleVoiceUnity : MonoBehaviour
     {
         private static AppleVoiceUnity m_TheVoice;
-        private Process m_SpeechProcess;
+        
         private static string GenderVoice => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice;
         private static int GenderRate => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.Settings.FemaleRate : Main.Settings.MaleRate;
 
@@ -44,7 +44,7 @@ namespace SpeechMod.Unity
 
             Stop();
 
-            m_TheVoice.m_SpeechProcess = Process.Start("/usr/bin/say", text);
+            Process.Start("/usr/bin/say", text);
         }
 
         public static void SpeakDialog(string text, float delay = 0f)
@@ -91,7 +91,7 @@ namespace SpeechMod.Unity
             Process.Start("/usr/bin/killall", "say");
             
             arguments = "-c \"" + arguments + "\"";
-            m_TheVoice.m_SpeechProcess = Process.Start("/bin/bash", arguments);
+            Process.Start("/bin/bash", arguments);
         }
 
         public static void Stop()
@@ -99,8 +99,8 @@ namespace SpeechMod.Unity
             if (!IsVoiceInitialized())
                 return;
 
-            if (m_TheVoice.m_SpeechProcess is { HasExited: false })
-                m_TheVoice.m_SpeechProcess.Kill();
+            Process.Start("/usr/bin/killall", "bash");
+            Process.Start("/usr/bin/killall", "say");
         }
     }
 }

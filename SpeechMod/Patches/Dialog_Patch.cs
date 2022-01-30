@@ -33,9 +33,12 @@ public static class Dialog_Patch
         if (string.IsNullOrWhiteSpace(key))
             return;
 
-        // Don't play if the dialog is voice acted.
+        // Stop playing and don't play if the dialog is voice acted.
         if (!string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(key, false)))
+        {
+            Main.Speech.Stop();
             return;
+        }
 
         Main.Speech.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.DisplayText, 0.5f);
     }

@@ -141,8 +141,8 @@ public class WindowsSpeech : ISpeech
 #if DEBUG
         UnityEngine.Debug.Log(text);
 #endif
-        text = text.PrepareSpeechText();
         text = new Regex("<[^>]+>").Replace(text, "");
+        text = text.PrepareSpeechText();
         text = $"{CombinedNarratorVoiceStart}{text}</voice>";
 
 #if DEBUG
