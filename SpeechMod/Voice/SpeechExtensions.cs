@@ -56,13 +56,16 @@ namespace SpeechMod.Voice
             };
         }
 
-        public static string PrepareSpeechText(this string text)
+        public static string PrepareText(this string text)
         {
             text = text.Replace("\"", "");
             text = text.Replace("\n", ". ");
             text = text.Trim().Trim('.');
+            
+            if (m_PhoneticDictionary == null)
+                LoadBackupDictionary();
 
-            return m_PhoneticDictionary?.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
+            return m_PhoneticDictionary.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
         }
 
         public static void AddUiElements<T>(string name) where T : MonoBehaviour
