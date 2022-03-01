@@ -19,11 +19,11 @@ public class Settings : UnityModManager.ModSettings
     public bool AutoPlay = false;
 
     public string[] AvailableVoices;
-    public int NarratorVoice = 1;
+    public int NarratorVoice = 0;
 
     public bool UseGenderSpecificVoices = false;
     public int FemaleVoice = 0;
-    public int MaleVoice = 2;
+    public int MaleVoice = 0;
 
     public bool ColorOnHover = false;
     public float HoverColorR = 0f;

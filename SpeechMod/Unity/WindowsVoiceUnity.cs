@@ -25,7 +25,6 @@ public class WindowsVoiceUnity : MonoBehaviour
     private static extern int getWordLength();
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordPosition();
-
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern WindowsVoiceStatus getSpeechState();
 
@@ -70,8 +69,9 @@ public class WindowsVoiceUnity : MonoBehaviour
         for (int i = 0; i < voices.Length; ++i)
         {
             if (!voices[i].Contains('-'))
-                continue;
-            voices[i] = voices[i].Replace(" - ", "#");
+                voices[i] = $"{voices[i]}#Unknown";
+            else
+                voices[i] = voices[i].Replace(" - ", "#");
         }
         return voices;
     }
