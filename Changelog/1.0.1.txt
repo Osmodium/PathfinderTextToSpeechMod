@@ -1,0 +1,7 @@
+SpeechMod 
+
+Version 1.0.1 Changelog
+
+- Various slight optimizations and stability fixes.
+
+Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues

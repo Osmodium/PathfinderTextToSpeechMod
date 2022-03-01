@@ -47,7 +47,7 @@ public class AppleSpeech : ISpeech
             return;
         }
 
-        text = text.PrepareSpeechText();
+        text = text.PrepareText();
         AppleVoiceUnity.SpeakDialog(text, delay);
     }
 
@@ -59,7 +59,7 @@ public class AppleSpeech : ISpeech
             return;
         }
 
-        text = text.PrepareSpeechText();
+        text = text.PrepareText();
         text = new Regex("<[^>]+>").Replace(text, "");
         text = $"-v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
         AppleVoiceUnity.Speak(text, delay);

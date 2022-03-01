@@ -3,6 +3,7 @@ using Kingmaker;
 using Kingmaker.Blueprints;
 using SpeechMod.Unity;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace SpeechMod.Voice;
@@ -10,23 +11,25 @@ namespace SpeechMod.Voice;
 public class WindowsSpeech : ISpeech
 {
     private static string NarratorVoice => $"<voice required=\"Name={ Main.NarratorVoice }\">";
-    private static string FemaleVoice => $"<voice required=\"Name={ Main.FemaleVoice }\">";
-    private static string MaleVoice => $"<voice required=\"Name={ Main.MaleVoice }\">";
     private static string NarratorPitch => $"<pitch absmiddle=\"{ Main.Settings.NarratorPitch }\"/>";
     private static string NarratorRate => $"<rate absspeed=\"{ Main.Settings.NarratorRate }\"/>";
     private static string NarratorVolume => $"<volume level=\"{ Main.Settings.NarratorVolume }\"/>";
+
+    private static string FemaleVoice => $"<voice required=\"Name={ Main.FemaleVoice }\">";
     private static string FemaleVolume => $"<volume level=\"{ Main.Settings.FemaleVolume }\"/>";
     private static string FemalePitch => $"<pitch absmiddle=\"{ Main.Settings.FemalePitch }\"/>";
     private static string FemaleRate => $"<rate absspeed=\"{ Main.Settings.FemaleRate }\"/>";
+    
+    private static string MaleVoice => $"<voice required=\"Name={ Main.MaleVoice }\">";
     private static string MaleVolume => $"<volume level=\"{ Main.Settings.MaleVolume }\"/>";
     private static string MalePitch => $"<pitch absmiddle=\"{ Main.Settings.MalePitch }\"/>";
     private static string MaleRate => $"<rate absspeed=\"{ Main.Settings.MaleRate }\"/>";
     
-    private string CombinedNarratorVoiceStart => $"{NarratorVoice}{NarratorPitch}{NarratorRate}{NarratorVolume}";
-    private string CombinedFemaleVoiceStart => $"{FemaleVoice}{FemalePitch}{FemaleRate}{FemaleVolume}";
-    private string CombinedMaleVoiceStart => $"{MaleVoice}{MalePitch}{MaleRate}{MaleVolume}";
+    public string CombinedNarratorVoiceStart => $"{NarratorVoice}{NarratorPitch}{NarratorRate}{NarratorVolume}";
+    public string CombinedFemaleVoiceStart => $"{FemaleVoice}{FemalePitch}{FemaleRate}{FemaleVolume}";
+    public string CombinedMaleVoiceStart => $"{MaleVoice}{MalePitch}{MaleRate}{MaleVolume}";
 
-    private string CombinedDialogVoiceStart
+    public virtual string CombinedDialogVoiceStart
     {
         get
         {
@@ -78,7 +81,7 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        text = text.PrepareSpeechText();
+        text = text.PrepareText();
         text = new Regex("<[^>]+>").Replace(text, "");
 
         switch (voiceType)
@@ -99,6 +102,43 @@ public class WindowsSpeech : ISpeech
         WindowsVoiceUnity.Speak(text, Length(text));
     }
 
+    public string PrepareSpeechText(string text)
+    {
+#if DEBUG
+        UnityEngine.Debug.Log(text);
+#endif
+        text = new Regex("<[^>]+>").Replace(text, "");
+        text = text.PrepareText();
+        text = $"{CombinedNarratorVoiceStart}{text}</voice>";
+
+#if DEBUG
+        if (Assembly.GetEntryAssembly() == null)
+            UnityEngine.Debug.Log(text);
+#endif
+        return text;
+    }
+
+    public string PrepareDialogText(string text)
+    {
+        text = text.PrepareText();
+
+        text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
+
+#if DEBUG
+        //if (Assembly.GetEntryAssembly() == null)
+            //UnityEngine.Debug.Log(text);
+#endif
+
+        text = FormatGenderSpecificVoices(text);
+
+#if DEBUG
+        //if (Assembly.GetEntryAssembly() == null)
+            //UnityEngine.Debug.Log(text);
+#endif
+
+        return text;
+    }
+
     public void SpeakDialog(string text, float delay = 0f)
     {
         if (string.IsNullOrEmpty(text))
@@ -113,19 +153,7 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-        text = text.PrepareSpeechText();
-
-        text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
-
-#if DEBUG
-        UnityEngine.Debug.Log(text);
-#endif
-
-        text = FormatGenderSpecificVoices(text);
-
-#if DEBUG
-        UnityEngine.Debug.Log(text);
-#endif
+        text = PrepareDialogText(text);
 
         WindowsVoiceUnity.Speak(text, Length(text), delay);
     }
@@ -138,16 +166,8 @@ public class WindowsSpeech : ISpeech
             return;
         }
 
-#if DEBUG
-        UnityEngine.Debug.Log(text);
-#endif
-        text = new Regex("<[^>]+>").Replace(text, "");
-        text = text.PrepareSpeechText();
-        text = $"{CombinedNarratorVoiceStart}{text}</voice>";
+        text = PrepareSpeechText(text);
 
-#if DEBUG
-        UnityEngine.Debug.Log(text);
-#endif
         WindowsVoiceUnity.Speak(text, Length(text), delay);
     }
 
