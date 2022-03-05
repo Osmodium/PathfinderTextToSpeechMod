@@ -319,4 +319,15 @@ public static class UIHelper
     {
         return Game.Instance.UI.FadeCanvas.transform.TryFind(n);
     }
+
+    public static string GetGameObjectPath(this Transform transform)
+    {
+        string path = transform.name;
+        while (transform.parent != null)
+        {
+            transform = transform.parent;
+            path = transform.name + "/" + path;
+        }
+        return path;
+    }
 }
