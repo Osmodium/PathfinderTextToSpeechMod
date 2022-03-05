@@ -25,6 +25,10 @@ static class TooltipEngine_Patch
         if (IsInvalid(view.transform?.parent))
             return;
 
+#if DEBUG
+        Debug.Log(__result.transform.GetGameObjectPath());
+#endif
+
         var textMeshProTransform = view.gameObject?.transform?.TryFind("Text (TMP)");
         if (textMeshProTransform == null)
         {

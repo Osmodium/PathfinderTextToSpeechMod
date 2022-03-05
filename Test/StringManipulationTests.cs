@@ -57,27 +57,33 @@ public class StringManipulationTests
         Assert.Equal(output, text);
     }
 
-    private static TheoryData<string, string> GenerateMaleDialogTexts => new()
+    private static TheoryData<string, string> GenerateMaleDialogTexts()
     {
+        return new TheoryData<string, string>
         {
-            "Here we are again, Commander. <color=#616060>Liotr looks grim but focused.</color> So let us take another glimpse into the past",
-            "<voice required=\"Name=Male\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Here we are again, Commander. </voice><voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Liotr looks grim but focused.</voice><voice required=\"Name=Male\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> So let us take another glimpse into the past</voice>"
-        },
-        {
-            "<color=#616060>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</color> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body",
-            "<voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</voice><voice required=\"Name=Male\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body</voice>"
-        }
-    };
+            {
+                "Here we are again, Commander. <color=#616060>Liotr looks grim but focused.</color> So let us take another glimpse into the past",
+                "<voice required=\"Name=Male\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Here we are again, Commander. </voice><voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Liotr looks grim but focused.</voice><voice required=\"Name=Male\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> So let us take another glimpse into the past</voice>"
+            },
+            {
+                "<color=#616060>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</color> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body",
+                "<voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</voice><voice required=\"Name=Male\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body</voice>"
+            }
+        };
+    }
 
-    private static TheoryData<string, string> GenerateFemaleDialogTexts => new()
+    private static TheoryData<string, string> GenerateFemaleDialogTexts()
     {
+        return new TheoryData<string, string>
         {
-            "Here we are again, Commander. <color=#616060>Liotr looks grim but focused.</color> So let us take another glimpse into the past",
-            "<voice required=\"Name=Female\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Here we are again, Commander. </voice><voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Liotr looks grim but focused.</voice><voice required=\"Name=Female\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> So let us take another glimpse into the past</voice>"
-        },
-        {
-            "<color=#616060>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</color> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body",
-            "<voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</voice><voice required=\"Name=Female\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body</voice>"
-        }
-    };
+            {
+                "Here we are again, Commander. <color=#616060>Liotr looks grim but focused.</color> So let us take another glimpse into the past",
+                "<voice required=\"Name=Female\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Here we are again, Commander. </voice><voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>Liotr looks grim but focused.</voice><voice required=\"Name=Female\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> So let us take another glimpse into the past</voice>"
+            },
+            {
+                "<color=#616060>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</color> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body",
+                "<voice required=\"Name=Narrator\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/>The booming voice of an old man dressed in I-o-mædæan robes shakes the walls of the hall.</voice><voice required=\"Name=Female\"><pitch absmiddle=\"0\"/><rate absspeed=\"0\"/><volume level=\"100\"/> Get away from him, demon! Let the boy go. By the blade of the Inheritor, you touch him only over my dead body</voice>"
+            }
+        };
+    }
 }
