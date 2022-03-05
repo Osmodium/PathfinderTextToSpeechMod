@@ -92,15 +92,13 @@ public class AppleSpeech : ISpeech
         process.WaitForExit();
         process.Dispose();
 
-        if (string.IsNullOrWhiteSpace(text))
-        {
-#if DEBUG
-            Main.Logger.Warning($"[GetAvailableVoices] {error}");
-#endif
-            return null;
-        }
+        if (!string.IsNullOrWhiteSpace(text))
+            return text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
 
-        return text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+#if DEBUG
+        Main.Logger.Warning($"[GetAvailableVoices] {error}");
+#endif
+        return null;
     }
 
     public string GetStatusMessage()

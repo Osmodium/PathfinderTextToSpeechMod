@@ -125,15 +125,15 @@ public class WindowsSpeech : ISpeech
         text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
 
 #if DEBUG
-        //if (Assembly.GetEntryAssembly() == null)
-            //UnityEngine.Debug.Log(text);
+        if (Assembly.GetEntryAssembly() == null)
+            UnityEngine.Debug.Log(text);
 #endif
 
         text = FormatGenderSpecificVoices(text);
 
 #if DEBUG
-        //if (Assembly.GetEntryAssembly() == null)
-            //UnityEngine.Debug.Log(text);
+        if (Assembly.GetEntryAssembly() == null)
+            UnityEngine.Debug.Log(text);
 #endif
 
         return text;

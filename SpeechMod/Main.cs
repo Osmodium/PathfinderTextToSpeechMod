@@ -35,6 +35,7 @@ public static class Main
     }).ToDictionary(p => p.Key, p => p.Value);
 
     public static ISpeech Speech;
+    private static bool m_Loaded = false;
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
@@ -63,7 +64,7 @@ public static class Main
         SpeechExtensions.LoadDictionary();
 
         Debug.Log("Speech Mod Initialized!");
-
+        m_Loaded = true;
         return true;
     }
 
@@ -77,16 +78,23 @@ public static class Main
             return false;
         }
 
-#if DEBUG
+//#if DEBUG
         Logger.Log("Available voices:");
         foreach (var voice in availableVoices)
         {
             Logger.Log(voice);
         }
-#endif
+//#endif
         Logger.Log("Setting available voices list...");
 
-        Settings.AvailableVoices = availableVoices.OrderBy(v => v.Split('#')[1]).ToArray();
+        for (int i = 0; i < availableVoices.Length; i++)
+        {
+            string[] splitVoice = availableVoices[i].Split('#');
+            if (splitVoice.Length != 2 || string.IsNullOrEmpty(splitVoice[1]))
+                availableVoices[i] = availableVoices[i].Replace("#","").Trim() + "#Unknown";
+        }
+
+        Settings.AvailableVoices = availableVoices.OrderBy(v => v.Split('#').ElementAtOrDefault(1)).ToArray();
 
         return true;
     }
@@ -119,7 +127,8 @@ public static class Main
 
     private static void OnGui(UnityModManager.ModEntry modEntry)
     {
-        MenuGUI.OnGui();
+        if (m_Loaded)
+            MenuGUI.OnGui();
     }
     
     private static void OnSaveGui(UnityModManager.ModEntry modEntry)
