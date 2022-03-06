@@ -88,17 +88,17 @@ public class AppleSpeech : ISpeech
         
         process.Start();
         string error = process.StandardError.ReadToEnd();
+        if (!string.IsNullOrWhiteSpace(error))
+            Main.Logger.Error(error);
         string text = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
         process.Dispose();
 
-        if (!string.IsNullOrWhiteSpace(text))
-            return text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+        return !string.IsNullOrWhiteSpace(text) ? text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries) : null;
 
 #if DEBUG
         Main.Logger.Warning($"[GetAvailableVoices] {error}");
 #endif
-        return null;
     }
 
     public string GetStatusMessage()
