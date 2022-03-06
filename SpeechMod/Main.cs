@@ -94,6 +94,25 @@ public static class Main
                 availableVoices[i] = availableVoices[i].Replace("#","").Trim() + "#Unknown";
         }
 
+        // Ensure that the selected voice index falls within the available voices range
+        if (Settings.NarratorVoice >= availableVoices.Length)
+        {
+            Logger.Log($"{nameof(Settings.NarratorVoice)} was out of range, resetting to first voice available.");
+            Settings.NarratorVoice = 0;
+        }
+
+        if (Settings.FemaleVoice >= availableVoices.Length)
+        {
+            Logger.Log($"{nameof(Settings.FemaleVoice)} was out of range, resetting to first voice available.");
+            Settings.FemaleVoice = 0;
+        }
+
+        if (Settings.MaleVoice >= availableVoices.Length)
+        {
+            Logger.Log($"{nameof(Settings.MaleVoice)} was out of range, resetting to first voice available.");
+            Settings.MaleVoice = 0;
+        }
+
         Settings.AvailableVoices = availableVoices.OrderBy(v => v.Split('#').ElementAtOrDefault(1)).ToArray();
 
         return true;
