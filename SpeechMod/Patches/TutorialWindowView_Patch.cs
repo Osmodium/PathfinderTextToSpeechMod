@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(TutorialWindowPCView<TutorialWindowVM>), "SetPage")]
-public class TutorialWindow_Patch
+[HarmonyPatch(typeof(TutorialWindowView<TutorialWindowVM>), "SetPage")]
+public class TutorialWindowView_Patch
 {
     public static void Postfix()
     {
@@ -16,7 +16,7 @@ public class TutorialWindow_Patch
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(TutorialWindowPCView<TutorialWindowVM>)}_SetPage_Postfix");
+        Debug.Log($"{nameof(TutorialWindowView<TutorialWindowVM>)}_SetPage_Postfix");
 #endif
 
         var smallWindow = UIHelper.TryFindInFadeCanvas("TutorialView/SmallWindow");
@@ -41,7 +41,7 @@ public class TutorialWindow_Patch
         var content = smallWindow.TryFind("Window/Content/Body/ScrollView/ViewPort/Content");
         if (content == null)
         {
-#if DEBUG
+#if DEBUG 
             Debug.LogWarning("Content of SMALL tutorial window was not found!");
 #endif
             return;
