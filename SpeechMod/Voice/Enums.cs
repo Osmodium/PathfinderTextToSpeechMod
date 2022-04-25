@@ -1,9 +1,8 @@
-﻿namespace SpeechMod.Voice
+﻿namespace SpeechMod.Voice;
+
+public enum VoiceType
 {
-    public enum VoiceType
-    {
-        Narrator,
-        Female,
-        Male
-    }
+    Narrator,
+    Female,
+    Male
 }
