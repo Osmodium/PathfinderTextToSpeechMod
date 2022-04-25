@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
-Version: 1.0.0
+Version: 1.0.4
 
 **Disclaimer: Works on Windows and macOS only**
 
@@ -75,6 +75,11 @@ When your amy has defeated an enemy, the resulting message text is also supporte
 Both big and small tutorial windows text is supported and can be played by hovering and left-clicking.
 
 ![Tutorials can be helpful to learn more.](http://dashvoid.com/speechmod/tutorialsmall_1_0_0.png)
+
+#### 10) Character story under summary and biography
+When inspecting a character, the story of that character is displayed both under *Summary* and under *Biography*, and are both supported by hovering and left-clicking.
+
+![Stories give companions depth.](http://dashvoid.com/speechmod/story_1_0_4.png)
 
 ### Settings
 
