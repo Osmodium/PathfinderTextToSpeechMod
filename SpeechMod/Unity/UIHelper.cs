@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
-using Kingmaker;
+﻿using Kingmaker;
 using Kingmaker.UI.Common;
+using System;
+using System.Collections;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -289,6 +289,13 @@ public static class UIHelper
     public static void SetHeight(this RectTransform trans, float newSize)
     {
         SetSize(trans, new Vector2(trans.rect.size.x, newSize));
+    }
+
+    public static Transform GetUICanvas()
+    {
+        return UIUtility.IsGlobalMap()
+            ? Game.Instance.UI.GlobalMapUI.transform
+            : Game.Instance.UI.Canvas.transform;
     }
 
     public static Transform TryFind(this Transform transform, string n)
