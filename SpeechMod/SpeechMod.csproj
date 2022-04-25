@@ -82,13 +82,14 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Patches\BookEventView_Patch.cs" />
+    <Compile Include="Patches\CharacterInfoVM_Patch.cs" />
     <Compile Include="Patches\CombatResultView_Patch.cs" />
     <Compile Include="Patches\DialogController_Patch.cs" />
     <Compile Include="Patches\Dialog_Patch.cs" />
     <Compile Include="Patches\EncyclopediaPage_Patch.cs" />
     <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
     <Compile Include="Patches\MessageModal_Patch.cs" />
-    <Compile Include="Patches\TutorialWindow_Patch.cs" />
+    <Compile Include="Patches\TutorialWindowView_Patch.cs" />
     <Compile Include="Unity\AppleVoiceUnity.cs" />
     <Compile Include="Unity\ButtonFactory.cs" />
     <Compile Include="Patches\StaticCanvas_Patch.cs" />
