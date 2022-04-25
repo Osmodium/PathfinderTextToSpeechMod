@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SpeechMod;
 
-[HarmonyPatch(typeof(TooltipEngine), "GetBrickView")]
+[HarmonyPatch(typeof(TooltipEngine), nameof(TooltipEngine.GetBrickView))]
 static class TooltipEngine_Patch
 {
     public static void Postfix(ref MonoBehaviour __result)
