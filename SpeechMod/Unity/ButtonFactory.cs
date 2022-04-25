@@ -2,6 +2,7 @@
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
+using Owlcat.Runtime.UI.Tooltips;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -41,10 +42,7 @@ public static class ButtonFactory
         button.OnLeftClick.AddListener(call);
 
         if (!string.IsNullOrWhiteSpace(text))
-            button.SetTooltip(new TooltipTemplateSimple(text, toolTip), new TooltipConfig
-            {
-                InfoCallMethod = InfoCallMethod.None
-            });
+            button.SetTooltip(new TooltipTemplateSimple(text, toolTip));
     }
 
     public static GameObject CreateSquareButton()
