@@ -1,12 +1,13 @@
 ﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.Dialog.BookEvent;
+using Kingmaker.UI.MVVM._PCView.Dialog.Dialog;
 using SpeechMod.Unity;
 using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(BookEventView), "SetCues")]
+[HarmonyPatch(typeof(BookEventView<DialogAnswerPCView>), "SetCues")]
 public static class BookEventView_Patch
 {
     public static void Postfix()
@@ -17,7 +18,7 @@ public static class BookEventView_Patch
         var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
 
 #if DEBUG
-        Debug.Log($"{nameof(BookEventView)}_SetCues_Postfix @ {sceneName}");
+        Debug.Log($"{nameof(BookEventView<DialogAnswerPCView>)}_SetCues_Postfix @ {sceneName}");
 #endif
 
         Transform cuesBlock = UIHelper.TryFindInStaticCanvas("BookEventView/ContentWrapper/Window/Content/CuesBlock");
