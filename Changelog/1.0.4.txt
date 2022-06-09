@@ -1,0 +1,9 @@
+SpeechMod 
+
+Version 1.0.4 Changelog
+
+- Support for version 1.0.3.
+- Added TTS for companion stories under summary and biography.
+- Various slight optimizations and stability fixes.
+
+Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues
