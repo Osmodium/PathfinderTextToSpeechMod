@@ -70,25 +70,23 @@ public static class SpeechExtensions
 
     public static void AddUiElements<T>(string name) where T : MonoBehaviour
     {
-        Debug.Log("Adding Apple SpeechMod UI elements.");
+        Debug.Log($"Adding {name} SpeechMod UI elements.");
 
-        GameObject appleVoice = null;
+        GameObject voice = null;
         try
         {
-            appleVoice = UnityEngine.Object.FindObjectOfType<T>()?.gameObject;
+            voice = UnityEngine.Object.FindObjectOfType<T>()?.gameObject;
         }
         catch{} // Sigh
 
-        if (appleVoice != null)
+        if (voice != null)
         {
-            Debug.Log($"{nameof(T)} found!");
+            Debug.Log($"{name} found!");
             return;
         }
 
-        Debug.Log($"Adding {nameof(T)}...");
-
-        var windowsVoiceGameObject = new GameObject(name);
-        windowsVoiceGameObject.AddComponent<T>();
-        UnityEngine.Object.DontDestroyOnLoad(windowsVoiceGameObject);
+        var voiceGameObject = new GameObject(name);
+        voiceGameObject.AddComponent<T>();
+        UnityEngine.Object.DontDestroyOnLoad(voiceGameObject);
     }
 }
