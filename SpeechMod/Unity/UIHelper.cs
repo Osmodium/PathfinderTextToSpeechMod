@@ -255,22 +255,22 @@ public static class UIHelper
 
     public static void SetLeftBottomPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x + trans.pivot.x * trans.rect.width, newPos.y + trans.pivot.y * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetLeftTopPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x + trans.pivot.x * trans.rect.width, newPos.y - (1f - trans.pivot.y) * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetRightBottomPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x - (1f - trans.pivot.x) * trans.rect.width, newPos.y + trans.pivot.y * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetRightTopPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x - (1f - trans.pivot.x) * trans.rect.width, newPos.y - (1f - trans.pivot.y) * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetSize(this RectTransform trans, Vector2 newSize)
@@ -347,5 +347,11 @@ public static class UIHelper
     {
         transform.anchorMin = new Vector2((float)xMin, (float)yMin);
         transform.anchorMax = new Vector2((float)xMax, (float)yMax);
+    }
+    
+    public static void FillParent(this RectTransform rect) 
+    {
+        rect.SetAnchor(0, 1, 0, 1);
+        rect.sizeDelta = Vector2.zero;
     }
 }
