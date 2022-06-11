@@ -342,4 +342,10 @@ public static class UIHelper
         }
         return path;
     }
+
+    public static void SetAnchor(this RectTransform transform, double xMin, double xMax, double yMin, double yMax)
+    {
+        transform.anchorMin = new Vector2((float)xMin, (float)yMin);
+        transform.anchorMax = new Vector2((float)xMax, (float)yMax);
+    }
 }

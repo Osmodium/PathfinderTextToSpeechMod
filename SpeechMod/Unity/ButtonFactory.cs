@@ -18,6 +18,21 @@ public static class ButtonFactory
         return CreatePlayButton(parent, call, null, null);
     }
 
+    public static void SetAction(this GameObject buttonGameObject, UnityAction call, string text = null, string toolTip = null)
+    {
+        var button = buttonGameObject.GetComponent<OwlcatButton>();
+        button.OnLeftClick.RemoveAllListeners();
+        try
+        {
+            button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
+        }
+        catch { }
+        button.OnLeftClick.AddListener(call);
+
+        if (!string.IsNullOrWhiteSpace(text))
+            button.SetTooltip(new TooltipTemplateSimple(text, toolTip));
+    }
+
     private static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
     {
         if (ArrowButton == null)
@@ -29,19 +44,8 @@ public static class ButtonFactory
         }
 
         var buttonGameObject = Object.Instantiate(ArrowButton, parent);
-        SetAction(buttonGameObject, call, text, toolTip);
+        buttonGameObject.SetAction(call, text, toolTip);
         return buttonGameObject;
-    }
-
-    private static void SetAction(GameObject buttonGameObject, UnityAction call, string text, string toolTip)
-    {
-        var button = buttonGameObject.GetComponent<OwlcatButton>();
-        button.OnLeftClick.RemoveAllListeners();
-        button.OnLeftClick.SetPersistentListenerState(0, UnityEventCallState.Off);
-        button.OnLeftClick.AddListener(call);
-
-        if (!string.IsNullOrWhiteSpace(text))
-            button.SetTooltip(new TooltipTemplateSimple(text, toolTip));
     }
 
     public static GameObject CreateSquareButton()

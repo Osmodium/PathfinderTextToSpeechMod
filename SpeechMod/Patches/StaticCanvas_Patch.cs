@@ -1,8 +1,11 @@
 ﻿using HarmonyLib;
 using Kingmaker;
 using Kingmaker.UI;
+using Kingmaker.UI.MVVM._PCView.Tutorial;
 using SpeechMod.Unity;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpeechMod.Patches;
 
@@ -22,6 +25,7 @@ public static class StaticCanvas_Patch
 #endif
 
         AddDialogSpeechButton();
+        AddPlaybackControl();
     }
 
     private static void AddDialogSpeechButton()
@@ -49,5 +53,68 @@ public static class StaticCanvas_Patch
         buttonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
 
         buttonGameObject.SetActive(true);
+    }
+
+    private static void AddPlaybackControl()
+    {
+        var prefabPath = "TutorialView/BigWindow";
+        var prefab = UIHelper.TryFindInFadeCanvas(prefabPath);
+
+        if (prefab == null)
+        {
+            Debug.LogWarning($"Parent on path '{prefabPath}' not found!");
+            return;
+        }
+
+        var playbackControl = Object.Instantiate(prefab, Game.Instance.UI.FadeCanvas.transform);
+        playbackControl.name = "SpeechModPlaybackControl";
+
+        Object.Destroy(playbackControl.GetComponent<TutorialModalWindowPCView>());
+
+        var window = playbackControl.Find("Window");
+        
+        var attentionmarker = window.TryFind("AttentionMarker")?.gameObject;
+        if (attentionmarker)
+            Object.Destroy(attentionmarker);
+        
+        var art = window.TryFind("SheetMask/Sheet/Art")?.gameObject;
+        if (art)
+            Object.Destroy(art);
+        
+        var contentBody = window.TryFind("Content/Body")?.gameObject;
+        if (contentBody)
+        {
+            foreach (Transform child in contentBody.transform)
+            {
+                Object.Destroy(child.gameObject);
+            }
+        }
+
+        var contentFooter = window.TryFind("Content/Footer")?.gameObject;
+        if (contentFooter)
+            Object.Destroy(contentFooter);
+        
+        var rectControl = window.GetComponent<RectTransform>();
+        rectControl.SetSize(new Vector2(400, 200));
+
+        var background = window.TryFind("SheetMask")?.gameObject;
+        if (background)
+            background.gameObject.AddComponent<DragableWindow>();
+
+        var closeButton = window.TryFind("OwlcatClose")?.gameObject;
+        if (closeButton)
+            closeButton.SetAction(() => { playbackControl.gameObject.SetActive(false); });
+
+        var title = window.TryFind("Content/Header/Title")?.gameObject;
+        if (title)
+        {
+            title.GetComponent<TextMeshProUGUI>().text = "Playback Control";
+            foreach (Image image in title.GetComponentsInChildren<Image>())
+            {
+                image.raycastTarget = false;
+            }
+        }
+
+        playbackControl.gameObject.SetActive(true);
     }
 }
