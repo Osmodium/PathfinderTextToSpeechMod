@@ -113,6 +113,7 @@
     <Compile Include="Patches\DialogController_Patch.cs" />
     <Compile Include="Patches\Dialog_Patch.cs" />
     <Compile Include="Patches\EncyclopediaPage_Patch.cs" />
+    <Compile Include="Patches\FadeCanvas_Patch.cs" />
     <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
     <Compile Include="Patches\MessageModal_Patch.cs" />
     <Compile Include="Patches\TutorialWindowView_Patch.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Unity\DraggableWindow.cs" />
     <Compile Include="Unity\MenuGUI.cs" />
+    <Compile Include="Unity\PlaybackControl.cs" />
     <Compile Include="Unity\UIHelper.cs" />
     <Compile Include="Voice\Enums.cs" />
     <Compile Include="Voice\ISpeech.cs" />

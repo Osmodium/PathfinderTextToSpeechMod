@@ -5,7 +5,7 @@ using SpeechMod.Unity;
 using TMPro;
 using UnityEngine;
 
-namespace SpeechMod;
+namespace SpeechMod.Patches;
 
 [HarmonyPatch(typeof(TooltipEngine), nameof(TooltipEngine.GetBrickView))]
 static class TooltipEngine_Patch
