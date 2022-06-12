@@ -17,6 +17,7 @@ namespace SpeechMod;
 public static class Main
 {
     public static UnityModManager.ModEntry.ModLogger Logger;
+    public static UnityModManager.ModEntry ModEntry;
     public static Settings Settings;
     public static bool Enabled;
 
@@ -40,7 +41,8 @@ public static class Main
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
         Debug.Log("Speech Mod Initializing...");
-
+        
+        ModEntry = modEntry;
         Logger = modEntry.Logger;
 
         if (!SetSpeech())
