@@ -92,6 +92,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>E:\SteamLibrary\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>E:\SteamLibrary\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>E:\SteamLibrary\steamapps\common\Pathfinder Second Adventure\Wrath_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
@@ -129,6 +132,7 @@
     <Compile Include="Unity\MenuGUI.cs" />
     <Compile Include="Unity\PlaybackControl.cs" />
     <Compile Include="Unity\UIHelper.cs" />
+    <Compile Include="Unity\Utility\AssetLoader.cs" />
     <Compile Include="Voice\Enums.cs" />
     <Compile Include="Voice\ISpeech.cs" />
     <Compile Include="Voice\AppleSpeech.cs" />
@@ -148,5 +152,23 @@
     </None>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="Assets\Sprites\UI_BackgroundExpiriensPB.png" />
+    <Content Include="Assets\Sprites\UI_BoxButton_Click.png" />
+    <Content Include="Assets\Sprites\UI_BoxButton_Default.png" />
+    <Content Include="Assets\Sprites\UI_BoxButton_Disable.png" />
+    <Content Include="Assets\Sprites\UI_BoxButton_Hover.png" />
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Active.png" />
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Default.png" />
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Disable.png" />
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Hover.png" />
+    <Content Include="Assets\Sprites\UI_ExpiriensPB.png" />
+    <Content Include="Assets\Sprites\UI_ExpiriensPBLine.png" />
+    <Content Include="Assets\Sprites\UI_SortButton_Active.png" />
+    <Content Include="Assets\Sprites\UI_SortButton_Click.png" />
+    <Content Include="Assets\Sprites\UI_SortButton_Default.png" />
+    <Content Include="Assets\Sprites\UI_SortButton_Disable.png" />
+    <Content Include="Assets\Sprites\UI_SortButton_Hover.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

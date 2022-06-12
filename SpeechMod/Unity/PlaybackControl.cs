@@ -1,17 +1,12 @@
-﻿using System;
-using DG.Tweening;
+﻿using DG.Tweening;
 using Kingmaker;
-using Kingmaker.ResourceLinks;
 using Kingmaker.UI;
-using Kingmaker.UI.Common;
 using Kingmaker.UI.MVVM._PCView.Tutorial;
 using Kingmaker.Utility;
-using Owlcat.Runtime.UI.Controls.Button;
 using SpeechMod.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 public class PlaybackControl : MonoBehaviour
 {
@@ -38,32 +33,32 @@ public class PlaybackControl : MonoBehaviour
             return;
         }
 
-        m_PlaybackControl = Object.Instantiate(prefab, Game.Instance.UI.FadeCanvas.transform);
+        m_PlaybackControl = Instantiate(prefab, Game.Instance.UI.FadeCanvas.transform);
         m_PlaybackControl.name = "SpeechModPlaybackControl";
         m_PlaybackControl.gameObject.AddComponent<PlaybackControl>();
 
-        Object.Destroy(m_PlaybackControl.GetComponent<TutorialModalWindowPCView>());
+        Destroy(m_PlaybackControl.GetComponent<TutorialModalWindowPCView>());
 
         var window = m_PlaybackControl.Find("Window");
 
         var attentionmarker = window.TryFind("AttentionMarker")?.gameObject;
         if (attentionmarker)
-            Object.Destroy(attentionmarker);
+            Destroy(attentionmarker);
 
         var art = window.TryFind("SheetMask/Sheet/Art")?.gameObject;
         if (art)
-            Object.Destroy(art);
+            Destroy(art);
 
         var contentBody = window.TryFind("Content/Body")?.gameObject;
         if (contentBody)
         {
             foreach (Transform child in contentBody.transform)
-                Object.Destroy(child.gameObject);
+                Destroy(child.gameObject);
         }
 
         var contentFooter = window.TryFind("Content/Footer")?.gameObject;
         if (contentFooter)
-            Object.Destroy(contentFooter);
+            Destroy(contentFooter);
 
         var rectControl = window.GetComponent<RectTransform>();
         rectControl.SetSize(new Vector2(400, 180));
@@ -194,11 +189,12 @@ public class PlaybackControl : MonoBehaviour
         stopButtonGameObject.AddComponent<RectTransform>();
         var buttonImage = stopButtonGameObject.AddComponent<Image>();
         //buttonImage.sprite = Resources.Load<Sprite>("UI_BoxButton_Default");
-        var sl = new SpriteLink
-        {
-            AssetId = "237"
-        };
-        buttonImage.sprite = sl.Load();
+        
+        //var sl = new SpriteLink
+        //{
+        //    AssetId = "237"
+        //};
+        //buttonImage.sprite = sl.Load();
         //var stopButton = stopButtonGameObject.AddComponent<OwlcatButton>();
         //AssetsLoader
         //stopButton
