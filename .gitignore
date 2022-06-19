@@ -11,6 +11,7 @@
 *.sln.docstates
 [Ll]ib/
 [Ww]eb[Rr]esources/
+[Ll]ib/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

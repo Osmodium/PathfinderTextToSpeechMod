@@ -1,12 +1,16 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using Kingmaker;
 using Kingmaker.UI;
 using Kingmaker.UI.MVVM._PCView.Tutorial;
 using Kingmaker.Utility;
+using Owlcat.Runtime.UI.Controls.Button;
 using SpeechMod.Unity;
+using SpeechMod.Unity.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityModManagerNet;
 
 public class PlaybackControl : MonoBehaviour
 {
@@ -14,12 +18,13 @@ public class PlaybackControl : MonoBehaviour
     private static TextMeshProUGUI m_Title;
     private static TextMeshProUGUI m_ProgressText;
     private static Slider m_ProgressSlider;
+    private static SpriteState m_StopButtonSpriteState;
 
     public static void TryInstantiate()
     {
         if (m_PlaybackControl)
             return;
-
+        
 #if DEBUG
         Debug.Log("Initializing playback control...");
 #endif
@@ -58,7 +63,19 @@ public class PlaybackControl : MonoBehaviour
 
         var contentFooter = window.TryFind("Content/Footer")?.gameObject;
         if (contentFooter)
+        {
+            var spriteTransform = contentFooter.transform.TryFind("Toggle");
+            var spriteButton = spriteTransform.GetComponent<ToggleWorkaround>();
+            var st = spriteButton.spriteState;
+            m_StopButtonSpriteState = new SpriteState
+            {
+                disabledSprite = st.disabledSprite,
+                highlightedSprite = st.highlightedSprite,
+                pressedSprite = st.pressedSprite,
+                selectedSprite = st.selectedSprite
+            };
             Destroy(contentFooter);
+        }
 
         var rectControl = window.GetComponent<RectTransform>();
         rectControl.SetSize(new Vector2(400, 180));
@@ -101,13 +118,13 @@ public class PlaybackControl : MonoBehaviour
     {
         Debug.Log("Adding body...");
 
-
         DestroyImmediate(body.gameObject.GetComponent<HorizontalLayoutGroupWorkaround>());
         body.gameObject.AddComponent<VerticalLayoutGroup>();
 
         var bodyContainer = new GameObject("Conainer");
         bodyContainer.transform.SetParent(body.transform);
         bodyContainer.transform.localPosition = body.transform.localPosition;
+        bodyContainer.transform.localScale = Vector3.one;
         var bodyContainerRectTransform = bodyContainer.AddComponent<RectTransform>();
         //bodyContainer.AddComponent<VerticalLayoutGroupWorkaround>();
 
@@ -143,9 +160,8 @@ public class PlaybackControl : MonoBehaviour
         sliderBackgroundImage.fillMethod = Image.FillMethod.Horizontal;
         sliderBackgroundImage.color = Color.black;
         sliderBackgroundImage.fillOrigin = 0;
-        //sliderBackgroundRectTransform.SetSize(new Vector2(200, 20));
-        // TODO Set texture
-        //sliderBackgroundImage.overrideSprite = Sprite.Create(Texture2D.redTexture, new Rect(0, 0, 200, 20), new Vector2(0f, 0.5f), 100);
+        sliderBackgroundRectTransform.SetSize(new Vector2(200, 20));
+        sliderBackgroundImage.sprite = AssetLoader.LoadInternal("Sprites", "UI_BackgroundExpiriensPB.png", new Vector2Int(200, 20));
 
         var sliderFillArea = new GameObject("Fill Area");
         sliderFillArea.transform.SetParent(sliderContainer.transform);
@@ -168,9 +184,8 @@ public class PlaybackControl : MonoBehaviour
         sliderFillBackgroundImage.fillOrigin = 0;
         sliderFillBackgroundImage.color = Color.gray;
         sliderFillBackgroundImage.DOFillAmount(0.4f, 2f);
-        //sliderBackgroundRectTransform.SetSize(new Vector2(200, 20));
-        // TODO Set texture
-        //sliderFillBackgroundImage.overrideSprite = Sprite.Create(Texture2D.blackTexture, new Rect(0, 0, 120, 20), new Vector2(0f, 0.5f), 100);
+        sliderFillBackgroundRectTransform.SetSize(new Vector2(200, 20));
+        sliderFillBackgroundImage.sprite = AssetLoader.LoadInternal("Sprites", "UI_ExpiriensPB.png", new Vector2Int(200, 20));
 
         var sliderHandleSlideArea = new GameObject("Handle Slide Area");
         sliderHandleSlideArea.transform.SetParent(sliderContainer.transform);
@@ -182,23 +197,9 @@ public class PlaybackControl : MonoBehaviour
         var sliderHandleRectTransform = sliderHandle.AddComponent<RectTransform>();
         sliderHandleRectTransform.FillParent();
 
-
-        // Button
-        var stopButtonGameObject = new GameObject("StopButton");
-        stopButtonGameObject.transform.SetParent(bodyContainer.transform);
-        stopButtonGameObject.AddComponent<RectTransform>();
-        var buttonImage = stopButtonGameObject.AddComponent<Image>();
-        //buttonImage.sprite = Resources.Load<Sprite>("UI_BoxButton_Default");
+        // Stop button
+        ButtonFactory.CreateOwlcatButton(bodyContainer.transform, m_StopButtonSpriteState, null);
         
-        //var sl = new SpriteLink
-        //{
-        //    AssetId = "237"
-        //};
-        //buttonImage.sprite = sl.Load();
-        //var stopButton = stopButtonGameObject.AddComponent<OwlcatButton>();
-        //AssetsLoader
-        //stopButton
-
         labelContainer.transform.localPosition = bodyContainer.transform.localPosition;
         sliderContainer.transform.localPosition = bodyContainer.transform.localPosition;
 
