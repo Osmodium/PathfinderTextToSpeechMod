@@ -18,7 +18,7 @@ public class AssetLoader
         texture.LoadImage(bytes);
         return Sprite.Create(texture, new Rect(0, 0, size.x, size.y), new Vector2(0, 0));
     }
-    
+
     //private static Dictionary<string, GameObject> Objects = new();
     //public static Dictionary<string, Sprite> Sprites = new();
     //public static Dictionary<string, Mesh> Meshes = new();

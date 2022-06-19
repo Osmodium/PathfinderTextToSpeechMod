@@ -1,9 +1,6 @@
-﻿using Kingmaker;
-using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
+﻿using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
-using Owlcat.Runtime.UI.Tooltips;
-using SpeechMod.Unity.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -12,9 +9,12 @@ namespace SpeechMod.Unity;
 
 public static class ButtonFactory
 {
-    private static GameObject m_ButtonPrefab = null;
+    //private static GameObject m_ButtonPrefab = null;
 
     private static GameObject ArrowButton => UIHelper.TryFindInStaticCanvas(Constants.ARROW_BUTTON_PATH)?.gameObject;
+
+    private static GameObject CloseButton => UIHelper.TryFindInFadeCanvas(Constants.OWLCAT_CLOSE_BUTTON_PATH)?.gameObject;
+    
 
     public static GameObject CreatePlayButton(Transform parent, UnityAction call)
     {
@@ -24,6 +24,11 @@ public static class ButtonFactory
     public static void SetAction(this GameObject buttonGameObject, UnityAction call, string text = null, string toolTip = null)
     {
         var button = buttonGameObject.GetComponent<OwlcatButton>();
+        button.SetAction(call, text, toolTip);
+    }
+
+    public static void SetAction(this OwlcatButton button, UnityAction call, string text = null, string toolTip = null)
+    {
         button.OnLeftClick.RemoveAllListeners();
         try
         {
@@ -36,39 +41,36 @@ public static class ButtonFactory
             button.SetTooltip(new TooltipTemplateSimple(text, toolTip));
     }
 
-    //public static void AddOwlcatButton(string text, string tooltip, ButtonSprites sprites, UnityAction act)
-    //{
-    //    //var applyBuffsButton = GameObject.Instantiate(prefab, buttonsContainer.transform);
-    //    //applyBuffsButton.SetActive(true);
-    //    OwlcatButton button = new OwlcatButton(); //= applyBuffsButton.GetComponentInChildren<OwlcatButton>();
-    //    button.m_CommonLayer[0].SpriteState = new SpriteState
-    //    {
-    //        pressedSprite = sprites.down,
-    //        highlightedSprite = sprites.hover,
-    //    };
-    //    button.OnLeftClick.AddListener(() => {
-    //        act();
-    //    });
-        
-    //    //applyBuffsButton.GetComponentInChildren<Image>().sprite = sprites.normal;
-    //}
-
-    public class ButtonSprites
+    public static void CreateOwlcatButton(Transform parent, SpriteState sprites, UnityAction call)
     {
-        public Sprite normal;
-        public Sprite hover;
-        public Sprite down;
-
-        public static ButtonSprites Load(string name, Vector2Int size)
+        var button = Object.Instantiate(CloseButton, parent);
+        button.SetActive(true);
+        OwlcatButton owlcatButton = button.GetComponentInChildren<OwlcatButton>();
+        if (owlcatButton != null)
         {
-            return new ButtonSprites
-            {
-                normal = AssetLoader.LoadInternal("icons", $"{name}_normal.png", size),
-                hover = AssetLoader.LoadInternal("icons", $"{name}_hover.png", size),
-                down = AssetLoader.LoadInternal("icons", $"{name}_down.png", size),
-            };
+            owlcatButton.m_CommonLayer[0].SpriteState = sprites;
+            owlcatButton.SetAction(call, "Stop playback");
         }
+
+        button.GetComponentInChildren<Image>().sprite = sprites.selectedSprite;
     }
+
+    //public class ButtonSprites
+    //{
+    //    public Sprite normal;
+    //    public Sprite hover;
+    //    public Sprite down;
+
+    //    public static ButtonSprites Load(string name, Vector2Int size)
+    //    {
+    //        return new ButtonSprites
+    //        {
+    //            normal = AssetLoader.LoadInternal("icons", $"{name}_normal.png", size),
+    //            hover = AssetLoader.LoadInternal("icons", $"{name}_hover.png", size),
+    //            down = AssetLoader.LoadInternal("icons", $"{name}_down.png", size),
+    //        };
+    //    }
+    //}
 
     private static GameObject CreatePlayButton(Transform parent, UnityAction call, string text, string toolTip)
     {
@@ -85,14 +87,14 @@ public static class ButtonFactory
         return buttonGameObject;
     }
 
-    public static GameObject CreateSquareButton()
-    {
-        if (m_ButtonPrefab != null)
-            return Object.Instantiate(m_ButtonPrefab);
+    //public static GameObject CreateSquareButton()
+    //{
+    //    if (m_ButtonPrefab != null)
+    //        return Object.Instantiate(m_ButtonPrefab);
 
-        var staticRoot = Game.Instance.UI.Canvas.transform;
-        var buttonsContainer = staticRoot.TryFind("HUDLayout/IngameMenuView/ButtonsPart/Container");
-        m_ButtonPrefab = buttonsContainer.GetChild(0).gameObject;
-        return Object.Instantiate(m_ButtonPrefab);
-    }
+    //    var staticRoot = Game.Instance.UI.Canvas.transform;
+    //    var buttonsContainer = staticRoot.TryFind("HUDLayout/IngameMenuView/ButtonsPart/Container");
+    //    m_ButtonPrefab = buttonsContainer.GetChild(0).gameObject;
+    //    return Object.Instantiate(m_ButtonPrefab);
+    //}
 }
