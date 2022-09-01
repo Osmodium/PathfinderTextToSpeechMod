@@ -41,7 +41,7 @@ public class TutorialWindowView_Patch
         var content = smallWindow.TryFind("Window/Content/Body/ScrollView/ViewPort/Content");
         if (content == null)
         {
-#if DEBUG 
+#if DEBUG
             Debug.LogWarning("Content of SMALL tutorial window was not found!");
 #endif
             return;

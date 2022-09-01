@@ -64,7 +64,7 @@ public class AppleSpeech : ISpeech
         text = $"-v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
         AppleVoiceUnity.Speak(text, delay);
     }
-    
+
     public void Stop()
     {
         AppleVoiceUnity.Stop();
@@ -85,7 +85,7 @@ public class AppleSpeech : ISpeech
                 CreateNoWindow = true
             }
         };
-        
+
         process.Start();
         string error = process.StandardError.ReadToEnd();
         if (!string.IsNullOrWhiteSpace(error))

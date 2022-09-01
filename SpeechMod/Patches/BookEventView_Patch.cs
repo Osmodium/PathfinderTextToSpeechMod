@@ -24,7 +24,7 @@ public static class BookEventView_Patch
         Transform cuesBlock = UIHelper.TryFindInStaticCanvas("BookEventView/ContentWrapper/Window/Content/CuesBlock");
         if (cuesBlock == null)
             cuesBlock = UIHelper.TryFindInStaticCanvas("BookEventPCView/ContentWrapper/Window/Content/CuesBlock");
-        
+
         if (cuesBlock == null)
         {
             Debug.LogWarning("CuesBlock not found!");

@@ -1,30 +1,29 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Kingmaker;
 using Kingmaker.Blueprints;
 using SpeechMod.Unity;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace SpeechMod.Voice;
 
 public class WindowsSpeech : ISpeech
 {
-    private static string NarratorVoice => $"<voice required=\"Name={ Main.NarratorVoice }\">";
-    private static string NarratorPitch => $"<pitch absmiddle=\"{ Main.Settings.NarratorPitch }\"/>";
-    private static string NarratorRate => $"<rate absspeed=\"{ Main.Settings.NarratorRate }\"/>";
-    private static string NarratorVolume => $"<volume level=\"{ Main.Settings.NarratorVolume }\"/>";
+    private static string NarratorVoice => $"<voice required=\"Name={Main.NarratorVoice}\">";
+    private static string NarratorPitch => $"<pitch absmiddle=\"{Main.Settings.NarratorPitch}\"/>";
+    private static string NarratorRate => $"<rate absspeed=\"{Main.Settings.NarratorRate}\"/>";
+    private static string NarratorVolume => $"<volume level=\"{Main.Settings.NarratorVolume}\"/>";
 
-    private static string FemaleVoice => $"<voice required=\"Name={ Main.FemaleVoice }\">";
-    private static string FemaleVolume => $"<volume level=\"{ Main.Settings.FemaleVolume }\"/>";
-    private static string FemalePitch => $"<pitch absmiddle=\"{ Main.Settings.FemalePitch }\"/>";
-    private static string FemaleRate => $"<rate absspeed=\"{ Main.Settings.FemaleRate }\"/>";
-    
-    private static string MaleVoice => $"<voice required=\"Name={ Main.MaleVoice }\">";
-    private static string MaleVolume => $"<volume level=\"{ Main.Settings.MaleVolume }\"/>";
-    private static string MalePitch => $"<pitch absmiddle=\"{ Main.Settings.MalePitch }\"/>";
-    private static string MaleRate => $"<rate absspeed=\"{ Main.Settings.MaleRate }\"/>";
-    
+    private static string FemaleVoice => $"<voice required=\"Name={Main.FemaleVoice}\">";
+    private static string FemaleVolume => $"<volume level=\"{Main.Settings.FemaleVolume}\"/>";
+    private static string FemalePitch => $"<pitch absmiddle=\"{Main.Settings.FemalePitch}\"/>";
+    private static string FemaleRate => $"<rate absspeed=\"{Main.Settings.FemaleRate}\"/>";
+
+    private static string MaleVoice => $"<voice required=\"Name={Main.MaleVoice}\">";
+    private static string MaleVolume => $"<volume level=\"{Main.Settings.MaleVolume}\"/>";
+    private static string MalePitch => $"<pitch absmiddle=\"{Main.Settings.MalePitch}\"/>";
+    private static string MaleRate => $"<rate absspeed=\"{Main.Settings.MaleRate}\"/>";
+
     public string CombinedNarratorVoiceStart => $"{NarratorVoice}{NarratorPitch}{NarratorRate}{NarratorVolume}";
     public string CombinedFemaleVoiceStart => $"{FemaleVoice}{FemalePitch}{FemaleRate}{FemaleVolume}";
     public string CombinedMaleVoiceStart => $"{MaleVoice}{MalePitch}{MaleRate}{MaleVolume}";

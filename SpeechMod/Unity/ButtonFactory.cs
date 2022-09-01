@@ -2,7 +2,6 @@
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
-using Owlcat.Runtime.UI.Tooltips;
 using UnityEngine;
 using UnityEngine.Events;
 
