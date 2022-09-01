@@ -15,7 +15,7 @@ public class Settings : UnityModManager.ModSettings
     public int MaleRate = 0;
     public int MaleVolume = 100;
     public int MalePitch = 0;
-        
+
     public bool AutoPlay = false;
 
     public string[] AvailableVoices;

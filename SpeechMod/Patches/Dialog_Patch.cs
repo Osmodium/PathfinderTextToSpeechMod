@@ -2,7 +2,6 @@
 using Kingmaker;
 using Kingmaker.Localization;
 using Kingmaker.UI.MVVM._VM.Dialog.Dialog;
-using UnityEngine;
 
 namespace SpeechMod.Patches;
 

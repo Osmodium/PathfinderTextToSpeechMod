@@ -61,7 +61,7 @@ public static class SpeechExtensions
         text = text.Replace("\"", "");
         text = text.Replace("\n", ". ");
         text = text.Trim().Trim('.');
-            
+
         if (m_PhoneticDictionary == null)
             LoadBackupDictionary();
 

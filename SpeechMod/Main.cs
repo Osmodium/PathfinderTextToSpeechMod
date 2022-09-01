@@ -149,7 +149,7 @@ public static class Main
         if (m_Loaded)
             MenuGUI.OnGui();
     }
-    
+
     private static void OnSaveGui(UnityModManager.ModEntry modEntry)
     {
         MenuGUI.UpdateColors();
