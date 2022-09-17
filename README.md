@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
-Version: 1.0.4
+Version: 1.0.5
 
 **Disclaimer: Works on Windows and macOS only**
 
