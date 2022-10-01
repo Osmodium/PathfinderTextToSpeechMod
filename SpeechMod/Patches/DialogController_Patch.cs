@@ -2,6 +2,9 @@
 using Kingmaker;
 using Kingmaker.Controllers.Dialog;
 using Kingmaker.DialogSystem.Blueprints;
+#if DEBUG
+using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 

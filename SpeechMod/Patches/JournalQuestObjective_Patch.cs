@@ -12,16 +12,18 @@ public static class JournalQuestObjective_Patch
 {
     private static readonly string m_ButtonName = "JQSpeechButton";
 
+    private const string BODY_GROUP_PATH = "ServiceWindowsPCView/Background/Windows/JournalPCView/JournalQuestView/BodyGroup";
+
     public static void Postfix()
     {
         if (!Main.Enabled)
             return;
 
 #if DEBUG
-        Debug.Log("JournalQuestObjectivePCView_BindViewImplementation");
+        Debug.Log($"{nameof(JournalQuestObjectivePCView)}_BindViewImplementation_Postfix");
 #endif
 
-        var bodyGroup = UIHelper.TryFindInStaticCanvas("ServiceWindowsPCView/JournalPCView/JournalQuestView/BodyGroup");
+        var bodyGroup = UIHelper.TryFindInStaticCanvas(BODY_GROUP_PATH);
         if (bodyGroup == null)
         {
             Debug.Log("Couldn't find BodyGroup...");

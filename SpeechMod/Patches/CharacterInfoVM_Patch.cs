@@ -16,7 +16,7 @@ public static class CharacterInfoVM_Patch
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(CharacterInfoVM)}_OnPageSelected_Postfix - {pageType}");
+        Debug.Log($"{nameof(CharacterInfoVM)}_OnPageSelected_Postfix @ {pageType}");
 #endif
 
         if (pageType is not (CharInfoPageType.SummaryPC or CharInfoPageType.BiographyPC))

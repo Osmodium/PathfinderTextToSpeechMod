@@ -9,6 +9,8 @@ namespace SpeechMod;
 [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
 public static class StaticCanvas_Patch
 {
+    private const string SCROLL_VIEW_PATH = "NestedCanvas1/DialogPCView/Body/View/Scroll View";
+
     public static void Postfix()
     {
         if (!Main.Enabled)
@@ -30,7 +32,7 @@ public static class StaticCanvas_Patch
         Debug.Log("Adding speech button to dialog ui.");
 #endif
 
-        var parent = UIHelper.TryFindInStaticCanvas("DialogPCView/Body/View/Scroll View");
+        var parent = UIHelper.TryFindInStaticCanvas(SCROLL_VIEW_PATH);
 
         if (parent == null)
         {

@@ -10,6 +10,8 @@ namespace SpeechMod.Patches;
 [HarmonyPatch(typeof(BookEventView<DialogAnswerPCView>), "SetCues")]
 public static class BookEventView_Patch
 {
+    private const string CUES_BLOCK_PATH = "NestedCanvas1/BookEventPCView/ContentWrapper/Window/Content/CuesBlock";
+
     public static void Postfix()
     {
         if (!Main.Enabled)
@@ -21,9 +23,7 @@ public static class BookEventView_Patch
         Debug.Log($"{nameof(BookEventView<DialogAnswerPCView>)}_SetCues_Postfix @ {sceneName}");
 #endif
 
-        Transform cuesBlock = UIHelper.TryFindInStaticCanvas("BookEventView/ContentWrapper/Window/Content/CuesBlock");
-        if (cuesBlock == null)
-            cuesBlock = UIHelper.TryFindInStaticCanvas("BookEventPCView/ContentWrapper/Window/Content/CuesBlock");
+        Transform cuesBlock = UIHelper.TryFindInStaticCanvas(CUES_BLOCK_PATH);
 
         if (cuesBlock == null)
         {

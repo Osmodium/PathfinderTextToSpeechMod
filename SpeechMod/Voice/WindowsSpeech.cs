@@ -5,6 +5,10 @@ using Kingmaker;
 using Kingmaker.Blueprints;
 using SpeechMod.Unity;
 
+#if DEBUG
+using System.Reflection;
+#endif
+
 namespace SpeechMod.Voice;
 
 public class WindowsSpeech : ISpeech

@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
-Version: 1.0.5
+Version: 1.0.6
 
 **Disclaimer: Works on Windows and macOS only**
 
@@ -22,11 +22,10 @@ Version: 1.0.5
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/PathfinderTextToSpeechMod/issues)*
 
 #### Limitations:
- - There's currently a bug in the base game where sub-menus in the Encyclopedia disappears at times, this is not due to this mod.
+ - Working on a UI to control playback.
 
 #### Issues todo:
- - No control to stop playback manually (want to do a visualization at some point).
- - No support for chapter changes (although they seem to be narrated).
+  - No support for chapter changes (although they seem to be narrated).
 
 ### How to use
 

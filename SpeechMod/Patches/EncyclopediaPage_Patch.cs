@@ -12,12 +12,18 @@ public static class EncyclopediaPage_Patch
 {
     private static readonly string m_ButtonName = "EncyclopediaSpeechButton";
 
+    private const string BODY_GROUP_PATH = "ServiceWindowsPCView/Background/Windows/EncyclopediaPCView/EncyclopediaPageView/BodyGroup";
+
     public static void Postfix()
     {
         if (!Main.Enabled)
             return;
 
-        var bodyGroup = UIHelper.TryFindInStaticCanvas("ServiceWindowsPCView/EncyclopediaPCView/EncyclopediaPageView/BodyGroup");
+#if DEBUG
+        Debug.Log($"{nameof(EncyclopediaPagePCView)}_UpdateView_Postfix");
+#endif
+
+        var bodyGroup = UIHelper.TryFindInStaticCanvas(BODY_GROUP_PATH);
         if (bodyGroup == null)
         {
 #if DEBUG
