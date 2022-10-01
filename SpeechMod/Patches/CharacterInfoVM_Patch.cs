@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.CharacterInfo;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.CharacterInfo.Sections.Stories;
 using Kingmaker.UI.MVVM._VM.ServiceWindows.CharacterInfo;
@@ -26,15 +27,22 @@ public static class CharacterInfoVM_Patch
 
         for (int i = 0; i < stories.Length; ++i)
         {
-            var story = stories[i];
-            var textBox = story?.transform?.Find("StoryFull/StoryContent/TextBox");
-            if (textBox == null)
+            try
             {
-                Debug.LogWarning($"{nameof(CharacterInfoVM)}_OnPageSelected_Postfix - {nameof(textBox)} not found for pagetype {pageType}!");
-                continue;
-            }
+                var story = stories[i];
+                var textBox = story?.transform?.Find("StoryFull/StoryContent/TextBox");
+                if (textBox == null)
+                {
+                    Debug.LogWarning($"{nameof(CharacterInfoVM)}_OnPageSelected_Postfix - TextBox not found for pagetype {pageType}!");
+                    continue;
+                }
 
-            textBox.HookupTextToSpeechOnTransform();
+                textBox.HookupTextToSpeechOnTransform();
+            }
+            catch(Exception ex)
+            {
+                Debug.LogWarning($"Failed hooking story text on story '{stories[i].name}'. {ex.Message}");
+            }
         }
     }
 }
