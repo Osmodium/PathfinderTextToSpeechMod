@@ -16,9 +16,8 @@ public static class StaticCanvas_Patch
         if (!Main.Enabled)
             return;
 
-        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
-
 #if DEBUG
+        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
         Debug.Log($"{nameof(StaticCanvas)}_Initialize_Postfix @ {sceneName}");
 #endif
 

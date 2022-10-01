@@ -14,9 +14,8 @@ public static class CombatResultView_Patch
         if (!Main.Enabled)
             return;
 
-        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
-
 #if DEBUG
+        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
         Debug.Log($"{nameof(CombatResultPCView)}_BindViewImplementation_Postfix @ {sceneName}");
 #endif
 

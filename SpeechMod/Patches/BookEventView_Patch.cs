@@ -17,9 +17,8 @@ public static class BookEventView_Patch
         if (!Main.Enabled)
             return;
 
-        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
-
 #if DEBUG
+        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
         Debug.Log($"{nameof(BookEventView<DialogAnswerPCView>)}_SetCues_Postfix @ {sceneName}");
 #endif
 
