@@ -81,11 +81,11 @@ public static class SpeechExtensions
 
         if (appleVoice != null)
         {
-            Debug.Log($"{nameof(T)} found!");
+            Debug.Log($"{typeof(T).Name} found!");
             return;
         }
 
-        Debug.Log($"Adding {nameof(T)}...");
+        Debug.Log($"Adding {typeof(T).Name}...");
 
         var windowsVoiceGameObject = new GameObject(name);
         windowsVoiceGameObject.AddComponent<T>();

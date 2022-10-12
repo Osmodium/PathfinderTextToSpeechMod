@@ -317,9 +317,14 @@ public static class UIHelper
 
     public static Transform TryFindInStaticCanvas(string n)
     {
+        return TryFindInStaticCanvas(n, n);
+    }
+
+    public static Transform TryFindInStaticCanvas(string canvasName, string globalMapName)
+    {
         return UIUtility.IsGlobalMap()
-            ? Game.Instance.UI.GlobalMapUI.transform.TryFind(n)
-            : Game.Instance.UI.Canvas.transform.TryFind(n);
+            ? Game.Instance.UI.GlobalMapUI.transform.TryFind(globalMapName)
+            : Game.Instance.UI.Canvas.transform.TryFind(canvasName);
     }
 
     public static Transform TryFindInFadeCanvas(string n)

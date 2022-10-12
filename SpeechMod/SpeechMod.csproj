@@ -88,6 +88,7 @@
     <Compile Include="Patches\Dialog_Patch.cs" />
     <Compile Include="Patches\EncyclopediaPage_Patch.cs" />
     <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
+    <Compile Include="Patches\GlobalMapEnterMessage_Patch.cs" />
     <Compile Include="Patches\MessageModal_Patch.cs" />
     <Compile Include="Patches\TutorialWindowView_Patch.cs" />
     <Compile Include="Unity\AppleVoiceUnity.cs" />
