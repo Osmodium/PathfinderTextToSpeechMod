@@ -87,8 +87,7 @@ public class AppleVoiceUnity : MonoBehaviour
 
         arguments = new Regex("<[^>]+>").Replace(arguments, "");
 
-        Process.Start("/usr/bin/killall", "bash");
-        Process.Start("/usr/bin/killall", "say");
+        KillAll();
 
         arguments = "-c \"" + arguments + "\"";
         Process.Start("/bin/bash", arguments);
@@ -99,7 +98,12 @@ public class AppleVoiceUnity : MonoBehaviour
         if (!IsVoiceInitialized())
             return;
 
-        Process.Start("/usr/bin/killall", "bash");
-        Process.Start("/usr/bin/killall", "say");
+        KillAll();
+    }
+
+    private static void KillAll()
+    {
+        Process.Start("/usr/bin/killall", "bash -kill");
+        Process.Start("/usr/bin/killall", "say -kill");
     }
 }
