@@ -31,22 +31,22 @@ public class AppleVoiceUnity : MonoBehaviour
     {
         if (!AppleVoiceUnity.IsVoiceInitialized())
 	    {
-		    return;
+	    	return;
 	    }
 	    if (delay > 0f)
 	    {
-		    AppleVoiceUnity.m_TheVoice.ExecuteLater(delay, delegate
-		    {
-			    AppleVoiceUnity.Speak(text, 0f);
-		    });
-		return;
+	       AppleVoiceUnity.m_TheVoice.ExecuteLater(delay, delegate
+	       {
+	          AppleVoiceUnity.Speak(text, 0f);
+	       });
+	    return;
 	    }
 	    AppleVoiceUnity.Stop();
 	    text = string.Format("-v {0} -r {1} {2};", new object[]
 	    {
-		    Main.NarratorVoice,
-		    Main.Settings.NarratorRate,
-		    text.Replace("\"", "")
+		Main.NarratorVoice,
+		Main.Settings.NarratorRate,
+		text.Replace("\"", "")
 	    });
 	    Process.Start("/usr/bin/say", text);
         }
