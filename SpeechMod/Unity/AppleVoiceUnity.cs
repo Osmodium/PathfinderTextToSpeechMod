@@ -101,6 +101,7 @@ public class AppleVoiceUnity : MonoBehaviour
 
     private static void KillAll()
     {
-        Process.Start("/usr/bin/killall", "say -kill").WaitForExit();
+        Process.Start("/usr/bin/killall", "bash -kill").WaitForExit();
+	Process.Start("/usr/bin/killall", "say -kill").WaitForExit();
     }
 }
