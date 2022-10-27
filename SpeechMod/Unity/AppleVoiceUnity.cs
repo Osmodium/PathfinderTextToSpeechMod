@@ -1,4 +1,4 @@
-﻿using Kingmaker;
+using Kingmaker;
 using Kingmaker.Blueprints;
 using System;
 using System.Diagnostics;
@@ -10,19 +10,15 @@ namespace SpeechMod.Unity;
 public class AppleVoiceUnity : MonoBehaviour
 {
     private static AppleVoiceUnity m_TheVoice;
-
     private static string GenderVoice => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice;
     private static int GenderRate => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.Settings.FemaleRate : Main.Settings.MaleRate;
-
     private static bool IsVoiceInitialized()
     {
         if (m_TheVoice != null)
             return true;
-
         Main.Logger.Critical("No voice initialized!");
         return false;
     }
-
     void Start()
     {
         if (m_TheVoice != null)
@@ -59,13 +55,11 @@ public class AppleVoiceUnity : MonoBehaviour
     {
         if (!IsVoiceInitialized())
             return;
-
         if (delay > 0f)
         {
             m_TheVoice.ExecuteLater(delay, () => SpeakDialog(text));
             return;
         }
-
         string arguments = "";
         text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
         text = text.Replace("\\n", "  ");
@@ -88,15 +82,11 @@ public class AppleVoiceUnity : MonoBehaviour
                 arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {argumentsPart2.Replace("\"", "")};";
             }
         }
-
         text = text.Replace("\"", "");
         if (!string.IsNullOrWhiteSpace(text) && text != "</color>")
             arguments = $"{arguments}say -v {GenderVoice} -r {GenderRate} {text};";
-
         arguments = new Regex("<[^>]+>").Replace(arguments, "");
-
         KillAll();
-
         arguments = "-c \"" + arguments + "\"";
         Process.Start("/bin/bash", arguments);
     }
@@ -111,6 +101,6 @@ public class AppleVoiceUnity : MonoBehaviour
 
     private static void KillAll()
     {
-        Process.Start("/usr/bin/killall", "say -kill");
+        Process.Start("/usr/bin/killall", "say -kill").WaitForExit();
     }
 }
