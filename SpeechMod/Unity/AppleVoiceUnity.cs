@@ -33,19 +33,27 @@ public class AppleVoiceUnity : MonoBehaviour
 
     public static void Speak(string text, float delay = 0f)
     {
-        if (!IsVoiceInitialized())
-            return;
-
-        if (delay > 0f)
-        {
-            m_TheVoice.ExecuteLater(delay, () => Speak(text));
-            return;
+        if (!AppleVoiceUnity.IsVoiceInitialized())
+	    {
+		    return;
+	    }
+	    if (delay > 0f)
+	    {
+		    AppleVoiceUnity.m_TheVoice.ExecuteLater(delay, delegate
+		    {
+			    AppleVoiceUnity.Speak(text, 0f);
+		    });
+		return;
+	    }
+	    AppleVoiceUnity.Stop();
+	    text = string.Format("-v {0} -r {1} {2};", new object[]
+	    {
+		    Main.NarratorVoice,
+		    Main.Settings.NarratorRate,
+		    text.Replace("\"", "")
+	    });
+	    Process.Start("/usr/bin/say", text);
         }
-
-        Stop();
-
-        Process.Start("/usr/bin/say", text);
-    }
 
     public static void SpeakDialog(string text, float delay = 0f)
     {
@@ -103,7 +111,6 @@ public class AppleVoiceUnity : MonoBehaviour
 
     private static void KillAll()
     {
-        Process.Start("/usr/bin/killall", "bash -kill");
         Process.Start("/usr/bin/killall", "say -kill");
     }
 }
