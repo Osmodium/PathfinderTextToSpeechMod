@@ -101,7 +101,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
 
-![Settings for SpeechMod](http://dashvoid.com/speechmod/settings_1_0_0.png)
+![Settings for SpeechMod](http://dashvoid.com/speechmod/settings_1_0_9.png)
 
 ### Motivation
 *Why did I create this mod?*
