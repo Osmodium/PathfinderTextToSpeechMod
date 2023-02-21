@@ -46,6 +46,18 @@ public static class MenuGUI
         Main.Settings.AutoPlay = GUILayout.Toggle(Main.Settings.AutoPlay, "Enabled");
         GUILayout.EndHorizontal();
 
+        {
+            GUI.enabled = Main.Settings.AutoPlay;
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Auto play ignores voiced dialog lines", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.AutoPlayIgnoreVoice = GUILayout.Toggle(Main.Settings.AutoPlayIgnoreVoice, "Enabled");
+            GUILayout.EndHorizontal();
+
+            GUI.enabled = true;
+        }
+
         GUILayout.EndVertical();
 
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);

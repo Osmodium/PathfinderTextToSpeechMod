@@ -15,10 +15,10 @@ public static class UIHelper
 
     public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
     {
-        return behaviour.StartCoroutine(_realExecute(delay, action));
+        return behaviour.StartCoroutine(InternalExecute(delay, action));
     }
 
-    static IEnumerator _realExecute(float delay, Action action)
+    private static IEnumerator InternalExecute(float delay, Action action)
     {
         yield return new WaitForSeconds(delay);
         action?.Invoke();

@@ -4,7 +4,7 @@ using Kingmaker.UI;
 using SpeechMod.Unity;
 using UnityEngine;
 
-namespace SpeechMod;
+namespace SpeechMod.Patches;
 
 [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
 public static class StaticCanvas_Patch

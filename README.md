@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
-Version: 1.0.8
+Version: 1.0.9
 
 **Disclaimer: Works on Windows and macOS only**
 
@@ -96,6 +96,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - Windows Only:
 	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*, hope this speaks for itself.
 - **Auto play dialog**: When enabled, dialogs will be played automatically when theres no voice acted dialog.
+- **Auto play ignores voiced dialog lines**: Only available when using auto play dialog. This option makes the auto play ignore when there is voiced dialog, remember to turn dialog off in the settings.
 - **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
