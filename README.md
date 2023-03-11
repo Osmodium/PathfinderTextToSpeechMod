@@ -8,13 +8,15 @@ Version: 1.0.9
 
 **Works with all languages as long as you have a voice in that language installed.**
 
+[How to unlock more voices in Windows 10](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
+
 ### How to install
 
  1. Download and install Unity Mod Manager, make sure it is at least version 0.23.0 (I use 0.23.3)
  2. Run Unity Mod Manger and set it up to find Pathfinder: Wrath of the Righteous (Second Adventure)
  3. Download the SpeechMod-mod
  4. Install the mod by dragging the zip file from step 3 into the Unity Mod Manager window under the Mods tab. Alternatively locate the zip file after clicking the "Install" button in Unity Mod Manager.
- 
+
  *If running on OSX 64-bit you might need to use the *mono console.exe* command (see UMM documentation for further)
 
 ### Known issues / limitations
@@ -29,7 +31,7 @@ Version: 1.0.9
 
 ### How to use
 
-#### 1) Dialog 
+#### 1) Dialog
 When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
 
 ![Playbutton for the current dialog](http://dashvoid.com/speechmod/playbutton_dialog.png)
@@ -85,8 +87,8 @@ When inspecting a character, the story of that character is displayed both under
 The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
 - **Narrator Voice**: The settings for the voice used for either all or non-gender specific text in dialogs when *Use gender specific voices* is turned on.
 	- *Nationality*: Just shows the selected voices nationality.
-	- **Speech rate**: The speed of the voice the higher number, the faster the speech. 
-		- Windows: from -10 to 10 (relative speed from 0). 
+	- **Speech rate**: The speed of the voice the higher number, the faster the speech.
+		- Windows: from -10 to 10 (relative speed from 0).
 		- macOS: from 150 to 300 (words per minute).
 	- Windows Only:
 		- **Speech volume**: The volume of the voice from 0 to 100.
