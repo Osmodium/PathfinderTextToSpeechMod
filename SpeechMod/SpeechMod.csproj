@@ -91,7 +91,7 @@
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owlcat.Runtime.UI_public">
       <HintPath>..\lib\Owlcat.Runtime.UI_public.dll</HintPath>
@@ -174,22 +174,54 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Assets\Sprites\UI_BackgroundExpiriensPB.png" />
-    <Content Include="Assets\Sprites\UI_BoxButton_Click.png" />
-    <Content Include="Assets\Sprites\UI_BoxButton_Default.png" />
-    <Content Include="Assets\Sprites\UI_BoxButton_Disable.png" />
-    <Content Include="Assets\Sprites\UI_BoxButton_Hover.png" />
-    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Active.png" />
-    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Default.png" />
-    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Disable.png" />
-    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Hover.png" />
-    <Content Include="Assets\Sprites\UI_ExpiriensPB.png" />
-    <Content Include="Assets\Sprites\UI_ExpiriensPBLine.png" />
-    <Content Include="Assets\Sprites\UI_SortButton_Active.png" />
-    <Content Include="Assets\Sprites\UI_SortButton_Click.png" />
-    <Content Include="Assets\Sprites\UI_SortButton_Default.png" />
-    <Content Include="Assets\Sprites\UI_SortButton_Disable.png" />
-    <Content Include="Assets\Sprites\UI_SortButton_Hover.png" />
+    <Content Include="Assets\Sprites\UI_BackgroundExpiriensPB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_BoxButton_Click.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_BoxButton_Default.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_BoxButton_Disable.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_BoxButton_Hover.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Default.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Disable.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_CharGen_VoiceIcon_Hover.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_ExpiriensPB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_ExpiriensPBLine.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_SortButton_Active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_SortButton_Click.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_SortButton_Default.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_SortButton_Disable.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sprites\UI_SortButton_Hover.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="BeforeClean">

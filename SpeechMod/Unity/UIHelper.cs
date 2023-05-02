@@ -348,10 +348,16 @@ public static class UIHelper
         transform.anchorMin = new Vector2((float)xMin, (float)yMin);
         transform.anchorMax = new Vector2((float)xMax, (float)yMax);
     }
-    
-    public static void FillParent(this RectTransform rect) 
+
+    public static void FillParent(this RectTransform rect)
     {
         rect.SetAnchor(0, 1, 0, 1);
         rect.sizeDelta = Vector2.zero;
+    }
+
+    public static void ResetScaleAndPosition(this Transform transform)
+    {
+        transform.localScale = Vector3.one;
+        transform.localPosition = Vector3.zero;
     }
 }

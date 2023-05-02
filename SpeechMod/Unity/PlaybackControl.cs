@@ -8,9 +8,9 @@ using Owlcat.Runtime.UI.Controls.Button;
 using SpeechMod.Unity;
 using SpeechMod.Unity.Utility;
 using TMPro;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityModManagerNet;
 
 public class PlaybackControl : MonoBehaviour
 {
@@ -24,7 +24,7 @@ public class PlaybackControl : MonoBehaviour
     {
         if (m_PlaybackControl)
             return;
-        
+
 #if DEBUG
         Debug.Log("Initializing playback control...");
 #endif
@@ -39,6 +39,7 @@ public class PlaybackControl : MonoBehaviour
         }
 
         m_PlaybackControl = Instantiate(prefab, Game.Instance.UI.FadeCanvas.transform);
+        m_PlaybackControl.transform.transform.ResetScaleAndPosition();
         m_PlaybackControl.name = "SpeechModPlaybackControl";
         m_PlaybackControl.gameObject.AddComponent<PlaybackControl>();
 
@@ -59,6 +60,7 @@ public class PlaybackControl : MonoBehaviour
         {
             foreach (Transform child in contentBody.transform)
                 Destroy(child.gameObject);
+            contentBody.transform.ResetScaleAndPosition();
         }
 
         var contentFooter = window.TryFind("Content/Footer")?.gameObject;
@@ -78,7 +80,7 @@ public class PlaybackControl : MonoBehaviour
         }
 
         var rectControl = window.GetComponent<RectTransform>();
-        rectControl.SetSize(new Vector2(400, 180));
+        rectControl.SetSize(new Vector2(380, 120));
 
         var background = window.TryFind("SheetMask")?.gameObject;
         if (background)
@@ -121,10 +123,10 @@ public class PlaybackControl : MonoBehaviour
         DestroyImmediate(body.gameObject.GetComponent<HorizontalLayoutGroupWorkaround>());
         body.gameObject.AddComponent<VerticalLayoutGroup>();
 
-        var bodyContainer = new GameObject("Conainer");
+        var bodyContainer = new GameObject("Container");
         bodyContainer.transform.SetParent(body.transform);
-        bodyContainer.transform.localPosition = body.transform.localPosition;
-        bodyContainer.transform.localScale = Vector3.one;
+        bodyContainer.transform.transform.ResetScaleAndPosition();
+        //bodyContainer.transform.localPosition = body.transform.localPosition;
         var bodyContainerRectTransform = bodyContainer.AddComponent<RectTransform>();
         //bodyContainer.AddComponent<VerticalLayoutGroupWorkaround>();
 
@@ -132,6 +134,7 @@ public class PlaybackControl : MonoBehaviour
 
         var labelContainer = new GameObject("StatusLabel");
         labelContainer.transform.SetParent(bodyContainer.transform);
+        labelContainer.transform.transform.ResetScaleAndPosition();
         var labelContainerRectTransform = labelContainer.AddComponent<RectTransform>();
         labelContainerRectTransform.SetHeight(20);
 
@@ -148,11 +151,13 @@ public class PlaybackControl : MonoBehaviour
 
         var sliderContainer = new GameObject("ProgressBar");
         sliderContainer.transform.SetParent(bodyContainer.transform);
+        sliderContainer.transform.transform.ResetScaleAndPosition();
         var sliderContainerRectTransform = sliderContainer.AddComponent<RectTransform>();
         sliderContainerRectTransform.SetHeight(16);
 
         var sliderBackground = new GameObject("Background");
         sliderBackground.transform.SetParent(sliderContainer.transform);
+        sliderBackground.transform.transform.ResetScaleAndPosition();
         var sliderBackgroundRectTransform = sliderBackground.AddComponent<RectTransform>();
         sliderBackgroundRectTransform.FillParent();
         var sliderBackgroundImage = sliderBackground.AddComponent<Image>();
@@ -165,17 +170,20 @@ public class PlaybackControl : MonoBehaviour
 
         var sliderFillArea = new GameObject("Fill Area");
         sliderFillArea.transform.SetParent(sliderContainer.transform);
+        sliderFillArea.transform.transform.ResetScaleAndPosition();
 
         var sliderFillAreaRectTransform = sliderFillArea.AddComponent<RectTransform>();
         sliderFillAreaRectTransform.FillParent();
 
         var sliderFill = new GameObject("Fill");
         sliderFill.transform.SetParent(sliderFillArea.transform);
+        sliderFill.transform.transform.ResetScaleAndPosition();
         var sliderFillRectTransform = sliderFill.AddComponent<RectTransform>();
         sliderFillRectTransform.FillParent();
 
         var sliderFillBackground = new GameObject("Background");
         sliderFillBackground.transform.SetParent(sliderFill.transform);
+        sliderFillBackground.transform.transform.ResetScaleAndPosition();
         var sliderFillBackgroundRectTransform = sliderFillBackground.AddComponent<RectTransform>();
         sliderFillBackgroundRectTransform.FillParent();
         var sliderFillBackgroundImage = sliderFillBackground.AddComponent<Image>();
@@ -189,19 +197,23 @@ public class PlaybackControl : MonoBehaviour
 
         var sliderHandleSlideArea = new GameObject("Handle Slide Area");
         sliderHandleSlideArea.transform.SetParent(sliderContainer.transform);
+        sliderHandleSlideArea.transform.transform.ResetScaleAndPosition();
         var sliderHandleSlideAreaRectTransform = sliderHandleSlideArea.AddComponent<RectTransform>();
         sliderHandleSlideAreaRectTransform.FillParent();
 
         var sliderHandle = new GameObject("Handle");
         sliderHandle.transform.SetParent(sliderHandleSlideArea.transform);
+        sliderHandle.transform.ResetScaleAndPosition();
         var sliderHandleRectTransform = sliderHandle.AddComponent<RectTransform>();
         sliderHandleRectTransform.FillParent();
 
         // Stop button
-        ButtonFactory.CreateOwlcatButton(bodyContainer.transform, m_StopButtonSpriteState, null);
-        
-        labelContainer.transform.localPosition = bodyContainer.transform.localPosition;
-        sliderContainer.transform.localPosition = bodyContainer.transform.localPosition;
+        var stopButton = ButtonFactory.CreateOwlcatButton(bodyContainer.transform, m_StopButtonSpriteState, "Stop playback", null);
+        stopButton.transform.localScale = Vector3.one;
+        stopButton.transform.position = new Vector3(300, 100, stopButton.transform.localPosition.z);
+
+        //labelContainer.transform.localPosition = bodyContainer.transform.localPosition;
+        //sliderContainer.transform.localPosition = bodyContainer.transform.localPosition;
 
 
         // // Status & Progress
@@ -243,7 +255,7 @@ public class PlaybackControl : MonoBehaviour
 
     // private void LateUpdate()
     // {
-    //     
+    //
     // }
 
     private void OnDestroy()

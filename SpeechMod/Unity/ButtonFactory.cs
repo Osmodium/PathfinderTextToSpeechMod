@@ -14,7 +14,6 @@ public static class ButtonFactory
     private static GameObject ArrowButton => UIHelper.TryFindInStaticCanvas(Constants.ARROW_BUTTON_PATH)?.gameObject;
 
     private static GameObject CloseButton => UIHelper.TryFindInFadeCanvas(Constants.OWLCAT_CLOSE_BUTTON_PATH)?.gameObject;
-    
 
     public static GameObject CreatePlayButton(Transform parent, UnityAction call)
     {
@@ -41,7 +40,7 @@ public static class ButtonFactory
             button.SetTooltip(new TooltipTemplateSimple(text, toolTip));
     }
 
-    public static void CreateOwlcatButton(Transform parent, SpriteState sprites, UnityAction call)
+    public static GameObject CreateOwlcatButton(Transform parent, SpriteState sprites, string text, UnityAction call)
     {
         var button = Object.Instantiate(CloseButton, parent);
         button.SetActive(true);
@@ -49,10 +48,11 @@ public static class ButtonFactory
         if (owlcatButton != null)
         {
             owlcatButton.m_CommonLayer[0].SpriteState = sprites;
-            owlcatButton.SetAction(call, "Stop playback");
+            owlcatButton.SetAction(call, text);
         }
 
         button.GetComponentInChildren<Image>().sprite = sprites.selectedSprite;
+        return button;
     }
 
     //public class ButtonSprites

@@ -20,12 +20,15 @@ public static class Main
     public static UnityModManager.ModEntry ModEntry;
     public static Settings Settings;
     public static bool Enabled;
+    public static ISpeech Speech;
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
     public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;
     public static string FemaleVoice => VoicesDict?.ElementAtOrDefault(Settings.FemaleVoice).Key;
     public static string MaleVoice => VoicesDict?.ElementAtOrDefault(Settings.MaleVoice).Key;
+
+    private static bool m_Loaded;
 
     public static Dictionary<string, string> VoicesDict => Settings?.AvailableVoices?.Select(v =>
     {
@@ -35,13 +38,10 @@ public static class Main
             : new { Key = splitV[0], Value = splitV[1] };
     }).ToDictionary(p => p.Key, p => p.Value);
 
-    public static ISpeech Speech;
-    private static bool m_Loaded = false;
-
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
         Debug.Log("Speech Mod Initializing...");
-        
+
         ModEntry = modEntry;
         Logger = modEntry.Logger;
 
@@ -55,15 +55,15 @@ public static class Main
         modEntry.OnGUI = OnGui;
         modEntry.OnSaveGUI = OnSaveGui;
 
-        var harmony = new Harmony(modEntry.Info.Id);
-        harmony.PatchAll(Assembly.GetExecutingAssembly());
-
         Logger.Log(Speech.GetStatusMessage());
 
         if (!SetAvailableVoices())
             return false;
 
         SpeechExtensions.LoadDictionary();
+
+        var harmony = new Harmony(modEntry.Info.Id);
+        harmony.PatchAll(Assembly.GetExecutingAssembly());
 
         Debug.Log("Speech Mod Initialized!");
         m_Loaded = true;

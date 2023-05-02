@@ -74,7 +74,7 @@ public static class MenuGUI
         if (Main.Settings.FontStyleOnHover)
         {
             GUILayout.BeginHorizontal();
-            for (int i = 0; i < Main.Settings.FontStyles.Length; ++i)
+            for (int i = 0; i < Main.Settings.FontStyles!.Length; ++i)
             {
                 Main.Settings.FontStyles[i] = GUILayout.Toggle(Main.Settings.FontStyles[i], Main.FontStyleNames[i], GUILayout.ExpandWidth(true));
             }
