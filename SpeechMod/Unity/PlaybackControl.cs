@@ -11,6 +11,7 @@ using TMPro;
 using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
+using Kingmaker.Assets.UI.Common;
 
 public class PlaybackControl : MonoBehaviour
 {
@@ -142,13 +143,12 @@ public class PlaybackControl : MonoBehaviour
         labelText.autoSizeTextContainer = false;
         labelText.enableAutoSizing = true;
         labelText.SetText("Idle... Waiting for voice to play...");
-        //labelText.fontSizeMin = 20;
-        //labelText.fontSizeMax = 20;
+        labelText.fontSizeMin = 20;
+        labelText.fontSizeMax = 20;
         labelText.font = m_Title.font;
         labelText.color = m_Title.color;
 
         // Progressbar
-
         var sliderContainer = new GameObject("ProgressBar");
         sliderContainer.transform.SetParent(bodyContainer.transform);
         sliderContainer.transform.transform.ResetScaleAndPosition();
@@ -165,7 +165,7 @@ public class PlaybackControl : MonoBehaviour
         sliderBackgroundImage.fillMethod = Image.FillMethod.Horizontal;
         sliderBackgroundImage.color = Color.black;
         sliderBackgroundImage.fillOrigin = 0;
-        sliderBackgroundRectTransform.SetSize(new Vector2(200, 20));
+        sliderBackgroundRectTransform.SetSize(new Vector2(200, 16));
         sliderBackgroundImage.sprite = AssetLoader.LoadInternal("Sprites", "UI_BackgroundExpiriensPB.png", new Vector2Int(200, 20));
 
         var sliderFillArea = new GameObject("Fill Area");
@@ -192,7 +192,7 @@ public class PlaybackControl : MonoBehaviour
         sliderFillBackgroundImage.fillOrigin = 0;
         sliderFillBackgroundImage.color = Color.gray;
         sliderFillBackgroundImage.DOFillAmount(0.4f, 2f);
-        sliderFillBackgroundRectTransform.SetSize(new Vector2(200, 20));
+        sliderFillBackgroundRectTransform.SetSize(new Vector2(180, 18));
         sliderFillBackgroundImage.sprite = AssetLoader.LoadInternal("Sprites", "UI_ExpiriensPB.png", new Vector2Int(200, 20));
 
         var sliderHandleSlideArea = new GameObject("Handle Slide Area");
@@ -206,11 +206,16 @@ public class PlaybackControl : MonoBehaviour
         sliderHandle.transform.ResetScaleAndPosition();
         var sliderHandleRectTransform = sliderHandle.AddComponent<RectTransform>();
         sliderHandleRectTransform.FillParent();
+        var sliderHandleImage = sliderHandle.AddComponent<Image>();
+        sliderHandleImage.raycastTarget = false;
+        sliderHandleRectTransform.SetSize(new Vector2(8, 18));
+        sliderHandleImage.sprite = AssetLoader.LoadInternal("Sprites", "UI_ExpiriensPBLine.png", new Vector2Int(11, 43));
 
         // Stop button
         var stopButton = ButtonFactory.CreateOwlcatButton(bodyContainer.transform, m_StopButtonSpriteState, "Stop playback", null);
-        stopButton.transform.localScale = Vector3.one;
-        stopButton.transform.position = new Vector3(300, 100, stopButton.transform.localPosition.z);
+        //stopButton.transform.localScale = Vector3.one;
+        stopButton.transform.ResetScaleAndPosition();
+        stopButton.transform.position = new Vector3(300, 100, sliderHandle.transform.localPosition.z);
 
         //labelContainer.transform.localPosition = bodyContainer.transform.localPosition;
         //sliderContainer.transform.localPosition = bodyContainer.transform.localPosition;

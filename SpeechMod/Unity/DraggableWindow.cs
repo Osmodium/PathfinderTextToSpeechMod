@@ -5,18 +5,17 @@ using UnityEngine.EventSystems;
 
 namespace SpeechMod.Unity;
 
-public class DraggableWindow : MonoBehaviour, IPointerDownHandler, IEventSystemHandler, IPointerUpHandler
+public class DraggableWindow : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private bool m_MoveMode;
     private Vector2 m_MouseStartPos;
     private Vector2 m_ContainerStartPos;
     private Vector2 m_LastMousePos;
-    private Vector2 m_TakeDrag;
     private RectTransform m_OwnRectTransform;
     private RectTransform m_ParentRectTransform;
+
     private void Start()
     {
-        m_TakeDrag = new Vector2(0f, 0f);
         m_OwnRectTransform = (RectTransform)transform.parent;
         m_ParentRectTransform = (RectTransform)m_OwnRectTransform.parent;
     }
@@ -28,14 +27,12 @@ public class DraggableWindow : MonoBehaviour, IPointerDownHandler, IEventSystemH
 
         m_MoveMode = true;
         m_MouseStartPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        m_OwnRectTransform.anchoredPosition += m_TakeDrag;
-        m_OwnRectTransform.DOAnchorPos(m_OwnRectTransform.anchoredPosition + m_TakeDrag, 0.1f).SetUpdate(true);
         m_ContainerStartPos = m_OwnRectTransform.anchoredPosition;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        m_OwnRectTransform.DOAnchorPos(m_OwnRectTransform.anchoredPosition - m_TakeDrag, 0.1f).SetUpdate(true);
+        m_OwnRectTransform.DOAnchorPos(m_OwnRectTransform.anchoredPosition, 0.1f).SetUpdate(true);
         m_MoveMode = false;
         m_MouseStartPos = default;
     }
@@ -45,11 +42,13 @@ public class DraggableWindow : MonoBehaviour, IPointerDownHandler, IEventSystemH
         if (!m_MoveMode)
             return;
 
-        Vector2 vector2 = new Vector2(Input.mousePosition.x - m_MouseStartPos.x, Input.mousePosition.y - m_MouseStartPos.y);
-        if (m_LastMousePos == vector2)
+        Vector2 vector = new Vector2(Input.mousePosition.x - m_MouseStartPos.x, Input.mousePosition.y - m_MouseStartPos.y);
+        if (m_LastMousePos == vector)
             return;
 
-        m_OwnRectTransform.anchoredPosition = UIUtility.LimitPositionRectInRect(m_ContainerStartPos + vector2 - m_TakeDrag, m_ParentRectTransform, m_OwnRectTransform) + m_TakeDrag;
-        m_LastMousePos = vector2;
+        Vector2 vector2 = m_ContainerStartPos + vector;
+        vector2 = UIUtility.LimitPositionRectInRect(vector2, m_ParentRectTransform, m_OwnRectTransform);
+        m_OwnRectTransform.anchoredPosition = vector2;
+        m_LastMousePos = vector;
     }
 }
