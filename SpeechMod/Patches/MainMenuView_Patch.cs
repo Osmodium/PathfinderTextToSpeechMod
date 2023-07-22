@@ -1,13 +1,11 @@
 ﻿using HarmonyLib;
-using Kingmaker;
-using Kingmaker.UI;
 using Kingmaker.UI.MVVM._PCView.MainMenu;
 using UnityEngine;
 
 namespace SpeechMod.Patches;
 
 [HarmonyPatch(typeof(MainMenuView), "Initialize")]
-public class FadeCanvas_Patch
+public class MainMenuView_Patch
 {
     public static void Postfix()
     {
@@ -18,6 +16,6 @@ public class FadeCanvas_Patch
         Debug.Log($"{nameof(MainMenuView)}_Initialize_Postfix");
 #endif
 
-        PlaybackControl.TryInstantiate();
+        //PlaybackControl.TryInstantiate();
     }
 }
