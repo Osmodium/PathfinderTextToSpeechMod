@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <WrathPath>E:\SteamLibrary\steamapps\common\Pathfinder Second Adventure</WrathPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,51 +47,45 @@
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <Target Name="RemoveLib" BeforeTargets="Clean" Condition="Exists('$(SolutionDir)lib')">
-    <RemoveDir Directories="$(SolutionDir)lib" />
-  </Target>
-  <Target Name="CreateLib" BeforeTargets="BeforeBuild" AfterTargets="RemoveLib" Condition="!Exists('$(SolutionDir)lib')">
-    <MakeDir Directories="$(SolutionDir)lib" />
-  </Target>
-  <Target Name="Publicise" AfterTargets="CreateLib">
-    <ItemGroup>
-      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp.dll;$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll;$(WrathPath)\Wrath_Data\Managed\UniRx.dll" />
-    </ItemGroup>
-    <Publicise InputAssemblies="@(Assemblies)" OutputPath="$(SolutionDir)lib/" PubliciseCompilerGenerated="true" />
-  </Target>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp_public">
-      <HintPath>..\lib\Assembly-CSharp_public.dll</HintPath>
+    <Compile Remove="$(SolutionDir)lib\**" />
+    <EmbeddedResource Remove="$(SolutionDir)lib\**" />
+    <None Remove="$(SolutionDir)lib\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(SolutionDir)\lib\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="DOTween, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Owlcat.Runtime.UI.dll">
+      <HintPath>$(SolutionDir)\lib\Owlcat.Runtime.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Owlcat.Runtime.Validation.dll">
+      <HintPath>$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="UniRx.dll">
+      <HintPath>$(WrathPath)\Wrath_Data\Managed\UniRx.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\DOTween.dll</HintPath>
     </Reference>
-    <Reference Include="DOTween43, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DOTween43">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\DOTween43.dll</HintPath>
     </Reference>
-    <Reference Include="DOTween46, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DOTween46">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\DOTween46.dll</HintPath>
     </Reference>
     <Reference Include="DOTween50">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\DOTween50.dll</HintPath>
     </Reference>
-    <Reference Include="DOTweenPro, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="DOTweenPro">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\DOTweenPro.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="Owlcat.Runtime.UI_public">
-      <HintPath>..\lib\Owlcat.Runtime.UI_public.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="UniRx_public">
-      <HintPath>..\lib\UniRx_public.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Unity.TextMeshPro">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UnityEngine">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
@@ -105,7 +100,7 @@
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UnityEngine.UI">
       <HintPath>$(WrathPath)\Wrath_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityModManager">
@@ -114,6 +109,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="External\ModMenu\Helpers.cs" />
+    <Compile Include="External\ModMenu\ModMenu.cs" />
+    <Compile Include="External\ModMenu\NewTypes\SettingsEntityButton.cs" />
+    <Compile Include="External\ModMenu\NewTypes\SettingsEntityCollapsibleHeader.cs" />
+    <Compile Include="External\ModMenu\NewTypes\SettingsEntityDropdownButton.cs" />
+    <Compile Include="External\ModMenu\NewTypes\SettingsEntityImage.cs" />
+    <Compile Include="External\ModMenu\NewTypes\SettingsEntityPatches.cs" />
+    <Compile Include="External\ModMenu\NewTypes\SettingsEntitySubHeader.cs" />
+    <Compile Include="External\ModMenu\Settings\KeyBinding.cs" />
+    <Compile Include="External\ModMenu\Settings\ModsMenuEntity.cs" />
+    <Compile Include="External\ModMenu\Settings\SettingsBuilder.cs" />
+    <Compile Include="External\ModMenu\Settings\TestSettings.cs" />
     <Compile Include="Patches\BookEventView_Patch.cs" />
     <Compile Include="Patches\CharacterInfoVM_Patch.cs" />
     <Compile Include="Patches\CombatResultView_Patch.cs" />
@@ -154,8 +161,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Aze.Publicise.MSBuild.Task">
-      <Version>1.1.0</Version>
+    <PackageReference Include="AssemblyPublicizer">
+      <Version>1.0.2</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -216,5 +223,49 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Localization\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- <Target Name="RemoveLib" BeforeTargets="Clean" Condition="Exists('$(SolutionDir)lib')">
+    <RemoveDir Directories="$(SolutionDir)lib" />
+  </Target>-->
+  <Target Name="CreateLib" BeforeTargets="BeforeBuild" AfterTargets="RemoveLib" Condition="!Exists('$(SolutionDir)lib')">
+    <MakeDir Directories="$(SolutionDir)lib" />
+  </Target>
+  <!--
+  <Target Name="Publicise" AfterTargets="Clean">
+    <ItemGroup>
+      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp.dll;$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll;$(WrathPath)\Wrath_Data\Managed\UniRx.dll" />
+    </ItemGroup>
+    <Publicise InputAssemblies="@(Assemblies)" OutputPath="$(SolutionDir)lib/" />
+  </Target> -->
+  <!-- Generates Assembly-CSharp_public.dll -->
+  <Target Name="PublicizeAssembly" AfterTargets="Clean">
+    <ItemGroup>
+      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Assembly-CSharp.dll" />
+      <PublicAssembly Include="$(SolutionDir)lib\Assembly-CSharp_public.dll" />
+      <RenamedAssembly Include="$(SolutionDir)lib\Assembly-CSharp.dll" />
+    </ItemGroup>
+    <PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
+    <Move SourceFiles="@(PublicAssembly)" DestinationFiles="@(RenamedAssembly)" />
+  </Target>
+  <Target Name="PublicizeOwlcatRuntimeUI" AfterTargets="Clean">
+    <ItemGroup>
+      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll" />
+      <PublicAssembly Include="$(SolutionDir)lib\Owlcat.Runtime.UI_public.dll" />
+      <RenamedAssembly Include="$(SolutionDir)lib\Owlcat.Runtime.UI.dll" />
+    </ItemGroup>
+    <PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
+    <Move SourceFiles="@(PublicAssembly)" DestinationFiles="@(RenamedAssembly)" />
+  </Target>
+  <!-- <Target Name="PublicizeUniRx" AfterTargets="Clean">
+    <ItemGroup>
+      <Assemblies Include="$(WrathPath)\Wrath_Data\Managed\UniRx.dll" />
+      <PublicAssembly Include="$(SolutionDir)lib\UniRx_public.dll" />
+      <RenamedAssembly Include="$(SolutionDir)lib\UniRx.dll" />
+    </ItemGroup>
+    <PublicizeTask InputAssemblies="@(Assemblies)" OutputDir="$(SolutionDir)lib/" />
+    <Move SourceFiles="@(PublicAssembly)" DestinationFiles="@(RenamedAssembly)" />
+  </Target> -->
 </Project>
