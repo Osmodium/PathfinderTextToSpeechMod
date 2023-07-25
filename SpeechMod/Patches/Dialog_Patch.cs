@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Handles autoplay TTS from dialog.
+/// </summary>
 [HarmonyPatch(typeof(DialogVM), "HandleOnCueShow")]
 public static class Dialog_Patch
 {

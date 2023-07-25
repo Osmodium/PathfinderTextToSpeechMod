@@ -40,7 +40,7 @@ public static class UIHelper
         return transform.parent.GetParentRecursive(name);
     }
 
-    public static void HookupTextToSpeechOnTransform(this Transform transform)
+    public static void HookTextToSpeechOnTransform(this Transform transform)
     {
         if (transform == null)
         {
@@ -49,18 +49,18 @@ public static class UIHelper
         }
 
         var allTexts = transform.GetComponentsInChildren<TextMeshProUGUI>();
-        allTexts.HookupTextToSpeech();
+        allTexts.HookTextToSpeech();
     }
 
-    public static void HookupTextToSpeech(this TextMeshProUGUI[] textMeshPros)
+    public static void HookTextToSpeech(this TextMeshProUGUI[] textMeshPros)
     {
         foreach (var textMeshPro in textMeshPros)
         {
-            textMeshPro.HookupTextToSpeech();
+            textMeshPro.HookTextToSpeech();
         }
     }
 
-    public static void HookupTextToSpeech(this TextMeshProUGUI textMeshPro)
+    public static void HookTextToSpeech(this TextMeshProUGUI textMeshPro)
     {
         if (textMeshPro == null)
         {

@@ -121,6 +121,7 @@
     <Compile Include="External\ModMenu\Settings\ModsMenuEntity.cs" />
     <Compile Include="External\ModMenu\Settings\SettingsBuilder.cs" />
     <Compile Include="External\ModMenu\Settings\TestSettings.cs" />
+    <Compile Include="Patches\BlueprintsCache_Patch.cs" />
     <Compile Include="Patches\BookEventView_Patch.cs" />
     <Compile Include="Patches\CharacterInfoVM_Patch.cs" />
     <Compile Include="Patches\CombatResultView_Patch.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Patches\EncyclopediaPage_Patch.cs" />
     <Compile Include="Patches\JournalQuestObjective_Patch.cs" />
     <Compile Include="Patches\GlobalMapEnterMessage_Patch.cs" />
-    <Compile Include="Patches\MainMenuView_Patch.cs" />
     <Compile Include="Patches\MessageModal_Patch.cs" />
     <Compile Include="Patches\TutorialWindowView_Patch.cs" />
     <Compile Include="Unity\AppleVoiceUnity.cs" />
@@ -223,9 +223,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Localization\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- <Target Name="RemoveLib" BeforeTargets="Clean" Condition="Exists('$(SolutionDir)lib')">
     <RemoveDir Directories="$(SolutionDir)lib" />

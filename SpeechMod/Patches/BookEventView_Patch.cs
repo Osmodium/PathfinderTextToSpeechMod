@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Hooks TTS onto each paragraph in a book event.
+/// </summary>
 [HarmonyPatch(typeof(BookEventView<DialogAnswerPCView>), "SetCues")]
 public static class BookEventView_Patch
 {
@@ -31,6 +34,6 @@ public static class BookEventView_Patch
             return;
         }
 
-        cuesBlock.HookupTextToSpeechOnTransform();
+        cuesBlock.HookTextToSpeechOnTransform();
     }
 }

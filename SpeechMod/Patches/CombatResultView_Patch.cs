@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Hooks TTS onto paragraphs in the army combat result dialog.
+/// </summary>
 [HarmonyPatch(typeof(CombatResultPCView), "BindViewImplementation")]
 public static class CombatResultView_Patch
 {
@@ -23,18 +26,18 @@ public static class CombatResultView_Patch
         if (description == null)
             Debug.LogWarning($"{nameof(description)} not found!");
         else
-            description.HookupTextToSpeechOnTransform();
+            description.HookTextToSpeechOnTransform();
 
         var experience = UIHelper.TryFindInStaticCanvas("CombatResultView/Experience");
         if (experience == null)
             Debug.LogWarning($"{nameof(experience)} not found!");
         else
-            experience.HookupTextToSpeechOnTransform();
+            experience.HookTextToSpeechOnTransform();
 
         var resource = UIHelper.TryFindInStaticCanvas("CombatResultView/Resource");
         if (resource == null)
             Debug.LogWarning($"{nameof(resource)} not found!");
         else
-            resource.HookupTextToSpeechOnTransform();
+            resource.HookTextToSpeechOnTransform();
     }
 }

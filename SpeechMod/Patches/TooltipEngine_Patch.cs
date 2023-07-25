@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Hooks TTS onto paragraphs in tooltips windows.
+/// </summary>
 [HarmonyPatch(typeof(TooltipEngine), nameof(TooltipEngine.GetBrickView))]
 static class TooltipEngine_Patch
 {
@@ -43,7 +46,7 @@ static class TooltipEngine_Patch
             return;
         }
 
-        textMeshPro.HookupTextToSpeech();
+        textMeshPro.HookTextToSpeech();
     }
 
     // TODO: Better way of telling if inside hover tooltip.

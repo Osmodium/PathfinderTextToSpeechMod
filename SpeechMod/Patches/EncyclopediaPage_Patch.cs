@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Add play buttons to the encyclopedia view for each paragraph.
+/// </summary>
 [HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
 public static class EncyclopediaPage_Patch
 {

@@ -152,24 +152,21 @@ public static class ModMenu
         return SetSetting<SettingsEntityInt, int>(key, value);
     }
 
-    [HarmonyPatch(typeof(BlueprintsCache))]
-    static class BlueprintsCache_Patches
-    {
-        [HarmonyPriority(Priority.First)]
-        [HarmonyPatch(nameof(BlueprintsCache.Init)), HarmonyPostfix]
-        static void Postfix()
-        {
-            try
-            {
-#if DEBUG
-                new TestSettings().Initialize();
-#endif
-            }
-            catch (Exception e)
-            {
-                Main.Logger.LogException("BlueprintsCache.Init", e);
-            }
-        }
-    }
-
+    //[HarmonyPatch(typeof(BlueprintsCache))]
+    //static class BlueprintsCache_Patches
+    //{
+    //    [HarmonyPriority(Priority.First)]
+    //    [HarmonyPatch(nameof(BlueprintsCache.Init)), HarmonyPostfix]
+    //    static void Postfix()
+    //    {
+    //        try
+    //        {
+    //            new TestSettings().Initialize();
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            Main.Logger.LogException("BlueprintsCache.Init", e);
+    //        }
+    //    }
+    //}
 }

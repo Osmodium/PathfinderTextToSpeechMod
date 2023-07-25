@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Adds a play button to the dialog window.
+/// </summary>
 [HarmonyPatch(typeof(StaticCanvas), "Initialize")]
 public static class StaticCanvas_Patch
 {

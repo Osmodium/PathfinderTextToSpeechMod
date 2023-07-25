@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Hooks TTS onto paragraphs on a character sheet.
+/// </summary>
 [HarmonyPatch(typeof(CharacterInfoVM), "OnPageSelected")]
 public static class CharacterInfoVM_Patch
 {
@@ -37,7 +40,7 @@ public static class CharacterInfoVM_Patch
                     continue;
                 }
 
-                textBox.HookupTextToSpeechOnTransform();
+                textBox.HookTextToSpeechOnTransform();
             }
             catch(Exception ex)
             {

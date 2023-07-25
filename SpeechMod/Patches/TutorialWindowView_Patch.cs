@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Hooks TTS onto paragraphs in tutorials windows.
+/// </summary>
 [HarmonyPatch(typeof(TutorialWindowView<TutorialWindowVM>), "SetPage")]
 public class TutorialWindowView_Patch
 {
@@ -47,7 +50,7 @@ public class TutorialWindowView_Patch
             return;
         }
 
-        content.HookupTextToSpeechOnTransform();
+        content.HookTextToSpeechOnTransform();
 
         var viewPort = smallWindow.TryFind("Window/Content/Body/ScrollView/ViewPort");
         if (viewPort == null)
@@ -84,6 +87,6 @@ public class TutorialWindowView_Patch
             return;
         }
 
-        rightSideTutorialDescription.HookupTextToSpeechOnTransform();
+        rightSideTutorialDescription.HookTextToSpeechOnTransform();
     }
 }

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Hooks TTS onto the generic messagebox paragraph.
+/// </summary>
 [HarmonyPatch(typeof(MessageModalPCView), "BindViewImplementation")]
 public class MessageModal_Patch
 {
@@ -24,6 +27,6 @@ public class MessageModal_Patch
             return;
         }
 
-        labelMessage.HookupTextToSpeechOnTransform();
+        labelMessage.HookTextToSpeechOnTransform();
     }
 }
