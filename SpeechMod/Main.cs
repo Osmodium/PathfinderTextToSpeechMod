@@ -127,7 +127,7 @@ public static class Main
                 SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
                 break;
             case RuntimePlatform.WindowsPlayer:
-                Speech = new WindowsSpeech();
+                Speech = new WindowsSynthesis();
                 SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
                 break;
             default:

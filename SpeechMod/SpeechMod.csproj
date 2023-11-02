@@ -108,6 +108,7 @@
     <Compile Include="Unity\WindowsVoiceUnity.cs" />
     <Compile Include="Voice\SpeechExtensions.cs" />
     <Compile Include="Voice\WindowsSpeech.cs" />
+    <Compile Include="Voice\WindowsSynthesis.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.json">

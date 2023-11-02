@@ -70,7 +70,7 @@ public static class SpeechExtensions
 
     public static void AddUiElements<T>(string name) where T : MonoBehaviour
     {
-        Debug.Log("Adding Apple SpeechMod UI elements.");
+        Debug.Log("Adding SpeechMod UI elements.");
 
         GameObject appleVoice = null;
         try
