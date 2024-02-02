@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Handles cutting autoplay TTS off in dialog when a new anwser is selected before it's done.
+/// </summary>
 [HarmonyPatch(typeof(DialogController), "SelectAnswer")]
 public class DialogController_Patch
 {

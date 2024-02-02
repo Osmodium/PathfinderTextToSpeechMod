@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Adds play buttons to paragraphs and objectives in the journal.
+/// </summary>
 [HarmonyPatch(typeof(JournalQuestObjectivePCView), "BindViewImplementation")]
 public static class JournalQuestObjective_Patch
 {

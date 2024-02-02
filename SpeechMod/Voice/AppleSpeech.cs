@@ -94,11 +94,11 @@ public class AppleSpeech : ISpeech
         process.WaitForExit();
         process.Dispose();
 
-        return !string.IsNullOrWhiteSpace(text) ? text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries) : null;
-
 #if DEBUG
         Main.Logger.Warning($"[GetAvailableVoices] {error}");
 #endif
+
+        return !string.IsNullOrWhiteSpace(text) ? text.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries) : null;
     }
 
     public string GetStatusMessage()

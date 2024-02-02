@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
+/// <summary>
+/// Hooks TTS onto enter messageboxes when in global map.
+/// </summary>
 [HarmonyPatch(typeof(GlobalMapEnterMessagePCView), "BindViewImplementation")]
 public class GlobalMapEnterMessage_Patch
 {
@@ -24,6 +27,6 @@ public class GlobalMapEnterMessage_Patch
             return;
         }
 
-        labelMessage.HookupTextToSpeechOnTransform();
+        labelMessage.HookTextToSpeechOnTransform();
     }
 }

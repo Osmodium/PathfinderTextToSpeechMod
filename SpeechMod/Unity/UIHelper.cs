@@ -40,7 +40,7 @@ public static class UIHelper
         return transform.parent.GetParentRecursive(name);
     }
 
-    public static void HookupTextToSpeechOnTransform(this Transform transform)
+    public static void HookTextToSpeechOnTransform(this Transform transform)
     {
         if (transform == null)
         {
@@ -49,18 +49,18 @@ public static class UIHelper
         }
 
         var allTexts = transform.GetComponentsInChildren<TextMeshProUGUI>();
-        allTexts.HookupTextToSpeech();
+        allTexts.HookTextToSpeech();
     }
 
-    public static void HookupTextToSpeech(this TextMeshProUGUI[] textMeshPros)
+    public static void HookTextToSpeech(this TextMeshProUGUI[] textMeshPros)
     {
         foreach (var textMeshPro in textMeshPros)
         {
-            textMeshPro.HookupTextToSpeech();
+            textMeshPro.HookTextToSpeech();
         }
     }
 
-    public static void HookupTextToSpeech(this TextMeshProUGUI textMeshPro)
+    public static void HookTextToSpeech(this TextMeshProUGUI textMeshPro)
     {
         if (textMeshPro == null)
         {
@@ -255,22 +255,22 @@ public static class UIHelper
 
     public static void SetLeftBottomPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x + trans.pivot.x * trans.rect.width, newPos.y + trans.pivot.y * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetLeftTopPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x + trans.pivot.x * trans.rect.width, newPos.y - (1f - trans.pivot.y) * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetRightBottomPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x - (1f - trans.pivot.x) * trans.rect.width, newPos.y + trans.pivot.y * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetRightTopPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x - (1f - trans.pivot.x) * trans.rect.width, newPos.y - (1f - trans.pivot.y) * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetSize(this RectTransform trans, Vector2 newSize)
@@ -341,5 +341,23 @@ public static class UIHelper
             path = transform.name + "/" + path;
         }
         return path;
+    }
+
+    public static void SetAnchor(this RectTransform transform, double xMin, double xMax, double yMin, double yMax)
+    {
+        transform.anchorMin = new Vector2((float)xMin, (float)yMin);
+        transform.anchorMax = new Vector2((float)xMax, (float)yMax);
+    }
+
+    public static void FillParent(this RectTransform rect)
+    {
+        rect.SetAnchor(0, 1, 0, 1);
+        rect.sizeDelta = Vector2.zero;
+    }
+
+    public static void ResetScaleAndPosition(this Transform transform)
+    {
+        transform.localScale = Vector3.one;
+        transform.localPosition = Vector3.zero;
     }
 }
