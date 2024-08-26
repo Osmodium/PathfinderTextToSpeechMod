@@ -57,7 +57,7 @@ public class StringManipulationTests
         Assert.Equal(output, text);
     }
 
-    private static TheoryData<string, string> GenerateMaleDialogTexts()
+    public static TheoryData<string, string> GenerateMaleDialogTexts()
     {
         return new TheoryData<string, string>
         {
@@ -72,7 +72,7 @@ public class StringManipulationTests
         };
     }
 
-    private static TheoryData<string, string> GenerateFemaleDialogTexts()
+    public static TheoryData<string, string> GenerateFemaleDialogTexts()
     {
         return new TheoryData<string, string>
         {
