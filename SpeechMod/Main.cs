@@ -12,7 +12,7 @@ using UnityModManagerNet;
 namespace SpeechMod;
 
 #if DEBUG
-    [EnableReloading]
+[EnableReloading]
 #endif
 public static class Main
 {
@@ -39,7 +39,7 @@ public static class Main
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
-        Debug.Log("Speech Mod Initializing...");
+        Debug.Log("Pathfinder: Wrath of the Righteous Speech Mod Initializing...");
 
         Logger = modEntry.Logger;
 

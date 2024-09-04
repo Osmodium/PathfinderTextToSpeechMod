@@ -7,7 +7,7 @@ namespace SpeechMod.Unity;
 
 public class WindowsVoiceUnity : MonoBehaviour
 {
-    enum WindowsVoiceStatus { Uninitialized, Ready, Speaking, Terminated, Error }
+    public enum WindowsVoiceStatus { Uninitialized, Ready, Speaking, Terminated, Error }
 
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void initSpeech(int rate, int volume);
@@ -32,6 +32,7 @@ public class WindowsVoiceUnity : MonoBehaviour
     private static int m_CurrentWordCount;
 
     public static bool IsSpeaking => getSpeechState() == WindowsVoiceStatus.Speaking;
+    public static WindowsVoiceStatus VoiceStatus => getSpeechState();
 
     private static void Init()
     {
@@ -65,13 +66,19 @@ public class WindowsVoiceUnity : MonoBehaviour
         string voicesDelim = getVoicesAvailable();
         if (string.IsNullOrWhiteSpace(voicesDelim))
             return Array.Empty<string>();
-        string[] voices = voicesDelim.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] voices = voicesDelim.Split(['\n'], StringSplitOptions.RemoveEmptyEntries);
         for (int i = 0; i < voices.Length; ++i)
         {
             if (!voices[i].Contains('-'))
                 voices[i] = $"{voices[i]}#Unknown";
             else
                 voices[i] = voices[i].Replace(" - ", "#");
+
+            if (!voices[i].Contains("(Natural)"))
+                continue;
+
+            voices[i] = voices[i].Replace("(Natural)", "");
+            voices[i] = voices[i].Replace("(", "Natural (");
         }
         return voices;
     }
