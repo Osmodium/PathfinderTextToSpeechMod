@@ -2,13 +2,14 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
-Version: 1.0.9
+Version: 1.1.0
 
 **Disclaimer: Works on Windows and macOS only**
 
 **Works with all languages as long as you have a voice in that language installed.**
 
-[How to unlock more voices in Windows 10](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
+- [How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
+- [How to use Natural voices in Windows 10/11](https://www.nexusmods.com/warhammer40kroguetrader/articles/7)
 
 ### How to install
 
@@ -24,7 +25,7 @@ Version: 1.0.9
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/PathfinderTextToSpeechMod/issues)*
 
 #### Limitations:
- - Working on a UI to control playback.
+ - No stopping of playback yet.
 
 #### Issues todo:
   - No support for chapter changes (although they seem to be narrated).

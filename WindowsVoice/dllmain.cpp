@@ -35,8 +35,7 @@ namespace WindowsVoice
 		{
 			const LPSTR pText = 0;
 
-			::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-				nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, nullptr);
+			::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, nullptr);
 			LocalFree(pText);
 			theStatusMessage = L"Error: Failed to create Voice instance.";
 			speechState = speech_state_enum::error;
@@ -48,9 +47,9 @@ namespace WindowsVoice
 
 		pVoice->SetRate(rate);
 		pVoice->SetVolume(volume);
-		
+
 		SPVOICESTATUS voiceStatus;
-		wchar_t* priorText = nullptr;
+		const wchar_t* priorText = nullptr;
 		while (!shouldTerminate)
 		{
 			pVoice->GetStatus(&voiceStatus, 0);

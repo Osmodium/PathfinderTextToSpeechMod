@@ -62,8 +62,6 @@ public static class MenuGUI
 
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);
 
-        //AddColorPicker("Show playback progress", ref Main.Settings.ShowPlaybackProgress, "Playback progress color", ref Main.Settings.PlaybackColorR, ref Main.Settings.PlaybackColorG, ref Main.Settings.PlaybackColorB, ref Main.Settings.PlaybackColorA);
-
         GUILayout.BeginVertical("", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
