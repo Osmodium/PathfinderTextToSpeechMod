@@ -36,6 +36,7 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     private static void Init()
     {
+        Main.Logger.Log("Init");
         initSpeech(1, 100);
     }
     private static bool IsVoiceInitialized()
@@ -85,17 +86,25 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static void Speak(string text, int length, float delay = 0f)
     {
-        if (!IsVoiceInitialized())
-            return;
+	    Main.Logger.Log("Speak");
+		try
+	    {
+		    if (!IsVoiceInitialized())
+			    return;
 
-        if (Main.Settings.InterruptPlaybackOnPlay && IsSpeaking)
-            Stop();
+		    if (Main.Settings.InterruptPlaybackOnPlay && IsSpeaking)
+			    Stop();
 
-        m_CurrentWordCount = length;
-        if (delay <= 0f)
-            addToSpeechQueue(text);
-        else
-            m_TheVoice.ExecuteLater(delay, () => Speak(text, length));
+		    m_CurrentWordCount = length;
+		    if (delay <= 0f)
+			    addToSpeechQueue(text);
+		    else
+			    m_TheVoice.ExecuteLater(delay, () => Speak(text, length));
+	    }
+	    catch (Exception e)
+	    {
+            Main.Logger.Error(e.Message + e.StackTrace);
+	    }
     }
 
     public static string GetStatusMessage()
@@ -116,14 +125,23 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static void Stop()
     {
-        if (!IsVoiceInitialized())
-            return;
+        Main.Logger.Log("Stop");
 
-        if (!IsSpeaking)
-            return;
+        try
+        {
+	        if (!IsVoiceInitialized())
+		        return;
 
-        destroySpeech();
-        Init();
+	        if (!IsSpeaking)
+		        return;
+
+	        destroySpeech();
+	        Init();
+        }
+        catch (Exception ex)
+        {
+	        Main.Logger.Error(ex.Message + ex.StackTrace);
+        }
     }
 
     public static void ClearQueue()

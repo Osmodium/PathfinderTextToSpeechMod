@@ -138,6 +138,7 @@
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasicLogger.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="WindowsVoice.h" />
   </ItemGroup>

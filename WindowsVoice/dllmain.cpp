@@ -1,4 +1,7 @@
-﻿#include "pch.h"
+﻿#include <iostream>
+
+#include "BasicLogger.h"
+#include "pch.h"
 #include "WindowsVoice.h"
 
 namespace WindowsVoice
@@ -21,89 +24,107 @@ namespace WindowsVoice
 
 	void speechThreadFunc(const int rate, const int volume)
 	{
-		if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
+		BasicLogger::Log(InfoP, "SpeechTreadFunc");
+		terminated = false;
+		try
 		{
-			theStatusMessage = L"Error: Failed to initialize COM for Voice.";
-			speechState = speech_state_enum::error;
-			return;
-		}
-
-		ISpVoice* pVoice = nullptr;
-
-		const HRESULT hr = CoCreateInstance(CLSID_SpVoice, nullptr, CLSCTX_ALL, IID_ISpVoice, reinterpret_cast<void**>(&pVoice));
-		if (!SUCCEEDED(hr))
-		{
-			const LPSTR pText = 0;
-
-			::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, nullptr);
-			LocalFree(pText);
-			theStatusMessage = L"Error: Failed to create Voice instance.";
-			speechState = speech_state_enum::error;
-			return;
-		}
-
-		theStatusMessage = L"Speech ready.";
-		speechState = speech_state_enum::ready;
-
-		pVoice->SetRate(rate);
-		pVoice->SetVolume(volume);
-
-		SPVOICESTATUS voiceStatus;
-		const wchar_t* priorText = nullptr;
-		while (!shouldTerminate)
-		{
-			pVoice->GetStatus(&voiceStatus, 0);
-			if (voiceStatus.dwRunningState == SPRS_IS_SPEAKING)
+			if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
 			{
-				if (priorText == nullptr)
+				theStatusMessage = L"Error: Failed to initialize COM for Voice.";
+				speechState = speech_state_enum::error;
+				return;
+			}
+
+			ISpVoice* pVoice = nullptr;
+
+			const HRESULT hr = CoCreateInstance(CLSID_SpVoice, nullptr, CLSCTX_ALL, IID_ISpVoice, reinterpret_cast<void**>(&pVoice));
+			if (!SUCCEEDED(hr))
+			{
+				const LPSTR pText = 0;
+
+				::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), pText, 0, nullptr);
+				LocalFree(pText);
+				theStatusMessage = L"Error: Failed to create Voice instance.";
+				speechState = speech_state_enum::error;
+				BasicLogger::Log(FatalP, "Failed to create Voice instance.");
+				return;
+			}
+
+			theStatusMessage = L"Speech ready.";
+			speechState = speech_state_enum::ready;
+
+			pVoice->SetRate(rate);
+			pVoice->SetVolume(volume);
+
+			SPVOICESTATUS voiceStatus;
+			const wchar_t* priorText = nullptr;
+			while (!shouldTerminate)
+			{
+				pVoice->GetStatus(&voiceStatus, 0);
+				if (voiceStatus.dwRunningState == SPRS_IS_SPEAKING)
 				{
-					theStatusMessage = L"Error: SPRS_IS_SPEAKING but text is NULL";
-					speechState = speech_state_enum::error;
+					if (priorText == nullptr)
+					{
+						theStatusMessage = L"Error: SPRS_IS_SPEAKING but text is NULL";
+						speechState = speech_state_enum::error;
+					}
+					else
+					{
+						theStatusMessage = L"Speaking: ";
+						theStatusMessage.append(priorText);
+						speechState = speech_state_enum::speaking;
+						wordLength = voiceStatus.ulInputWordLen;
+						wordPosition = voiceStatus.ulInputWordPos;
+						if (!theSpeechQueue.empty())
+						{
+							theMutex.lock();
+							if (lstrcmpW(theSpeechQueue.front(), priorText) == 0)
+							{
+								delete[] theSpeechQueue.front();
+								theSpeechQueue.pop_front();
+							}
+							theMutex.unlock();
+						}
+					}
 				}
 				else
 				{
-					theStatusMessage = L"Speaking: ";
-					theStatusMessage.append(priorText);
-					speechState = speech_state_enum::speaking;
-					wordLength = voiceStatus.ulInputWordLen;
-					wordPosition = voiceStatus.ulInputWordPos;
+					theStatusMessage = L"Waiting";
+					speechState = speech_state_enum::ready;
+					if (priorText != nullptr)
+					{
+						delete[] priorText;
+						priorText = nullptr;
+					}
 					if (!theSpeechQueue.empty())
 					{
 						theMutex.lock();
-						if (lstrcmpW(theSpeechQueue.front(), priorText) == 0)
-						{
-							delete[] theSpeechQueue.front();
-							theSpeechQueue.pop_front();
-						}
+						priorText = theSpeechQueue.front();
+						theSpeechQueue.pop_front();
 						theMutex.unlock();
+						pVoice->Speak(priorText, SPF_IS_XML | SPF_ASYNC, nullptr);
 					}
 				}
+				Sleep(50);
 			}
-			else
-			{
-				theStatusMessage = L"Waiting";
-				speechState = speech_state_enum::ready;
-				if (priorText != nullptr)
-				{
-					delete[] priorText;
-					priorText = nullptr;
-				}
-				if (!theSpeechQueue.empty())
-				{
-					theMutex.lock();
-					priorText = theSpeechQueue.front();
-					theSpeechQueue.pop_front();
-					theMutex.unlock();
-					pVoice->Speak(priorText, SPF_IS_XML | SPF_ASYNC, nullptr);
-				}
-			}
-			Sleep(50);
-		}
-		pVoice->Pause();
-		pVoice->Release();
+			BasicLogger::Log(InfoP, "Stop");
+			pVoice->Speak(nullptr, SPF_PURGEBEFORESPEAK, nullptr);
+			//Sleep(10);
+			BasicLogger::Log(InfoP, "Release");
+			pVoice->Release();
+			terminated = true;
 
-		theStatusMessage = L"Speech thread terminated.";
-		speechState = speech_state_enum::terminated;
+			theStatusMessage = L"Speech thread terminated.";
+			speechState = speech_state_enum::terminated;
+		}
+		catch (const std::exception& ex)
+		{
+			BasicLogger::Log(CriticalP, ex.what());
+		}
+		catch (...)
+		{
+			BasicLogger::Log(CriticalP, "Unknown error occured in 'speechThreadFunc'...");
+		}
 	}
 
 	void addToSpeechQueue(const char* text)
@@ -143,22 +164,48 @@ namespace WindowsVoice
 
 	void destroySpeech()
 	{
-		if (theSpeechThread == nullptr)
+		BasicLogger::Log(InfoP, "destroySpeech");
+		try
 		{
-			theStatusMessage = L"Warning: Speach thread already destroyed or not started.";
-			return;
+			if (theSpeechThread == nullptr)
+			{
+				theStatusMessage = L"Warning: Speach thread already destroyed or not started.";
+				BasicLogger::Log(CriticalP, "Warning: Speach thread already destroyed or not started.");
+				return;
+			}
+			theStatusMessage = L"Destroying speech.";
+			wordLength = 0;
+			wordPosition = 0;
+			BasicLogger::Log(InfoP, "shouldTerminate = true;");
+			shouldTerminate = true;
+			if (theSpeechThread->joinable())
+			{
+				BasicLogger::Log(InfoP, "theSpeechThread->join()");
+				while (!terminated)
+				{
+					BasicLogger::Log(InfoP, "waiting to terminate...");
+					Sleep(100);
+				}
+				theSpeechThread->join();
+			}
+			//theSpeechQueue.clear();
+			BasicLogger::Log(InfoP, "delete theSpeechThread;");
+			delete theSpeechThread;
+			BasicLogger::Log(InfoP, "theSpeechThread = nullptr;");
+			theSpeechThread = nullptr;
+			BasicLogger::Log(InfoP, "CoUninitialize();");
+			CoUninitialize();
+			theStatusMessage = L"Speech destroyed.";
+			speechState = speech_state_enum::uninitialized;
 		}
-		theStatusMessage = L"Destroying speech.";
-		wordLength = 0;
-		wordPosition = 0;
-		shouldTerminate = true;
-		theSpeechThread->join();
-		theSpeechQueue.clear();
-		delete theSpeechThread;
-		theSpeechThread = nullptr;
-		CoUninitialize();
-		theStatusMessage = L"Speech destroyed.";
-		speechState = speech_state_enum::uninitialized;
+		catch (const std::exception& ex)
+		{
+			BasicLogger::Log(CriticalP, ex.what());
+		}
+		catch (...)
+		{
+			BasicLogger::Log(CriticalP, "Unknown error occured in 'destroySpeech'...");
+		}
 	}
 
 	char* getStatusMessage()
@@ -218,11 +265,11 @@ BOOL APIENTRY DllMain(HMODULE, DWORD ul_reason_for_call, LPVOID)
 {
 	switch (ul_reason_for_call)
 	{
-	case DLL_PROCESS_ATTACH:
-	case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
-	case DLL_PROCESS_DETACH:
-		break;
+		case DLL_PROCESS_ATTACH:
+		case DLL_THREAD_ATTACH:
+		case DLL_THREAD_DETACH:
+		case DLL_PROCESS_DETACH:
+			break;
 	}
 
 	return TRUE;

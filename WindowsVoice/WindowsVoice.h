@@ -34,6 +34,7 @@ namespace WindowsVoice {
 	list<wchar_t*> theSpeechQueue;
 	thread* theSpeechThread = nullptr;
 	bool shouldTerminate = false;
+	bool terminated = false;
 	wstring theStatusMessage;
 	ULONG wordLength = 0;
 	ULONG wordPosition = 0;
