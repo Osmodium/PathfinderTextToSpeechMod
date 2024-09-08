@@ -12,9 +12,21 @@ public static class MenuGUI
 
     public static void OnGui()
     {
+
+#if DEBUG
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Log speech", GUILayout.ExpandWidth(false));
+        Main.Settings.LogVoicedLines = GUILayout.Toggle(Main.Settings.LogVoicedLines, "Enabled");
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+#endif
+
         AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
 
-        GUILayout.BeginVertical("", GUI.skin.box);
+        GUILayout.BeginVertical("Playback voices", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Use gender specific voices", GUILayout.ExpandWidth(false));
@@ -60,6 +72,37 @@ public static class MenuGUI
 
         GUILayout.EndVertical();
 
+
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Playback barks", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.PlaybackBarks = GUILayout.Toggle(Main.Settings.PlaybackBarks, "Enabled");
+        GUILayout.EndHorizontal();
+
+        if (Main.Settings.PlaybackBarks)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Only playback barks if there's silence", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.PlaybackBarkOnlyIfSilence = GUILayout.Toggle(Main.Settings.PlaybackBarkOnlyIfSilence, "Enabled");
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Playback vicinity and cutscene triggered barks", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.PlaybackBarksInVicinity = GUILayout.Toggle(Main.Settings.PlaybackBarksInVicinity, "Enabled");
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Playback banter barks", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.PlaybackBarksPartyBanter = GUILayout.Toggle(Main.Settings.PlaybackBarksPartyBanter, "Enabled");
+            GUILayout.EndHorizontal();
+		}
+
+		GUILayout.EndVertical();
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);
 
         GUILayout.BeginVertical("", GUI.skin.box);
@@ -152,7 +195,13 @@ public static class MenuGUI
         GUILayout.EndVertical();
     }
 
-    private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b, ref float a)
+    private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b)
+    {
+        float a = 1;
+        AddColorPicker(enableLabel, ref enabledBool, colorLabel, ref r, ref g, ref b, ref a, false);
+    }
+
+    private static void AddColorPicker(string enableLabel, ref bool enabledBool, string colorLabel, ref float r, ref float g, ref float b, ref float a, bool useAlpha = true)
     {
         GUILayout.BeginVertical("", GUI.skin.box);
         GUILayout.BeginHorizontal();
@@ -174,9 +223,16 @@ public static class MenuGUI
             GUILayout.Label("B", GUILayout.ExpandWidth(false));
             b = GUILayout.HorizontalSlider(b, 0, 1);
             GUILayout.Space(10);
-            GUILayout.Label("A", GUILayout.ExpandWidth(false));
-            a = GUILayout.HorizontalSlider(a, 0, 1);
-            GUILayout.Space(10);
+            if (useAlpha)
+            {
+                GUILayout.Label("A", GUILayout.ExpandWidth(false));
+                a = GUILayout.HorizontalSlider(a, 0, 1);
+                GUILayout.Space(10);
+            }
+            else
+            {
+                a = 1;
+            }
             GUILayout.Box(GetColorPreview(ref r, ref g, ref b, ref a), GUILayout.Width(20));
             GUILayout.EndHorizontal();
         }

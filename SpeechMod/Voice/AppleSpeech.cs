@@ -7,7 +7,12 @@ namespace SpeechMod.Voice;
 
 public class AppleSpeech : ISpeech
 {
-    public void SpeakPreview(string text, VoiceType type)
+	public bool IsSpeaking()
+	{
+		throw new NotImplementedException();
+	}
+
+	public void SpeakPreview(string text, VoiceType type)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -49,6 +54,11 @@ public class AppleSpeech : ISpeech
 
         text = text.PrepareText();
         AppleVoiceUnity.SpeakDialog(text, delay);
+    }
+
+    public void SpeakAs(string text, VoiceType type, float delay = 0)
+    {
+	    throw new NotImplementedException();
     }
 
     public void Speak(string text, float delay)
@@ -105,4 +115,6 @@ public class AppleSpeech : ISpeech
     {
         return "AppleSpeech ready!";
     }
+
+
 }

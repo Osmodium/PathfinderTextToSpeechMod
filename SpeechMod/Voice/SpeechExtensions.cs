@@ -65,19 +65,19 @@ public static class SpeechExtensions
         if (m_PhoneticDictionary == null)
             LoadBackupDictionary();
 
-        return m_PhoneticDictionary.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
+        return m_PhoneticDictionary!.Aggregate(text, (current, pair) => current?.Replace(pair.Key, pair.Value));
     }
 
     public static void AddUiElements<T>(string name) where T : MonoBehaviour
     {
-        Debug.Log("Adding Apple SpeechMod UI elements.");
+        Debug.Log($"Adding {typeof(T).Name} SpeechMod UI elements.");
 
         GameObject appleVoice = null;
         try
         {
             appleVoice = UnityEngine.Object.FindObjectOfType<T>()?.gameObject;
         }
-        catch{} // Sigh
+        catch { /* sigh, ignored */ }
 
         if (appleVoice != null)
         {
