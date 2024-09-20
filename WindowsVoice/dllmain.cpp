@@ -3,22 +3,6 @@
 
 namespace WindowsVoice
 {
-	char* convertWstring(const wstring w_str)
-	{
-		const wchar_t* input = w_str.c_str();
-		const size_t size = (wcslen(input) + 1) * sizeof(wchar_t);
-		char* buffer = new char[size];
-
-#ifdef __STDC_LIB_EXT1__
-		// wcstombs_s is only guaranteed to be available if __STDC_LIB_EXT1__ is defined
-		size_t convertedSize;
-		wcstombs_s(&convertedSize, buffer, size, input, size);
-#else
-		wcstombs(buffer, input, size);
-#endif
-		return buffer;
-	}
-
 	void speechThreadFunc(const int rate, const int volume)
 	{
 		if (FAILED(::CoInitializeEx(NULL, COINITBASE_MULTITHREADED)))
@@ -161,13 +145,13 @@ namespace WindowsVoice
 		speechState = speech_state_enum::uninitialized;
 	}
 
-	char* getStatusMessage()
+	BSTR getStatusMessage()
 	{
 		if (theStatusMessage.empty())
 		{
 			theStatusMessage = L"WindowsVoice not yet initialized!";
 		}
-		return convertWstring(theStatusMessage);
+		return SysAllocString(theStatusMessage.c_str());
 	}
 
 	UINT32 getSpeechState()
@@ -175,7 +159,7 @@ namespace WindowsVoice
 		return static_cast<UINT32>(speechState);
 	}
 
-	char* getVoicesAvailable()
+	BSTR getVoicesAvailable()
 	{
 		wstring voices;
 		HRESULT hr;
@@ -191,16 +175,43 @@ namespace WindowsVoice
 				for (int i = 0; i < vCount; ++i)
 				{
 					cpSpEnumTokens->Next(1, &pSpTok, nullptr);
-					WCHAR* description;
-					if (SUCCEEDED(hr = SpGetDescription(pSpTok, &description)))
+					// try to get the Name attribute first; if failed, get the description
+					CSpDynamicString voiceName;
+					CComPtr<ISpDataKey> pAttribs;
+					hr = pSpTok->OpenKey(SPTOKENKEY_ATTRIBUTES, &pAttribs);
+					if (SUCCEEDED(hr))
 					{
-						voices.append(wstring(description) + L"\n");
+						hr = pAttribs->GetStringValue(L"Name", &voiceName);
+					}
+					if (FAILED(hr))
+					{
+						hr = SpGetDescription(pSpTok, &voiceName);
+					}
+					LANGID langid;
+					if (SUCCEEDED(hr))
+					{
+						hr = SpGetLanguageFromVoiceToken(pSpTok, &langid);
+					}
+					if (SUCCEEDED(hr))
+					{
+						// get the locale name (e.g. "English (United States)")
+						int size = GetLocaleInfoW(langid, LOCALE_SLOCALIZEDDISPLAYNAME, NULL, 0);
+						if (size != 0)
+						{
+							wchar_t* localeName = new wchar_t[size];
+							GetLocaleInfoW(langid, LOCALE_SLOCALIZEDDISPLAYNAME, localeName, size);
+							voices += voiceName;
+							voices += L'#';
+							voices += localeName;
+							voices += L'\n';
+							delete[] localeName;
+						}
 					}
 					pSpTok.Release();
 				}
 			}
 		}
-		return convertWstring(voices);
+		return SysAllocString(voices.c_str());
 	}
 
 	UINT32 getWordLength()
