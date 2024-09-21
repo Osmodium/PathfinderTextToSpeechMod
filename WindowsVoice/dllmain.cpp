@@ -195,16 +195,29 @@ namespace WindowsVoice
 					if (SUCCEEDED(hr))
 					{
 						// get the locale name (e.g. "English (United States)")
-						int size = GetLocaleInfoW(langid, LOCALE_SLOCALIZEDDISPLAYNAME, NULL, 0);
+						int size = GetLocaleInfoW(langid, LOCALE_SENGLISHDISPLAYNAME, NULL, 0);
 						if (size != 0)
 						{
-							wchar_t* localeName = new wchar_t[size];
-							GetLocaleInfoW(langid, LOCALE_SLOCALIZEDDISPLAYNAME, localeName, size);
+							wchar_t* localeNameBuf = new wchar_t[size];
+							GetLocaleInfoW(langid, LOCALE_SENGLISHDISPLAYNAME, localeNameBuf, size);
+							wstring localeName = localeNameBuf;
+							delete[] localeNameBuf;
+							// if the voice has attribute "NaturalVoiceType", consider it "natural"
+							CSpDynamicString naturalVoiceType;
+							hr = pSpTok->GetStringValue(L"NaturalVoiceType", &naturalVoiceType);
+							if (SUCCEEDED(hr))
+							{
+								// inserts "Natural" before '('
+								size_t pos = localeName.find(L'(');
+								if (pos != wstring::npos)
+									localeName.insert(pos, L"Natural ");
+								else
+									localeName.append(L" Natural");
+							}
 							voices += voiceName;
 							voices += L'#';
 							voices += localeName;
 							voices += L'\n';
-							delete[] localeName;
 						}
 					}
 					pSpTok.Release();
