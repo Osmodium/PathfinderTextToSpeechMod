@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Journal;
 using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

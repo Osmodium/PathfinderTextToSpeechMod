@@ -3,6 +3,7 @@ using Kingmaker.Blueprints;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Unity;

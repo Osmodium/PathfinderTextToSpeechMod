@@ -1,46 +1,41 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.Tooltip.Bricks;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
-using SpeechMod.Unity;
-using TMPro;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(TooltipEngine), nameof(TooltipEngine.GetBrickView))]
+[HarmonyPatch]
 static class TooltipEngine_Patch
 {
-    public static void Postfix(ref MonoBehaviour __result)
-    {
-        if (!Main.Enabled)
-            return;
+	[HarmonyPostfix]
+	[HarmonyPatch(typeof(TooltipEngine), nameof(TooltipEngine.GetBrickView))]
+	public static void GetBrickView_Postfix(ref MonoBehaviour __result)
+	{
+		if (!Main.Enabled)
+			return;
 
-        if (__result == null)
-            return;
+		if (__result == null)
+			return;
 
-        // TODO: Possibly add more types, however it seems the text in those are split
-        if (__result is not (
-	            TooltipBrickTextView or
-	            TooltipBrickEntityHeaderView or
-	            TooltipBrickIconAndNameView or
-	            TooltipBrickTitleView or
-	            TooltipBrickItemFooterView
+		// TODO: Possibly add more types, however it seems the text in those are split
+		if (__result is not (
+				TooltipBrickTextView or
+				TooltipBrickEntityHeaderView or
+				TooltipBrickIconAndNameView or
+				TooltipBrickTitleView or
+				TooltipBrickItemFooterView or
+				TooltipBrickIconValueStatView or
+				TooltipBrickValueStatFormulaView or
+				TooltipBrickTimerView
 			))
-            return;
-
-        if (IsInvalid(__result.transform?.parent))
-            return;
+			return;
 
 #if DEBUG
-        Debug.Log(__result.transform.GetGameObjectPath());
+		Debug.Log(__result.transform.GetGameObjectPath());
 #endif
 
-        __result.gameObject.transform.HookupTextToSpeechOnTransform();
-    }
-
-    // TODO: Better way of telling if inside hover tooltip.
-    private static bool IsInvalid(Transform parent)
-    {
-        return parent is null;
-    }
+		__result.gameObject.transform.HookupTextToSpeechOnTransform();
+	}
 }

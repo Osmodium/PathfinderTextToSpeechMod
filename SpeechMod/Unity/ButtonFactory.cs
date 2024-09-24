@@ -2,6 +2,7 @@
 using Kingmaker.UI.MVVM._VM.Tooltip.Templates;
 using Kingmaker.UI.MVVM._VM.Tooltip.Utils;
 using Owlcat.Runtime.UI.Controls.Button;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 using UnityEngine.Events;
 

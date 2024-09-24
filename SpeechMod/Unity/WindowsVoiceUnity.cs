@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Unity;
@@ -11,12 +12,16 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void initSpeech(int rate, int volume);
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void destroySpeech();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void addToSpeechQueue(string s);
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void clearSpeechQueue();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getStatusMessage();

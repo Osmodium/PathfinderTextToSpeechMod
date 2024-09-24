@@ -19,10 +19,6 @@
 			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Newtonsoft.Json.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<Reference Include="Assembly-CSharp">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Assembly-CSharp.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
 		<Reference Include="Owlcat.Runtime.UniRx">
 			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Owlcat.Runtime.UniRx.dll</HintPath>
 			<Private>False</Private>
@@ -51,6 +47,10 @@
 			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.UI.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+		<Reference Include="Assembly-CSharp">
+			<HintPath>$(SolutionDir)\lib\Assembly-CSharp_public.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
 		<Reference Include="Owlcat.Runtime.UI">
 			<HintPath>$(SolutionDir)\lib\Owlcat.Runtime.UI_public.dll</HintPath>
 			<Private>False</Private>
@@ -67,6 +67,7 @@
 	<ItemGroup>
 		<PubliciseInputAssemblies Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll" />
 		<PubliciseInputAssemblies Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll" />
+		<PubliciseInputAssemblies Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Assembly-CSharp.dll" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />

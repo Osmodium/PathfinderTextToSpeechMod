@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.GlobalMap.Message;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Patches;
