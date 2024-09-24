@@ -19,31 +19,23 @@ static class TooltipEngine_Patch
             return;
 
         // TODO: Possibly add more types, however it seems the text in those are split
-        if (!(__result is TooltipBrickTextView view))
+        if (__result is not (
+	            TooltipBrickTextView or
+	            TooltipBrickEntityHeaderView or
+	            TooltipBrickIconAndNameView or
+	            TooltipBrickTitleView or
+	            TooltipBrickItemFooterView
+			))
             return;
 
-        if (IsInvalid(view.transform?.parent))
+        if (IsInvalid(__result.transform?.parent))
             return;
 
 #if DEBUG
         Debug.Log(__result.transform.GetGameObjectPath());
 #endif
 
-        var textMeshProTransform = view.gameObject?.transform?.TryFind("Text (TMP)");
-        if (textMeshProTransform == null)
-        {
-            Debug.LogWarning("No TextMeshProUGUI found!");
-            return;
-        }
-
-        var textMeshPro = textMeshProTransform.GetComponent<TextMeshProUGUI>();
-        if (textMeshPro == null)
-        {
-            Debug.LogWarning("No TextMeshProUGUI found!");
-            return;
-        }
-
-        textMeshPro.HookupTextToSpeech();
+        __result.gameObject.transform.HookupTextToSpeechOnTransform();
     }
 
     // TODO: Better way of telling if inside hover tooltip.
