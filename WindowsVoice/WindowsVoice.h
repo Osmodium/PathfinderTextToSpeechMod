@@ -21,8 +21,8 @@ namespace WindowsVoice {
 		DLL_API void __cdecl addToSpeechQueue(const char* text);
 		DLL_API void __cdecl clearSpeechQueue();
 		DLL_API void __cdecl destroySpeech();
-		DLL_API char* __cdecl getStatusMessage();
-		DLL_API char* __cdecl getVoicesAvailable();
+		DLL_API BSTR __cdecl getStatusMessage();
+		DLL_API BSTR __cdecl getVoicesAvailable();
 		DLL_API UINT32 __cdecl getWordLength();
 		DLL_API UINT32 __cdecl getWordPosition();
 		DLL_API UINT32 __cdecl getSpeechState();

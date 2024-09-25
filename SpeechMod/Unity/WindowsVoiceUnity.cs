@@ -18,8 +18,10 @@ public class WindowsVoiceUnity : MonoBehaviour
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern void clearSpeechQueue();
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getStatusMessage();
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
+    [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getVoicesAvailable();
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordLength();
@@ -67,19 +69,6 @@ public class WindowsVoiceUnity : MonoBehaviour
         if (string.IsNullOrWhiteSpace(voicesDelim))
             return Array.Empty<string>();
         string[] voices = voicesDelim.Split(['\n'], StringSplitOptions.RemoveEmptyEntries);
-        for (int i = 0; i < voices.Length; ++i)
-        {
-            if (!voices[i].Contains('-'))
-                voices[i] = $"{voices[i]}#Unknown";
-            else
-                voices[i] = voices[i].Replace(" - ", "#");
-
-            if (!voices[i].Contains("(Natural)"))
-                continue;
-
-            voices[i] = voices[i].Replace("(Natural)", "");
-            voices[i] = voices[i].Replace("(", "Natural (");
-        }
         return voices;
     }
 
