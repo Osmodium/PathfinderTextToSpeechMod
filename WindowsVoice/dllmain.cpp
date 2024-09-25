@@ -204,7 +204,7 @@ namespace WindowsVoice
 							delete[] localeNameBuf;
 							// if the voice has attribute "NaturalVoiceType", consider it "natural"
 							CSpDynamicString naturalVoiceType;
-							hr = pSpTok->GetStringValue(L"NaturalVoiceType", &naturalVoiceType);
+							hr = pAttribs->GetStringValue(L"NaturalVoiceType", &naturalVoiceType);
 							if (SUCCEEDED(hr))
 							{
 								// inserts "Natural" before '('
