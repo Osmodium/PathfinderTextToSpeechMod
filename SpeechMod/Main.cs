@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NAudio.Wave;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
@@ -19,6 +20,8 @@ public static class Main
     public static UnityModManager.ModEntry.ModLogger Logger;
     public static Settings Settings;
     public static bool Enabled;
+    public static WaveOutEvent WaveOutEvent = new ();
+    public static VoiceSettings VoiceSettings;   
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
@@ -39,6 +42,7 @@ public static class Main
 
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
+        VoiceSettings = VoiceSettings.Load($"{modEntry.Path}/settings.json");
         Debug.Log("Pathfinder: Wrath of the Righteous Speech Mod Initializing...");
 
         Logger = modEntry.Logger;

@@ -1,7 +1,11 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Threading.Tasks;
+using HarmonyLib;
 using Kingmaker;
+using Kingmaker.Blueprints;
 using Kingmaker.Localization;
 using Kingmaker.UI.MVVM._VM.Dialog.Dialog;
+using SpeechMod.ElevenLabs;
 #if DEBUG
 using UnityEngine;
 #endif
@@ -13,36 +17,58 @@ public static class Dialog_Patch
 {
     public static void Postfix()
     {
-        if (!Main.Enabled)
-            return;
+        _ = RunPostfix();
+    }
 
-#if DEBUG
-        Debug.Log($"{nameof(DialogVM)}_HandleOnCueShow_Postfix");
-#endif
-
-        if (!Main.Settings.AutoPlay)
+    private static async Task RunPostfix()
+    {
+        try
         {
-#if DEBUG
-            Debug.Log($"{nameof(DialogVM)}: AutoPlay is disabled!");
-#endif
-            return;
+            var id = Game.Instance?.DialogController?.CurrentCue.Text.Key;
+            var speaker = Game.Instance?.DialogController?.CurrentSpeakerName;
+            var gender = Game.Instance?.DialogController?.CurrentSpeaker?.Gender ?? Gender.Female;
+
+            var fileExists = false;
+            var fullPath = "";
+
+            if (!string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(id, false)))
+                return;
+
+            try
+            {
+                fullPath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), $@"{Main.VoiceSettings.AudioSavePath}\{id}.mp3");
+                fileExists = System.IO.File.Exists(fullPath);
+            }
+            catch
+            {
+                // ignored
+            }
+
+            if (fileExists)
+            {
+                await VoicePlayer.PlayExistingMp3(fullPath);
+            }
+            else
+            {
+                var (finalName, textForVoice) = TextParser.MakeTextForVoice(Game.Instance?.DialogController?.CurrentCue?.DisplayText, speaker);
+                var voice = Main.VoiceSettings.GetVoice(finalName, gender);
+                ElevenReq req = new()
+                {
+                    ModelID = Main.VoiceSettings.Model,
+                    Text = textForVoice,
+                    Voice = voice
+                };
+       
+                var stream = await ElevenLabsGateway.CreateStream(req);
+
+                if (stream != null)
+                    await VoicePlayer.PlayStream(stream, id);
+            }
         }
-
-        string key = Game.Instance?.DialogController?.CurrentCue?.Text?.Key;
-        if (string.IsNullOrWhiteSpace(key))
-            key = Game.Instance?.DialogController?.CurrentCue?.Text?.Shared?.String?.Key;
-
-        if (string.IsNullOrWhiteSpace(key))
-            return;
-
-        // Stop playing and don't play if the dialog is voice acted.
-        if (!Main.Settings.AutoPlayIgnoreVoice &&
-            !string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(key, false)))
+        catch (Exception e)
         {
-            Main.Speech.Stop();
-            return;
+            Debug.Log(e.Message);
+            Debug.Log("Failed?");
         }
-
-        Main.Speech.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.DisplayText, 0.5f);
     }
 }

@@ -33,17 +33,17 @@ public static class ElevenLabsGateway
                 optimize_streaming_latency = 3,
                 voice_settings = new
                 {
-                    stability = Main.Settings.Stability,
-                    style = Main.Settings.Style,
-                    use_speaker_boost = Main.Settings.UseSpeakerBoost,
-                    similarity_boost = Main.Settings.SimilarityBoost,
+                    stability = Main.VoiceSettings.Stability,
+                    style = Main.VoiceSettings.Style,
+                    use_speaker_boost = Main.VoiceSettings.UseSpeakerBoost,
+                    similarity_boost = Main.VoiceSettings.SimilarityBoost,
                 }
             };
 
             Debug.Log(JsonConvert.SerializeObject(json));
 
             Debug.Log("Headers");
-            client.DefaultRequestHeaders.Add("xi-api-key", Main.Settings.ApiKey);
+            client.DefaultRequestHeaders.Add("xi-api-key", Main.VoiceSettings.ApiKey);
 
             var content = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");
 
