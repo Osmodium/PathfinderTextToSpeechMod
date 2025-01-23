@@ -87,9 +87,9 @@ public static class Main
 //#endif
         Logger.Log("Setting available voices list...");
 
-        for (int i = 0; i < availableVoices.Length; i++)
+        for (var i = 0; i < availableVoices.Length; i++)
         {
-            string[] splitVoice = availableVoices[i].Split('#');
+            var splitVoice = availableVoices[i].Split('#');
             if (splitVoice.Length != 2 || string.IsNullOrEmpty(splitVoice[1]))
                 availableVoices[i] = availableVoices[i].Replace("#","").Trim() + "#Unknown";
         }

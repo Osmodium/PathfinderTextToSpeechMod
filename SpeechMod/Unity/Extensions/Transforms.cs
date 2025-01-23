@@ -90,7 +90,7 @@ public static class Transforms
 
     private static void SetRectAlign(GameObject uiObject, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2? anchoredPosition = null)
     {
-        RectTransform uitransform = uiObject.GetComponent<RectTransform>();
+        var uitransform = uiObject.GetComponent<RectTransform>();
 
         if (uitransform == null)
             return;
@@ -154,8 +154,8 @@ public static class Transforms
 
     public static void SetSize(this RectTransform trans, Vector2 newSize)
     {
-        Vector2 oldSize = trans.rect.size;
-        Vector2 deltaSize = newSize - oldSize;
+        var oldSize = trans.rect.size;
+        var deltaSize = newSize - oldSize;
         trans.offsetMin -= new Vector2(deltaSize.x * trans.pivot.x, deltaSize.y * trans.pivot.y);
         trans.offsetMax += new Vector2(deltaSize.x * (1f - trans.pivot.x), deltaSize.y * (1f - trans.pivot.y));
     }

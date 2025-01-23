@@ -107,7 +107,7 @@ public static class Hooks
 
 				if (Main.Settings!.FontStyleOnHover)
 				{
-					for (int i = 0; i < Main.Settings.FontStyles!.Length; i++)
+					for (var i = 0; i < Main.Settings.FontStyles!.Length; i++)
 					{
 						if (Main.Settings.FontStyles[i])
 						{

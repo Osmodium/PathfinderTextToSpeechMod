@@ -72,7 +72,7 @@ public class AppleSpeech : ISpeech
 
     public string[] GetAvailableVoices()
     {
-        string arguments = "say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";
+        var arguments = "say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";
         var process = new Process
         {
             StartInfo = new ProcessStartInfo
@@ -87,10 +87,10 @@ public class AppleSpeech : ISpeech
         };
 
         process.Start();
-        string error = process.StandardError.ReadToEnd();
+        var error = process.StandardError.ReadToEnd();
         if (!string.IsNullOrWhiteSpace(error))
             Main.Logger.Error(error);
-        string text = process.StandardOutput.ReadToEnd();
+        var text = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
         process.Dispose();
 

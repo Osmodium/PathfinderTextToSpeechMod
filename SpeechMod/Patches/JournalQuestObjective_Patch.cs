@@ -38,7 +38,7 @@ public static class JournalQuestObjective_Patch
             return;
         }
 
-        bool isFirst = true;
+        var isFirst = true;
         foreach (var textMeshPro in allTexts)
         {
             var tmpTransform = textMeshPro.transform;

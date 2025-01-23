@@ -59,24 +59,24 @@ public class AppleVoiceUnity : MonoBehaviour
             return;
         }
 
-        string arguments = "";
+        var arguments = "";
         text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
         text = text.Replace("\\n", "  ");
         text = text.Replace("\n", " ");
         text = text.Replace(";", "");
         while (text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
-            int position = text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase);
+            var position = text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase);
             if (position != 0)
             {
-                string argumentsPart = text.Substring(0, position);
+                var argumentsPart = text.Substring(0, position);
                 text = text.Substring(position);
                 arguments = $"{arguments}say -v  {GenderVoice} -r {GenderRate} {argumentsPart.Replace("\"", "")};";
             }
             else
             {
                 position = text.IndexOf("</color>", StringComparison.InvariantCultureIgnoreCase);
-                string argumentsPart2 = text.Substring(0, position);
+                var argumentsPart2 = text.Substring(0, position);
                 text = text.Substring(position);
                 arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {argumentsPart2.Replace("\"", "")};";
             }

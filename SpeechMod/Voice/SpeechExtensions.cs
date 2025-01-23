@@ -19,8 +19,8 @@ public static class SpeechExtensions
         Main.Logger?.Log("Loading phonetic dictionary...");
         try
         {
-            string file = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? throw new FileNotFoundException("Path to Pathfinder could not be found!"), @"Mods", @"SpeechMod", @"PhoneticDictionary.json");
-            string json = File.ReadAllText(file, Encoding.UTF8);
+            var file = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? throw new FileNotFoundException("Path to Pathfinder could not be found!"), @"Mods", @"SpeechMod", @"PhoneticDictionary.json");
+            var json = File.ReadAllText(file, Encoding.UTF8);
             m_PhoneticDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
         }
         catch (Exception ex)

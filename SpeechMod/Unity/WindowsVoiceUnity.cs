@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using SpeechMod.Unity.Extensions;
+using System;
 using System.Runtime.InteropServices;
-using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Unity;
@@ -25,13 +24,17 @@ public class WindowsVoiceUnity : MonoBehaviour
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getStatusMessage();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     [return: MarshalAs(UnmanagedType.BStr)]
     private static extern string getVoicesAvailable();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordLength();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern int getWordPosition();
+
     [DllImport(Constants.WINDOWS_VOICE_DLL)]
     private static extern WindowsVoiceStatus getSpeechState();
 
@@ -70,10 +73,10 @@ public class WindowsVoiceUnity : MonoBehaviour
 
     public static string[] GetAvailableVoices()
     {
-        string voicesDelim = getVoicesAvailable();
-        if (string.IsNullOrWhiteSpace(voicesDelim))
-            return Array.Empty<string>();
-        string[] voices = voicesDelim.Split(['\n'], StringSplitOptions.RemoveEmptyEntries);
+        var voicesDelimited = getVoicesAvailable();
+        if (string.IsNullOrWhiteSpace(voicesDelimited))
+            return [];
+        var voices = voicesDelimited.Split(['\n'], StringSplitOptions.RemoveEmptyEntries);
         return voices;
     }
 

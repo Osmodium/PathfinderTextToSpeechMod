@@ -73,7 +73,7 @@ public static class MenuGUI
         if (Main.Settings.FontStyleOnHover)
         {
             GUILayout.BeginHorizontal();
-            for (int i = 0; i < Main.Settings.FontStyles.Length; ++i)
+            for (var i = 0; i < Main.Settings.FontStyles.Length; ++i)
             {
                 Main.Settings.FontStyles[i] = GUILayout.Toggle(Main.Settings.FontStyles[i], Main.FontStyleNames[i], GUILayout.ExpandWidth(true));
             }
@@ -187,9 +187,9 @@ public static class MenuGUI
     private static Texture2D GetColorPreview(ref float r, ref float g, ref float b, ref float a)
     {
         var texture = new Texture2D(20, 20);
-        for (int y = 0; y < texture.height; y++)
+        for (var y = 0; y < texture.height; y++)
         {
-            for (int x = 0; x < texture.width; x++)
+            for (var x = 0; x < texture.width; x++)
             {
                 texture.SetPixel(x, y, new Color(r, g, b, a));
             }
