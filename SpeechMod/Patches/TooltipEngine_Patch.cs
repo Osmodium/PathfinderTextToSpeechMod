@@ -28,7 +28,8 @@ static class TooltipEngine_Patch
 				TooltipBrickItemFooterView or
 				TooltipBrickIconValueStatView or
 				TooltipBrickValueStatFormulaView or
-				TooltipBrickTimerView
+				TooltipBrickTimerView or
+				TooltipBrickPortraitAndNameView
 			))
 			return;
 

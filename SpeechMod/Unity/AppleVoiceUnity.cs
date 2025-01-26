@@ -10,17 +10,16 @@ namespace SpeechMod.Unity;
 
 public class AppleVoiceUnity : MonoBehaviour
 {
-    private static AppleVoiceUnity m_TheVoice;
+    private static AppleVoiceUnity _theVoice;
 
     private static string GenderVoice => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice;
     private static int GenderRate => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.Settings.FemaleRate : Main.Settings.MaleRate;
 
-    private static Process m_SpeakingProcess = null;
-
+    private static Process _speakingProcess;
 
     private static bool IsVoiceInitialized()
     {
-        if (m_TheVoice != null)
+        if (_theVoice != null)
             return true;
 
         Main.Logger.Critical("No voice initialized!");
@@ -29,10 +28,10 @@ public class AppleVoiceUnity : MonoBehaviour
 
     void Start()
     {
-        if (m_TheVoice != null)
+        if (_theVoice != null)
             Destroy(gameObject);
         else
-            m_TheVoice = this;
+            _theVoice = this;
     }
 
     public static void Speak(string text, float delay = 0f)
@@ -42,13 +41,13 @@ public class AppleVoiceUnity : MonoBehaviour
 
         if (delay > 0f)
         {
-            m_TheVoice.ExecuteLater(delay, () => Speak(text));
+            _theVoice.ExecuteLater(delay, () => Speak(text));
             return;
         }
 
         Stop();
 
-        m_SpeakingProcess = Process.Start("/usr/bin/say", text);
+        _speakingProcess = Process.Start("/usr/bin/say", text);
     }
 
     public static void SpeakDialog(string text, float delay = 0f)
@@ -58,7 +57,7 @@ public class AppleVoiceUnity : MonoBehaviour
 
         if (delay > 0f)
         {
-            m_TheVoice.ExecuteLater(delay, () => SpeakDialog(text));
+            _theVoice.ExecuteLater(delay, () => SpeakDialog(text));
             return;
         }
 
@@ -94,7 +93,7 @@ public class AppleVoiceUnity : MonoBehaviour
         KillAll();
 
         arguments = "-c \"" + arguments + "\"";
-        m_SpeakingProcess = Process.Start("/bin/bash", arguments);
+        _speakingProcess = Process.Start("/bin/bash", arguments);
     }
 
     public static void Stop()
@@ -102,13 +101,13 @@ public class AppleVoiceUnity : MonoBehaviour
         if (!IsVoiceInitialized())
             return;
 
-        m_SpeakingProcess.Kill();
+        _speakingProcess.Kill();
         KillAll();
     }
 
     public static bool IsSpeaking()
     {
-        return !m_SpeakingProcess.HasExited;
+        return !_speakingProcess.HasExited;
     }
 
     private static void KillAll()

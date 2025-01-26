@@ -42,6 +42,6 @@ public abstract class ModToggleSettingEntry : ModSettingEntry
         {
             ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} disabled, setting integration skipped");
         }
-        return SettingStatus.NOT_APPLIED;
+        return SettingStatus.NotApplied;
     }
 }

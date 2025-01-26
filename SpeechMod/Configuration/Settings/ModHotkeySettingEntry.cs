@@ -51,7 +51,7 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
 
     protected void RegisterKeybind()
     {
-        if (Status != SettingStatus.NOT_APPLIED) return;
+        if (Status != SettingStatus.NotApplied) return;
 
         var currentValue = SettingEntity.GetValue();
 
@@ -87,7 +87,7 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
     protected SettingStatus TryEnableAndPatch(Type type)
     {
         TryFix();
-        if (Status != SettingStatus.NOT_APPLIED)
+        if (Status != SettingStatus.NotApplied)
         {
             return Status;
         }
@@ -102,7 +102,7 @@ public abstract class ModHotkeySettingEntry : ModSettingEntry
         {
             ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} binding 1 and binding 2 empty, setting integration skipped");
         }
-        return SettingStatus.NOT_APPLIED;
+        return SettingStatus.NotApplied;
     }
 
     /// <summary>

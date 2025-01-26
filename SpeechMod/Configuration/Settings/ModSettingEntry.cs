@@ -9,7 +9,7 @@ public abstract class ModSettingEntry
     public readonly string Title;
     public readonly string Tooltip;
 
-    public SettingStatus Status { get; private set; } = SettingStatus.NOT_APPLIED;
+    public SettingStatus Status { get; private set; } = SettingStatus.NotApplied;
 
     protected ModSettingEntry(string key, string title, string tooltip)
     {
@@ -26,20 +26,20 @@ public abstract class ModSettingEntry
 
     protected SettingStatus TryPatchInternal(params Type[] type)
     {
-        if (Status != SettingStatus.NOT_APPLIED) return Status;
+        if (Status != SettingStatus.NotApplied) return Status;
         try
         {
             foreach (var t in type)
             {
                 ModConfigurationManager.Instance?.HarmonyInstance?.CreateClassProcessor(t)?.Patch();
             }
-            Status = SettingStatus.WORKING;
+            Status = SettingStatus.Working;
             ModConfigurationManager.Instance?.ModEntry?.Logger?.Log($"{Title} patch succeeded");
         }
         catch (Exception ex)
         {
             ModConfigurationManager.Instance?.ModEntry?.Logger?.Error($"{Title} patch exception: {ex.Message}");
-            Status = SettingStatus.ERROR;
+            Status = SettingStatus.Error;
         }
         return Status;
     }

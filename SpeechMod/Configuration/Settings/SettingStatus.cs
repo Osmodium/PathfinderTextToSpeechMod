@@ -2,7 +2,7 @@
 
 public enum SettingStatus
 {
-    NOT_APPLIED = 0,
-    WORKING = 1,
-    ERROR = 2
+    NotApplied = 0,
+    Working = 1,
+    Error = 2
 }
