@@ -14,7 +14,9 @@ namespace SpeechMod.Patches;
 [HarmonyPatch]
 public static class DialogAnswerView_Patch
 {
-    private const string DIALOG_ANSWER_BUTTON_NAME = "SpeechMod_DialogAnswerButton";
+
+    private const string DIALOG_ANSWER_ARROW_TEXTURE_PATH = "Arrow";
+
 
     [HarmonyPatch(typeof(DialogAnswerView), nameof(DialogAnswerView.BindViewImplementation))]
     [HarmonyPostfix]
@@ -22,21 +24,23 @@ public static class DialogAnswerView_Patch
     {
         if (!Main.Enabled)
             return;
+
 #if DEBUG
         Debug.Log($"{nameof(DialogAnswerView)}_{nameof(BindViewImplementation_Postfix)}");
 #endif
 
-       TryAddDialogButton(__instance.AnswerText, new Vector2(-30f, -12f));
+       TryAddDialogButton(__instance);
     }
 
-    private static void TryAddDialogButton(TextMeshProUGUI textMeshPro, Vector2? anchoredPosition = null)
+    private static void TryAddDialogButton(DialogAnswerView instance)
     {
-        var transform = textMeshPro?.transform;
+        var transform = instance.AnswerText?.transform;
 
 #if DEBUG
-        Debug.Log($"Adding/Removing dialog answer button on {textMeshPro?.name}...");
+        Debug.Log($"Adding/Removing dialog answer button on {instance.AnswerText?.name}...");
 #endif
-        var playButtonGameObject = transform?.Find(DIALOG_ANSWER_BUTTON_NAME)?.gameObject;
+
+        var playButtonGameObject = transform?.Find(ButtonFactory.DIALOG_ANSWER_BUTTON_NAME)?.gameObject;
 
         // 1. Check if the setting for showing the playback button is enabled.
         if (!Main.Settings.ShowPlaybackOfDialogAnswers)
@@ -54,13 +58,17 @@ public static class DialogAnswerView_Patch
         // 3. Create the button if it doesn't exist.
         playButtonGameObject = ButtonFactory.CreatePlayButton(transform, () =>
         {
-            if (textMeshPro == null)
+            if (instance.AnswerText == null)
                 return;
-            var text = textMeshPro.text;
 
-            text = Main.Settings?.SayDialogAnswerNumber == true ?
-                new Regex("<alpha[^>]+>([^>]+)<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1 - $2") :
-                new Regex("<alpha[^>]+>[^>]+<alpha[^>]+><indent[^>]+>([^<>]*)</indent>").Replace(text, "$1");
+            var text = instance.AnswerText.text;
+
+            // Clean the text of tags
+            text = Regex.Replace(text, "<(.*?)>", string.Empty);
+
+            // Remove the number of the answer if the setting is disabled
+            if (!Main.Settings.SayDialogAnswerNumber)
+                text = new Regex(@"^(\d+\.)(.*)").Replace(text, "$2");
 
             text = text.PrepareText();
 
@@ -68,29 +76,23 @@ public static class DialogAnswerView_Patch
         });
 
         if (playButtonGameObject == null || playButtonGameObject.transform == null)
+        {
+            Debug.LogWarning("Failed to create the dialog answer button!");
             return;
+        }
 
-        playButtonGameObject.name = DIALOG_ANSWER_BUTTON_NAME;
-        playButtonGameObject.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+        //Debug.LogWarning($"Setting name '{playButtonGameObject.name}' to '{ButtonFactory.DIALOG_ANSWER_BUTTON_NAME}'...");
+        playButtonGameObject.name = ButtonFactory.DIALOG_ANSWER_BUTTON_NAME;
+        playButtonGameObject.transform.localScale = new Vector3(0.75f, 0.75f, 1f);
         playButtonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
-        playButtonGameObject.RectAlignMiddleLeft(anchoredPosition);
+        playButtonGameObject.RectAlignMiddleLeft(new Vector2(-18f, -12f));
         playButtonGameObject.SetActive(true);
 
+        //4. Remove the texture that indicates the hover state
+        var arrowTextureTransform = instance.transform.TryFind(DIALOG_ANSWER_ARROW_TEXTURE_PATH);
+        if (arrowTextureTransform)
+        {
+            Object.Destroy(arrowTextureTransform.gameObject);
+        }
     }
 }
-
-
-// (<([^>]+)>)
-
-// 2. <color=#2D3406><link="SkillcheckDC:CheckDiplomacy"><b>[Diplomacy 20]</b></link> </color> ...address the soldiers and boost their morale.
-// Diplomacy 20 ...address the soldiers and boost their morale.
-// 1. "I'd like to know more about you."
-//
-//1. Hover icon leaves a lot of space, and it's difficult to see when hovering the playback button
-// 2. The button does not exist in WorldMap scene
-// 3. Text check coloring
-// 	2. <color=#2D3406><link="SkillcheckDC:CheckDiplomacy"><b>[Diplomacy 20]</b></link> </color> ...address the soldiers and boost their morale.
-// 	Diplomacy 20 ...address the soldiers and boost their morale.
-//
-// 	1. "I'd like to know more about you."
-
