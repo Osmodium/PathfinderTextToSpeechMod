@@ -7,6 +7,11 @@ namespace SpeechMod.Voice;
 
 public class AppleSpeech : ISpeech
 {
+    public bool IsSpeaking()
+    {
+        return AppleVoiceUnity.IsSpeaking();
+    }
+
     public void SpeakPreview(string text, VoiceType type)
     {
         if (string.IsNullOrEmpty(text))

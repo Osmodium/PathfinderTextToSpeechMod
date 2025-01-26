@@ -37,13 +37,15 @@ public class Settings : UnityModManager.ModSettings
 
     public bool InterruptPlaybackOnPlay = true;
 
+    public bool ShowNotificationOnPlaybackStop = true;
+
     public bool ShowPlaybackOfDialogAnswers = true;
     public bool SayDialogAnswerNumber = false;
     public bool DialogAnswerColorOnHover = true;
-    public float DialogAnswerHoverColorR = 0.15f;
-    public float DialogAnswerHoverColorG = 0.75f;
-    public float DialogAnswerHoverColorB = 0.75f;
-    public float DialogAnswerHoverColorA = 0.2f;
+    public float DialogAnswerHoverColorR = 0.8f;
+    public float DialogAnswerHoverColorG = 0.78f;
+    public float DialogAnswerHoverColorB = 0.5f;
+    public float DialogAnswerHoverColorA = 0.75f;
 
     public override void Save(UnityModManager.ModEntry modEntry)
     {

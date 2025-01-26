@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Collections;
+using HarmonyLib;
 using Kingmaker;
 using Kingmaker.Blueprints;
 using Kingmaker.UI.MVVM._PCView.Dialog.Dialog;
@@ -6,8 +7,10 @@ using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
 using System.Text.RegularExpressions;
+using Owlcat.Runtime.UI.Controls.Button;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpeechMod.Patches;
 
@@ -81,7 +84,11 @@ public static class DialogAnswerView_Patch
             return;
         }
 
-        //Debug.LogWarning($"Setting name '{playButtonGameObject.name}' to '{ButtonFactory.DIALOG_ANSWER_BUTTON_NAME}'...");
+        if (Main.Settings?.DialogAnswerColorOnHover == true)
+        {
+            SetDialogAnswerColorHover(playButtonGameObject, instance);
+        }
+
         playButtonGameObject.name = ButtonFactory.DIALOG_ANSWER_BUTTON_NAME;
         playButtonGameObject.transform.localScale = new Vector3(0.75f, 0.75f, 1f);
         playButtonGameObject.transform.localRotation = Quaternion.Euler(0, 0, 90);
@@ -94,5 +101,42 @@ public static class DialogAnswerView_Patch
         {
             Object.Destroy(arrowTextureTransform.gameObject);
         }
+    }
+
+    private static void SetDialogAnswerColorHover(GameObject playButtonGameObject, DialogAnswerView instance)
+    {
+        var highlight = instance?.transform.TryFind("Highlight");
+        if (highlight == null)
+            return;
+
+        var highlightImage = highlight.GetComponent<Image>();
+        if (highlightImage == null)
+            return;
+
+        var colorOff = highlightImage.color;
+
+        var button = playButtonGameObject.GetComponent<OwlcatButton>();
+        if (button == null)
+            return;
+
+        button.OnHover.RemoveAllListeners();
+        button.OnHover.AddListener(hover =>
+        {
+            var colorOn = new Color(Main.Settings!.DialogAnswerHoverColorR, Main.Settings!.DialogAnswerHoverColorG, Main.Settings!.DialogAnswerHoverColorB, Main.Settings!.DialogAnswerHoverColorA);
+            if (hover)
+            {
+                highlightImage.color = colorOn;
+            }
+            else
+            {
+                button.StartCoroutine(ResetColor(highlightImage, colorOff));
+            }
+        });
+    }
+
+    private static IEnumerator ResetColor(Image image, Color color)
+    {
+        yield return new WaitForEndOfFrame();
+        image.color = color;
     }
 }
