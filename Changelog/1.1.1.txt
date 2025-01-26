@@ -1,0 +1,9 @@
+SpeechMod 
+
+Version 1.1.1 Changelog
+
+- Added loading screen TTS support
+- Added playback of dialog and book answers if enabled
+- Added hotkey to stop the playback (default ctrl+s)
+
+Report issues here thanks https://github.com/Osmodium/PathfinderTextToSpeechMod/issues

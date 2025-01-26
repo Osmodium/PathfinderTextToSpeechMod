@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Journal;
 using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,7 +38,7 @@ public static class JournalQuestObjective_Patch
             return;
         }
 
-        bool isFirst = true;
+        var isFirst = true;
         foreach (var textMeshPro in allTexts)
         {
             var tmpTransform = textMeshPro.transform;

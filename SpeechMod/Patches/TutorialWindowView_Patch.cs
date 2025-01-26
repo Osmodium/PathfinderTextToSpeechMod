@@ -2,21 +2,21 @@
 using Kingmaker.UI;
 using Kingmaker.UI.MVVM._PCView.Tutorial;
 using Kingmaker.UI.MVVM._VM.Tutorial;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(TutorialWindowView<TutorialWindowVM>), "SetPage")]
+[HarmonyPatch(typeof(TutorialWindowView<TutorialWindowVM>), nameof(TutorialWindowView<TutorialWindowVM>.SetPage))]
 public class TutorialWindowView_Patch
 {
-    public static void Postfix()
+    public static void Postfix(TutorialWindowView<TutorialWindowVM> __instance)
     {
         if (!Main.Enabled)
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(TutorialWindowView<TutorialWindowVM>)}_SetPage_Postfix");
+        Debug.Log($"{nameof(TutorialWindowView<TutorialWindowVM>)}_{nameof(TutorialWindowView<TutorialWindowVM>.SetPage)}_Postfix");
 #endif
 
         var smallWindow = UIHelper.TryFindInFadeCanvas("TutorialView/SmallWindow");

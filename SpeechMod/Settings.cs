@@ -33,15 +33,19 @@ public class Settings : UnityModManager.ModSettings
     public float HoverColorA = 1;
 
     public bool FontStyleOnHover = true;
-    public bool[] FontStyles = { false, false, false, true, false, false, false, false, false, false, false };
-
-    //public bool ShowPlaybackProgress = true;
-    //public float PlaybackColorR = 0.7f;
-    //public float PlaybackColorG = 0.9f;
-    //public float PlaybackColorB = 0.7f;
-    //public float PlaybackColorA = 0.5f;
+    public bool[] FontStyles = [false, false, false, true, false, false, false, false, false, false, false];
 
     public bool InterruptPlaybackOnPlay = true;
+
+    public bool ShowNotificationOnPlaybackStop = true;
+
+    public bool ShowPlaybackOfDialogAnswers = true;
+    public bool SayDialogAnswerNumber = false;
+    public bool DialogAnswerColorOnHover = true;
+    public float DialogAnswerHoverColorR = 0.8f;
+    public float DialogAnswerHoverColorG = 0.78f;
+    public float DialogAnswerHoverColorB = 0.5f;
+    public float DialogAnswerHoverColorA = 0.75f;
 
     public override void Save(UnityModManager.ModEntry modEntry)
     {

@@ -76,6 +76,19 @@ public class WindowsSpeech : ISpeech
         return text;
     }
 
+    private void SpeakInternal(string text, float delay = 0f)
+    {
+        text = "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"http://www.w3.org/2001/mstts\">" + text + "</speak>";
+        //if (Main.Settings?.LogVoicedLines == true)
+        //    UnityEngine.Debug.Log(text);
+        WindowsVoiceUnity.Speak(text, Length(text), delay);
+    }
+
+    public bool IsSpeaking()
+    {
+        return WindowsVoiceUnity.IsSpeaking;
+    }
+
     public void SpeakPreview(string text, VoiceType voiceType)
     {
         if (string.IsNullOrEmpty(text))
@@ -159,6 +172,31 @@ public class WindowsSpeech : ISpeech
         text = PrepareDialogText(text);
 
         WindowsVoiceUnity.Speak(text, Length(text), delay);
+    }
+
+    public void SpeakAs(string text, VoiceType voiceType, float delay = 0)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            Main.Logger?.Warning("No text to speak!");
+            return;
+        }
+
+        if (!Main.Settings!.UseGenderSpecificVoices)
+        {
+            Speak(text, delay);
+            return;
+        }
+
+        text = voiceType switch
+        {
+            VoiceType.Narrator => $"{CombinedNarratorVoiceStart}{text}</voice>",
+            VoiceType.Female => $"{CombinedFemaleVoiceStart}{text}</voice>",
+            VoiceType.Male => $"{CombinedMaleVoiceStart}{text}</voice>",
+            _ => throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null)
+        };
+
+        SpeakInternal(text, delay);
     }
 
     public void Speak(string text, float delay = 0f)

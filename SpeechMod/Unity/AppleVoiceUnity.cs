@@ -3,20 +3,23 @@ using Kingmaker.Blueprints;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Unity;
 
 public class AppleVoiceUnity : MonoBehaviour
 {
-    private static AppleVoiceUnity m_TheVoice;
+    private static AppleVoiceUnity _theVoice;
 
     private static string GenderVoice => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.FemaleVoice : Main.MaleVoice;
     private static int GenderRate => Game.Instance?.DialogController?.CurrentSpeaker?.Gender == Gender.Female ? Main.Settings.FemaleRate : Main.Settings.MaleRate;
 
+    private static Process _speakingProcess;
+
     private static bool IsVoiceInitialized()
     {
-        if (m_TheVoice != null)
+        if (_theVoice != null)
             return true;
 
         Main.Logger.Critical("No voice initialized!");
@@ -25,10 +28,10 @@ public class AppleVoiceUnity : MonoBehaviour
 
     void Start()
     {
-        if (m_TheVoice != null)
+        if (_theVoice != null)
             Destroy(gameObject);
         else
-            m_TheVoice = this;
+            _theVoice = this;
     }
 
     public static void Speak(string text, float delay = 0f)
@@ -38,13 +41,13 @@ public class AppleVoiceUnity : MonoBehaviour
 
         if (delay > 0f)
         {
-            m_TheVoice.ExecuteLater(delay, () => Speak(text));
+            _theVoice.ExecuteLater(delay, () => Speak(text));
             return;
         }
 
         Stop();
 
-        Process.Start("/usr/bin/say", text);
+        _speakingProcess = Process.Start("/usr/bin/say", text);
     }
 
     public static void SpeakDialog(string text, float delay = 0f)
@@ -54,28 +57,28 @@ public class AppleVoiceUnity : MonoBehaviour
 
         if (delay > 0f)
         {
-            m_TheVoice.ExecuteLater(delay, () => SpeakDialog(text));
+            _theVoice.ExecuteLater(delay, () => SpeakDialog(text));
             return;
         }
 
-        string arguments = "";
+        var arguments = "";
         text = new Regex("<b><color[^>]+><link([^>]+)?>([^<>]*)</link></color></b>").Replace(text, "$2");
         text = text.Replace("\\n", "  ");
         text = text.Replace("\n", " ");
         text = text.Replace(";", "");
         while (text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase) != -1)
         {
-            int position = text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase);
+            var position = text.IndexOf("<color=#616060>", StringComparison.InvariantCultureIgnoreCase);
             if (position != 0)
             {
-                string argumentsPart = text.Substring(0, position);
+                var argumentsPart = text.Substring(0, position);
                 text = text.Substring(position);
                 arguments = $"{arguments}say -v  {GenderVoice} -r {GenderRate} {argumentsPart.Replace("\"", "")};";
             }
             else
             {
                 position = text.IndexOf("</color>", StringComparison.InvariantCultureIgnoreCase);
-                string argumentsPart2 = text.Substring(0, position);
+                var argumentsPart2 = text.Substring(0, position);
                 text = text.Substring(position);
                 arguments = $"{arguments}say -v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {argumentsPart2.Replace("\"", "")};";
             }
@@ -90,7 +93,7 @@ public class AppleVoiceUnity : MonoBehaviour
         KillAll();
 
         arguments = "-c \"" + arguments + "\"";
-        Process.Start("/bin/bash", arguments);
+        _speakingProcess = Process.Start("/bin/bash", arguments);
     }
 
     public static void Stop()
@@ -98,7 +101,13 @@ public class AppleVoiceUnity : MonoBehaviour
         if (!IsVoiceInitialized())
             return;
 
+        _speakingProcess.Kill();
         KillAll();
+    }
+
+    public static bool IsSpeaking()
+    {
+        return !_speakingProcess.HasExited;
     }
 
     private static void KillAll()

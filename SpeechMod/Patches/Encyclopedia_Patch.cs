@@ -2,19 +2,32 @@
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Encyclopedia;
 using SpeechMod.Unity;
 using System.Linq;
+using SpeechMod.Unity.Extensions;
 using TMPro;
 using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
-public static class EncyclopediaPage_Patch
+[HarmonyPatch]
+public static class Encyclopedia_Patch
 {
     private static readonly string m_ButtonName = "EncyclopediaSpeechButton";
 
     private const string BODY_GROUP_PATH = "ServiceWindowsPCView/Background/Windows/EncyclopediaPCView/EncyclopediaPageView/BodyGroup";
 
-    public static void Postfix()
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(EncyclopediaPageBaseView), "Initialize")]
+    public static void Initialize_Postfix(EncyclopediaPageBaseView __instance)
+    {
+        if (!Main.Enabled)
+            return;
+
+        __instance.m_Title.HookupTextToSpeech();
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
+    public static void UpdateView_Postfix()
     {
         if (!Main.Enabled)
             return;

@@ -2,6 +2,7 @@
 using Kingmaker;
 using Kingmaker.UI;
 using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Patches;

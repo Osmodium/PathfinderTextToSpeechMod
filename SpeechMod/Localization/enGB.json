@@ -1,0 +1,16 @@
+{
+  "Strings": {
+    "osmodium.speechmod.group.main": {
+      "Text": "Speech Mod"
+    },
+    "osmodium.speechmod.feature.playback.stop.description": {
+      "Text": "Stop playback"
+    },
+    "osmodium.speechmod.feature.playback.stop.tooltip-description": {
+      "Text": "Stops playback of SpeechMod TTS when it is playing."
+    },
+    "osmodium.speechmod.feature.playback.stop.notification": {
+      "Text": "SpeechMod: Playback stopped!"
+    }
+  }
+}

@@ -1,97 +1,69 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="$(SolutionDir)GamePath.props" Condition="Exists('$(SolutionDir)GamePath.props')" />
-	<PropertyGroup>
-		<TargetFramework>net472</TargetFramework>
-		<AssemblyName>PathfinderWOTRSpeechMod</AssemblyName>
-		<Description>Pathfinder : Wrath of the Righteous - SpeechMod</Description>
-		<Version>1.0.0</Version>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<LangVersion>latest</LangVersion>
-		<RootNamespace>SpeechMod</RootNamespace>
-		<PathfinderWOTRData>$(LocalAppData)Low\Owlcat Games\Pathfinder Wrath Of The Righteous</PathfinderWOTRData>
-	</PropertyGroup>
-	<ItemGroup>
-		<Reference Include="0Harmony">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\0Harmony.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="Newtonsoft.Json">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Newtonsoft.Json.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="Assembly-CSharp">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Assembly-CSharp.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="Owlcat.Runtime.UniRx">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Owlcat.Runtime.UniRx.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="UniRx">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UniRx.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="Unity.TextMeshPro">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="UnityEngine.CoreModule">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="UnityEngine.CoreModule">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="UnityEngine.IMGUIModule">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="UnityEngine.UI">
-			<HintPath>$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.UI.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="Owlcat.Runtime.UI">
-			<HintPath>$(SolutionDir)\lib\Owlcat.Runtime.UI_public.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="UnityModManager">
-			<HintPath>$(SolutionDir)\lib\UnityModManager_public.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="Info.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
-		<None Include="PhoneticDictionary.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
-	</ItemGroup>
-	<ItemGroup>
-		<PubliciseInputAssemblies Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll" />
-		<PubliciseInputAssemblies Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll" />
-	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Aze.Publicise.MSBuild.Task" Version="1.1.0" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Properties\" />
-	</ItemGroup>
-	<Target Name="Publicise" AfterTargets="BeforeBuild;Clean" Inputs="@(PubliciseInputAssemblies)" Outputs="$(SolutionDir)lib\%(PubliciseInputAssemblies.FileName)_public.dll;$(SolutionDir)lib\%(PubliciseInputAssemblies.FileName)_public.hash">
-		<MakeDir Directories="$(SolutionDir)lib/" />
-		<Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="$(SolutionDir)lib/" PubliciseCompilerGenerated="true" />
-	</Target>
-	<Target Name="GenerateCustomPropsFile" BeforeTargets="BeforeBuild" Condition="$(PathfinderWOTRInstallDir) == ''">
-		<Exec Command="findstr /C:&quot;Mono path[0]&quot; &quot;$(PathfinderWOTRData)\Player.log&quot;" IgnoreExitCode="true" ConsoleToMSBuild="true">
-			<Output TaskParameter="ExitCode" PropertyName="ExitCode" />
-			<Output TaskParameter="ConsoleOutput" PropertyName="MonoPathLine" />
-		</Exec>
-		<PropertyGroup>
-			<MonoPathRegex>^Mono path\[0\] = '(.*?)/Wrath_Data/Managed'$</MonoPathRegex>
-		</PropertyGroup>
-		<PropertyGroup>
-			<PathfinderWOTRInstallDir>$([System.Text.RegularExpressions.Regex]::Match($(MonoPathLine), $(MonoPathRegex)).Groups[1].Value)</PathfinderWOTRInstallDir>
-		</PropertyGroup>
-		<WriteLinesToFile File="$(SolutionDir)GamePath.props" Lines="&lt;Project xmlns='http://schemas.microsoft.com/developer/msbuild/2003'&gt; &#xD;&#xA;	&lt;PropertyGroup&gt; &#xD;&#xA;		&lt;PathfinderWOTRInstallDir&gt;$(PathfinderWOTRInstallDir)&lt;/PathfinderWOTRInstallDir&gt;&#xD;&#xA;	&lt;/PropertyGroup&gt;&#xD;&#xA;&lt;/Project&gt;" Overwrite="true" Encoding="utf-8" />
-	</Target>
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="GenerateCustomPropsFile">
+    <Import Project="$(SolutionDir)GamePath.props" Condition="Exists('$(SolutionDir)GamePath.props')" />
+
+    <PropertyGroup>
+        <TargetFramework>net481</TargetFramework>
+        <AssemblyName>PathfinderWOTRSpeechMod</AssemblyName>
+        <Description>Pathfinder : Wrath of the Righteous - SpeechMod</Description>
+        <Version>1.1.1</Version>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <RootNamespace>SpeechMod</RootNamespace>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <PathfinderWOTRData>$(LocalAppData)Low\Owlcat Games\Pathfinder Wrath Of The Righteous</PathfinderWOTRData>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\0Harmony.dll*" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Newtonsoft.Json.dll*" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Owlcat.Runtime.UniRx.dll*" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UniRx.dll*" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Unity.TextMeshPro.dll*" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.CoreModule.dll*" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.IMGUIModule.dll*" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityEngine.UI.dll*" Private="false" />
+
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll*" Publicize="true" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll*" Publicize="true" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Assembly-CSharp.dll*" Publicize="true" Private="false" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="Info.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
+        <None Include="PhoneticDictionary.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
+    </ItemGroup>
+    <!--<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    </ItemGroup>-->
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" IncludeAssets="build; contentfiles" Version="0.4.2" PrivateAssets="all" />
+        <PackageReference Include="MicroUtils.HarmonyAnalyzers" IncludeAssets="runtime; build; native; contentfiles; analyzers" Version="*-*" PrivateAssets="all" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="Localization\enGB.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <!--<Target Name="Publicise" AfterTargets="BeforeBuild;Clean" Inputs="@(PubliciseInputAssemblies)" Outputs="$(SolutionDir)lib\%(PubliciseInputAssemblies.FileName)_public.dll;$(SolutionDir)lib\%(PubliciseInputAssemblies.FileName)_public.hash">
+        <MakeDir Directories="$(SolutionDir)lib/" />
+        <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="$(SolutionDir)lib/" PubliciseCompilerGenerated="true" />
+    </Target>-->
+
+    <Target Name="GenerateCustomPropsFile" Condition="$(PathfinderWOTRInstallDir) == ''">
+        <Exec Command="findstr /C:&quot;Mono path[0]&quot; &quot;$(PathfinderWOTRData)\Player.log&quot;" IgnoreExitCode="true" ConsoleToMSBuild="true">
+            <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
+            <Output TaskParameter="ConsoleOutput" PropertyName="MonoPathLine" />
+        </Exec>
+        <PropertyGroup>
+            <MonoPathRegex>^Mono path\[0\] = '(.*?)/Wrath_Data/Managed'$</MonoPathRegex>
+        </PropertyGroup>
+        <PropertyGroup>
+            <PathfinderWOTRInstallDir>$([System.Text.RegularExpressions.Regex]::Match($(MonoPathLine), $(MonoPathRegex)).Groups[1].Value)</PathfinderWOTRInstallDir>
+        </PropertyGroup>
+        <WriteLinesToFile File="$(SolutionDir)GamePath.props" Lines="&lt;Project xmlns='http://schemas.microsoft.com/developer/msbuild/2003'&gt; &#xD;&#xA;	&lt;PropertyGroup&gt; &#xD;&#xA;		&lt;PathfinderWOTRInstallDir&gt;$(PathfinderWOTRInstallDir)&lt;/PathfinderWOTRInstallDir&gt;&#xD;&#xA;	&lt;/PropertyGroup&gt;&#xD;&#xA;&lt;/Project&gt;" Overwrite="true" Encoding="utf-8" />
+    </Target>
+
+    <Target Name="DeleteCustomPropsFile" BeforeTargets="Clean">
+        <Delete Files="GamePath.props" />
+    </Target>
 </Project>

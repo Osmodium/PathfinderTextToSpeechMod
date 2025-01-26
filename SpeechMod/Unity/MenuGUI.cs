@@ -1,5 +1,6 @@
 ﻿using SpeechMod.Voice;
 using System.Linq;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Unity;
@@ -60,6 +61,31 @@ public static class MenuGUI
 
         GUILayout.EndVertical();
 
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Show playback button of dialog answers", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.ShowPlaybackOfDialogAnswers = GUILayout.Toggle(Main.Settings.ShowPlaybackOfDialogAnswers, "Enabled");
+        GUILayout.EndHorizontal();
+
+        if (Main.Settings.ShowPlaybackOfDialogAnswers)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Include dialog answer number in playback", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.SayDialogAnswerNumber = GUILayout.Toggle(Main.Settings.SayDialogAnswerNumber, "Enabled");
+            GUILayout.EndHorizontal();
+
+            GUILayout.EndVertical();
+
+            AddColorPicker("Color answer on hover", ref Main.Settings.DialogAnswerColorOnHover, "Hover color", ref Main.Settings.DialogAnswerHoverColorR, ref Main.Settings.DialogAnswerHoverColorG, ref Main.Settings.DialogAnswerHoverColorB, ref Main.Settings.DialogAnswerHoverColorA);
+        }
+        else
+        {
+            GUILayout.EndVertical();
+        }
+
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);
 
         GUILayout.BeginVertical("", GUI.skin.box);
@@ -72,7 +98,7 @@ public static class MenuGUI
         if (Main.Settings.FontStyleOnHover)
         {
             GUILayout.BeginHorizontal();
-            for (int i = 0; i < Main.Settings.FontStyles.Length; ++i)
+            for (var i = 0; i < Main.Settings.FontStyles.Length; ++i)
             {
                 Main.Settings.FontStyles[i] = GUILayout.Toggle(Main.Settings.FontStyles[i], Main.FontStyleNames[i], GUILayout.ExpandWidth(true));
             }
@@ -87,7 +113,7 @@ public static class MenuGUI
         GUILayout.Label("Phonetic dictionary", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false)))
-            SpeechExtensions.LoadDictionary();
+            PhoneticDictionary.LoadDictionary();
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
@@ -186,9 +212,9 @@ public static class MenuGUI
     private static Texture2D GetColorPreview(ref float r, ref float g, ref float b, ref float a)
     {
         var texture = new Texture2D(20, 20);
-        for (int y = 0; y < texture.height; y++)
+        for (var y = 0; y < texture.height; y++)
         {
-            for (int x = 0; x < texture.width; x++)
+            for (var x = 0; x < texture.width; x++)
             {
                 texture.SetPixel(x, y, new Color(r, g, b, a));
             }

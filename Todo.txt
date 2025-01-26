@@ -1,0 +1,5 @@
+﻿🔲 Look into loading screen hint, name and description hookup
+LoadingScreenPCView
+
+🔲 Look into TooltipBrickPortraitAndNameView that has a title
+TooltipBrickPortraitAndNameView

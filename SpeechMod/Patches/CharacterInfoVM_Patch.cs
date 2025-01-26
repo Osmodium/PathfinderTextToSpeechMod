@@ -3,7 +3,7 @@ using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.CharacterInfo;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.CharacterInfo.Sections.Stories;
 using Kingmaker.UI.MVVM._VM.ServiceWindows.CharacterInfo;
-using SpeechMod.Unity;
+using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
 namespace SpeechMod.Patches;
@@ -25,24 +25,27 @@ public static class CharacterInfoVM_Patch
 
         var stories = UIHelper.GetUICanvas()?.GetComponentsInChildren<CharInfoStoriesPCView>();
 
-        for (int i = 0; i < stories.Length; ++i)
-        {
-            try
-            {
-                var story = stories[i];
-                var textBox = story?.transform?.Find("StoryFull/StoryContent/TextBox");
-                if (textBox == null)
-                {
-                    Debug.LogWarning($"{nameof(CharacterInfoVM)}_OnPageSelected_Postfix - TextBox not found for pagetype {pageType}!");
-                    continue;
-                }
+        if (stories == null)
+	        return;
 
-                textBox.HookupTextToSpeechOnTransform();
-            }
-            catch(Exception ex)
-            {
-                Debug.LogWarning($"Failed hooking story text on story '{stories[i].name}'. {ex.Message}");
-            }
+        foreach (var story in stories)
+        {
+	        try
+	        {
+		        var textBox = story?.transform?.Find("StoryFull/StoryContent/TextBox");
+		        if (textBox == null)
+		        {
+			        Debug.LogWarning(
+				        $"{nameof(CharacterInfoVM)}_OnPageSelected_Postfix - TextBox not found for pagetype {pageType}!");
+			        continue;
+		        }
+
+		        textBox.HookupTextToSpeechOnTransform();
+	        }
+	        catch (Exception ex)
+	        {
+		        Debug.LogWarning($"Failed hooking story text on story '{story.name}'. {ex.Message}");
+	        }
         }
     }
 }

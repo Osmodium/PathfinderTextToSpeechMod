@@ -22,9 +22,9 @@ public class StringManipulationTests
             MalePitch = 0,
             MaleVoice = 2,
             MaleRate = 0,
-            MaleVolume = 100
+            MaleVolume = 100,
+            AvailableVoices = ["Narrator", "Female", "Male"]
         };
-        Main.Settings.AvailableVoices = new[] { "Narrator", "Female", "Male" };
     }
 
     [Theory]
