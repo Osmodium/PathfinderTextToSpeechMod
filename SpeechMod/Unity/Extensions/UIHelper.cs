@@ -100,9 +100,6 @@ public static class UIHelper
         }
         return path;
     }
-
-
-
     public static Transform GetUICanvas()
     {
         return UIUtility.IsGlobalMap()

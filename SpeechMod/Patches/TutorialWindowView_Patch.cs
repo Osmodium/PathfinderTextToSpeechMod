@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SpeechMod.Patches;
 
-[HarmonyPatch(typeof(TutorialWindowView<TutorialWindowVM>), "SetPage")]
+[HarmonyPatch(typeof(TutorialWindowView<TutorialWindowVM>), nameof(TutorialWindowView<TutorialWindowVM>.SetPage))]
 public class TutorialWindowView_Patch
 {
     public static void Postfix(TutorialWindowView<TutorialWindowVM> __instance)
@@ -16,7 +16,7 @@ public class TutorialWindowView_Patch
             return;
 
 #if DEBUG
-        Debug.Log($"{nameof(TutorialWindowView<TutorialWindowVM>)}_SetPage_Postfix");
+        Debug.Log($"{nameof(TutorialWindowView<TutorialWindowVM>)}_{nameof(TutorialWindowView<TutorialWindowVM>.SetPage)}_Postfix");
 #endif
 
         var smallWindow = UIHelper.TryFindInFadeCanvas("TutorialView/SmallWindow");

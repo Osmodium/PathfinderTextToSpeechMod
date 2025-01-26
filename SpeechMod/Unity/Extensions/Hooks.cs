@@ -30,20 +30,12 @@ public static class Hooks
 
 		var path = transform.GetGameObjectPath();
 
-#if DEBUG
-		//Debug.Log($"Attempting to get TextMeshProUGUI in children on '{path}'...");
-#endif
-
 		var allTexts = transform.GetComponentsInChildren<TextMeshProUGUI>(true);
 		if (allTexts?.Length == 0)
 		{
 			Debug.LogWarning($"No TextMeshProUGUI found in children on '{path}'!");
 			return;
 		}
-
-#if DEBUG
-		//Debug.Log($"Found {allTexts?.Length} TextMeshProUGUIs on '{path}'!");
-#endif
 
 		allTexts.HookupTextToSpeech(force);
 	}
