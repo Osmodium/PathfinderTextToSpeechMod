@@ -84,6 +84,11 @@ public class WindowsSpeech : ISpeech
         WindowsVoiceUnity.Speak(text, Length(text), delay);
     }
 
+    public bool IsSpeaking()
+    {
+        return WindowsVoiceUnity.IsSpeaking;
+    }
+
     public void SpeakPreview(string text, VoiceType voiceType)
     {
         if (string.IsNullOrEmpty(text))
