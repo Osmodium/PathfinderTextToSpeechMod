@@ -16,9 +16,7 @@ namespace SpeechMod.Patches;
 [HarmonyPatch]
 public static class DialogAnswerView_Patch
 {
-
     private const string DIALOG_ANSWER_ARROW_TEXTURE_PATH = "Arrow";
-
 
     [HarmonyPatch(typeof(DialogAnswerView), nameof(DialogAnswerView.BindViewImplementation))]
     [HarmonyPostfix]
