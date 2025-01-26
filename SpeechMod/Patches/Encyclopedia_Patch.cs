@@ -19,15 +19,15 @@ public static class Encyclopedia_Patch
     [HarmonyPatch(typeof(EncyclopediaPageBaseView), "Initialize")]
     public static void Initialize_Postfix(EncyclopediaPageBaseView __instance)
     {
-	    if (!Main.Enabled)
-		    return;
+        if (!Main.Enabled)
+            return;
 
         __instance.m_Title.HookupTextToSpeech();
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(EncyclopediaPagePCView), "UpdateView")]
-	public static void UpdateView_Postfix()
+    public static void UpdateView_Postfix()
     {
         if (!Main.Enabled)
             return;

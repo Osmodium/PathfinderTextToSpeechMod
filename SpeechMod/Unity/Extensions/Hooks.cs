@@ -121,7 +121,7 @@ public static class Hooks
 
 				if (Main.Settings.ColorOnHover)
 				{
-					textMeshPro.color = m_HoverColor;
+					textMeshPro.color = UIHelper.HoverColor;
 				}
 			}
 		).AddTo(hookData.Disposables);

@@ -10,9 +10,9 @@ namespace SpeechMod.Unity.Extensions;
 
 public static class UIHelper
 {
-	private static Color m_HoverColor = Color.blue;
+    public static Color HoverColor = Color.blue;
 
-	public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
+    public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
     {
         return behaviour.StartCoroutine(InternalExecute(delay, action));
     }
@@ -25,10 +25,10 @@ public static class UIHelper
 
     public static void UpdateHoverColor()
     {
-	    m_HoverColor = new Color(Main.Settings.HoverColorR, Main.Settings.HoverColorG, Main.Settings.HoverColorB, Main.Settings.HoverColorA);
+        HoverColor = new Color(Main.Settings.HoverColorR, Main.Settings.HoverColorG, Main.Settings.HoverColorB, Main.Settings.HoverColorA);
     }
 
-	public static bool IsParentClickable(this Transform transform)
+    public static bool IsParentClickable(this Transform transform)
     {
         return transform.GetComponentInParents<ObservablePointerClickTrigger>() != null;
     }
@@ -103,58 +103,58 @@ public static class UIHelper
 
     public static Transform GetUICanvas()
     {
-	    return UIUtility.IsGlobalMap()
-		    ? Game.Instance.UI.GlobalMapUI.transform
-		    : Game.Instance.UI.Canvas.transform;
+        return UIUtility.IsGlobalMap()
+            ? Game.Instance.UI.GlobalMapUI.transform
+            : Game.Instance.UI.Canvas.transform;
     }
 
     public static Transform TryFindInStaticCanvas(string n)
     {
-	    return TryFindInStaticCanvas(n, n);
+        return TryFindInStaticCanvas(n, n);
     }
 
     public static Transform TryFindInStaticCanvas(string canvasName, string globalMapName)
     {
-	    return UIUtility.IsGlobalMap()
-		    ? Game.Instance.UI.GlobalMapUI.transform.TryFind(globalMapName)
-		    : Game.Instance.UI.Canvas.transform.TryFind(canvasName);
+        return UIUtility.IsGlobalMap()
+            ? Game.Instance.UI.GlobalMapUI.transform.TryFind(globalMapName)
+            : Game.Instance.UI.Canvas.transform.TryFind(canvasName);
     }
 
     public static Transform TryFindInFadeCanvas(string n)
     {
-	    return Game.Instance.UI.FadeCanvas.transform.TryFind(n);
+        return Game.Instance.UI.FadeCanvas.transform.TryFind(n);
     }
 
-	/// <summary>
-	/// Returns true if the component was added, false if it already existed.
-	/// </summary>
-	/// <typeparam name="T">The type of component.</typeparam>
-	/// <param name="gameObject">The GameObject to add the component to.</param>
-	/// <param name="component">The component that either was added, or already existed.</param>
-	/// <returns></returns>
-	public static bool TryAddComponent<T>(this GameObject gameObject, out T component) where T : Component
-	{
-		component = gameObject.GetComponent<T>();
-		if (component != null)
-		{
-			return false;
-		}
-		component = gameObject.AddComponent<T>();
-		return true;
-	}
+    /// <summary>
+    /// Returns true if the component was added, false if it already existed.
+    /// </summary>
+    /// <typeparam name="T">The type of component.</typeparam>
+    /// <param name="gameObject">The GameObject to add the component to.</param>
+    /// <param name="component">The component that either was added, or already existed.</param>
+    /// <returns></returns>
+    public static bool TryAddComponent<T>(this GameObject gameObject, out T component) where T : Component
+    {
+        component = gameObject.GetComponent<T>();
+        if (component != null)
+        {
+            return false;
+        }
+        component = gameObject.AddComponent<T>();
+        return true;
+    }
 
-	public static T EnsureComponent<T>(this GameObject gameObject) where T : Component
-	{
-		var component = gameObject.GetComponent<T>();
-		if (component == null)
-		{
-			component = gameObject.AddComponent<T>();
-		}
-		return component;
-	}
+    public static T EnsureComponent<T>(this GameObject gameObject) where T : Component
+    {
+        var component = gameObject.GetComponent<T>();
+        if (component == null)
+        {
+            component = gameObject.AddComponent<T>();
+        }
+        return component;
+    }
 
-	public static T EnsureComponent<T>(this Transform transform) where T : Component
-	{
-		return transform.gameObject.EnsureComponent<T>();
-	}
+    public static T EnsureComponent<T>(this Transform transform) where T : Component
+    {
+        return transform.gameObject.EnsureComponent<T>();
+    }
 }

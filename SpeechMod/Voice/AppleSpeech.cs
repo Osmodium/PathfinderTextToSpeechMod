@@ -51,6 +51,11 @@ public class AppleSpeech : ISpeech
         AppleVoiceUnity.SpeakDialog(text, delay);
     }
 
+    public void SpeakAs(string text, VoiceType voiceType, float delay = 0)
+    {
+        SpeakPreview(text, voiceType);
+    }
+
     public void Speak(string text, float delay)
     {
         if (string.IsNullOrEmpty(text))

@@ -61,6 +61,16 @@ public static class MenuGUI
 
         GUILayout.EndVertical();
 
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Show playback button of dialog answers", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.ShowPlaybackOfDialogAnswers = GUILayout.Toggle(Main.Settings.ShowPlaybackOfDialogAnswers, "Enabled");
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);
 
         GUILayout.BeginVertical("", GUI.skin.box);
@@ -88,7 +98,7 @@ public static class MenuGUI
         GUILayout.Label("Phonetic dictionary", GUILayout.ExpandWidth(false));
         GUILayout.Space(10);
         if (GUILayout.Button("Reload", GUILayout.ExpandWidth(false)))
-            SpeechExtensions.LoadDictionary();
+            PhoneticDictionary.LoadDictionary();
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();

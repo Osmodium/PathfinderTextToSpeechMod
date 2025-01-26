@@ -61,7 +61,7 @@ public static class Main
         if (!SetAvailableVoices())
             return false;
 
-        SpeechExtensions.LoadDictionary();
+        PhoneticDictionary.LoadDictionary();
 
         Debug.Log("Speech Mod Initialized!");
         m_Loaded = true;
