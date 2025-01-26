@@ -8,7 +8,6 @@ using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
 using System.Text.RegularExpressions;
 using Owlcat.Runtime.UI.Controls.Button;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

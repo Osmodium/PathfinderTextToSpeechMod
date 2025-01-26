@@ -8,7 +8,6 @@ using SpeechMod.Configuration.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SpeechMod.Localization;
 using static UnityModManagerNet.UnityModManager;
 
 namespace SpeechMod.Configuration;
@@ -27,7 +26,6 @@ public class ModConfigurationManager
         Instance.HarmonyInstance = harmonyInstance;
         Instance.ModEntry = modEntry;
         Instance.SettingsPrefix = settingsPrefix;
-        //ModLocalizationManager.Init();
     }
 
     private bool Initialized = false;
