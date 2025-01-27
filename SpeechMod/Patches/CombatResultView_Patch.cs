@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Kingmaker;
 using Kingmaker.UI.MVVM._PCView.Crusade.CombatResult;
 using SpeechMod.Unity.Extensions;
 using UnityEngine;

@@ -16,7 +16,8 @@ public static class ButtonFactory
 
     private const string ARROW_BUTTON_PATH = "NestedCanvas1/DialogPCView/Body/View/Scroll View/ButtonEdge";
     private const string ARROW_BUTTON_MAP_PATH = "CombatLog_New/Panel/ButtonEdge";
-    private const string MIRROR_STATIC_CANVAS_PATH = "BookEventView/ContentWrapper/Window/Mirror/Mirror";
+    private const string MIRROR_MAP_PATH = "BookEventView/ContentWrapper/Window/Mirror/Mirror";
+    private const string MIRROR_STATIC_CANVAS_PATH = "NestedCanvas1/BookEventPCView/ContentWrapper/Window/Mirror/Mirror";
 
     public static GameObject CreatePlayButton(Transform parent, UnityAction call)
     {
@@ -30,29 +31,15 @@ public static class ButtonFactory
         if (UIUtility.IsGlobalMap())
         {
             arrowButton = UIHelper.TryFindInStaticCanvas(ARROW_BUTTON_MAP_PATH)?.gameObject;
-            var mirror = UIHelper.TryFindInStaticCanvas(MIRROR_STATIC_CANVAS_PATH);
-            if (mirror != null)
-            {
-                var image = mirror.GetComponent<Image>();
-                if (image != null)
-                {
-                    image.raycastTarget = false;
-                }
-                else
-                {
-                    Debug.LogWarning("Image component not found in Mirror!");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Mirror not found in GlobalMap Static Canvas!");
-            }
+            var mirror = UIHelper.TryFindInStaticCanvas(MIRROR_MAP_PATH);
+            FixMirrorRaycastTarget(mirror);
         }
         else
         {
             arrowButton = UIHelper.TryFindInStaticCanvas(ARROW_BUTTON_PATH)?.gameObject;
+            var mirror = UIHelper.TryFindInStaticCanvas(MIRROR_STATIC_CANVAS_PATH);
+            FixMirrorRaycastTarget(mirror);
         }
-
 
         if (arrowButton == null)
             return null;
@@ -61,6 +48,26 @@ public static class ButtonFactory
         SetupOwlcatButton(buttonGameObject, call, text, toolTip);
 
         return buttonGameObject;
+    }
+
+    private static void FixMirrorRaycastTarget(Transform mirror)
+    {
+        if (mirror != null)
+        {
+            var image = mirror.GetComponent<Image>();
+            if (image != null)
+            {
+                image.raycastTarget = false;
+            }
+            else
+            {
+                Debug.LogWarning("Image component not found in Mirror!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Mirror not found in GlobalMap Static Canvas!");
+        }
     }
 
     private static void SetupOwlcatButton(GameObject buttonGameObject, UnityAction call, string text, string toolTip)
