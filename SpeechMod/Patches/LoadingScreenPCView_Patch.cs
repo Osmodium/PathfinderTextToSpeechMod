@@ -1,6 +1,9 @@
 ﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.LoadingScreen;
 using SpeechMod.Unity.Extensions;
+#if DEBUG
+using UnityEngine;
+#endif
 
 namespace SpeechMod.Patches;
 
