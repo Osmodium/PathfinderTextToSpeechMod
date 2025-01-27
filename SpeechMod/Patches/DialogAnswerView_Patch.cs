@@ -7,7 +7,6 @@ using SpeechMod.Unity;
 using SpeechMod.Unity.Extensions;
 using SpeechMod.Voice;
 using System.Text.RegularExpressions;
-using Kingmaker.UI.Common;
 using Owlcat.Runtime.UI.Controls.Button;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,9 +72,12 @@ public static class DialogAnswerView_Patch
 
             text = text.PrepareText();
 
-            var voiceType = UIUtility.IsGlobalMap() ? VoiceType.Narrator :
-                Game.Instance?.Player.MainCharacter.Value?.Gender == Gender.Female ? VoiceType.Female :
-                VoiceType.Male;
+            var voiceType = Game.Instance.DialogController.CurrentSpeaker?.Gender switch
+            {
+                Gender.Female => VoiceType.Female,
+                Gender.Male => VoiceType.Male,
+                _ => VoiceType.Narrator
+            };
 
             Main.Speech.SpeakAs(text, voiceType);
         });
