@@ -11,9 +11,12 @@ Version: 1.1.1
 - [How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
 - [How to use Natural voices in Windows 10/11](https://www.nexusmods.com/warhammer40kroguetrader/articles/7)
 
-How to use natural voices.
+### How to use natural voices:
+
 Install this application: [NaturalVoiceSAPIAdapter](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
+
 Known issue: If the mod is not showing in the mod manager, it might be due to installing "All supported languages". Try uninstalling and installing using the setting "Follow user's preferred languages".
+
 Disclaimer: I do NOT intend to support issues related to the NaturalVoicesSAPIAdapter application. If it looks like it is an issue with the WindowsVoice dll, I'll have a look at it.
 
 ### How to install
@@ -108,7 +111,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - **Show playback button of dialog answers**: Display a playback button next to the dialog answers, left-click it to play the dialog line.
 - **Include dialog answer number in playback**: When playing the dialog answer, include the respective number.
 - **Color answer on hover**: Colorizes the background of the dialog answer for clearer indication that it is not being chosen, but played back.
-- **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
+- **Enable color on text hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing. (Note that the keys are now regex enabled, so it might need an update if you use this)
 
