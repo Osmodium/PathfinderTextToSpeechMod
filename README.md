@@ -11,6 +11,11 @@ Version: 1.1.1
 - [How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
 - [How to use Natural voices in Windows 10/11](https://www.nexusmods.com/warhammer40kroguetrader/articles/7)
 
+How to use natural voices.
+Install this application: [NaturalVoiceSAPIAdapter](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
+Known issue: If the mod is not showing in the mod manager, it might be due to installing "All supported languages". Try uninstalling and installing using the setting "Follow user's preferred languages".
+Disclaimer: I do NOT intend to support issues related to the NaturalVoicesSAPIAdapter application. If it looks like it is an issue with the WindowsVoice dll, I'll have a look at it.
+
 ### How to install
 
  1. Download and install Unity Mod Manager, make sure it is at least version 0.23.0 (I use 0.23.3)
@@ -100,11 +105,14 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*, hope this speaks for itself.
 - **Auto play dialog**: When enabled, dialogs will be played automatically when theres no voice acted dialog.
 - **Auto play ignores voiced dialog lines**: Only available when using auto play dialog. This option makes the auto play ignore when there is voiced dialog, remember to turn dialog off in the settings.
+- **Show playback button of dialog answers**: Display a playback button next to the dialog answers, left-click it to play the dialog line.
+- **Include dialog answer number in playback**: When playing the dialog answer, include the respective number.
+- **Color answer on hover**: Colorizes the background of the dialog answer for clearer indication that it is not being chosen, but played back.
 - **Enable color on hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
 - **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
-- **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing.
+- **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing. (Note that the keys are now regex enabled, so it might need an update if you use this)
 
-![Settings for SpeechMod](https://dashvoid.com/speechmod/wrath/settings_1_0_9.png)
+![Settings for SpeechMod](https://dashvoid.com/speechmod/wrath/settings_1_1_1.png)
 
 ### Motivation
 *Why did I create this mod?*
@@ -118,5 +126,6 @@ Also feel free to hit me up with ideas, issues and PRs on GitHub or NexusMods :)
 ### Acknowledgments
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
 - [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support macOS, and various exploration work.
-- Pathfinder Wrath of The Righteous Discord channel members
+- [gexgd0419](https://github.com/gexgd0419) for his work on the [NaturalVoiceSAPIAdapter](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
+- Owlcat Discord channel members
 - Join the [Discord](https://discord.gg/EFWq7rJFNN)
