@@ -3,6 +3,10 @@ using Kingmaker.UI.MVVM._PCView.Crusade.CombatResult;
 using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
+#if DEBUG
+using Kingmaker;
+#endif
+
 namespace SpeechMod.Patches;
 
 [HarmonyPatch(typeof(CombatResultPCView), "BindViewImplementation")]

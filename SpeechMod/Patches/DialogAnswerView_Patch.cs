@@ -41,6 +41,11 @@ public static class DialogAnswerView_Patch
 #endif
 
         var playButtonGameObject = transform?.Find(ButtonFactory.DIALOG_ANSWER_BUTTON_NAME)?.gameObject;
+        var arrowTextureTransform = instance.transform.TryFind(DIALOG_ANSWER_ARROW_TEXTURE_PATH);
+
+        Image arrowImage = null;
+        if(arrowTextureTransform)
+            arrowImage = arrowTextureTransform.GetComponent<Image>();
 
         // 1. Check if the setting for showing the playback button is enabled.
         if (!Main.Settings.ShowPlaybackOfDialogAnswers)
@@ -48,6 +53,10 @@ public static class DialogAnswerView_Patch
             // 1a. Destroy the button if it exists.
             if (playButtonGameObject != null)
                 Object.Destroy(playButtonGameObject);
+            // 1b. Re-enabled the arrow texture if it exists.
+            if (arrowImage != null)
+                arrowImage.enabled = true;
+
             return;
         }
 
@@ -99,12 +108,9 @@ public static class DialogAnswerView_Patch
         playButtonGameObject.RectAlignMiddleLeft(new Vector2(-18f, -12f));
         playButtonGameObject.SetActive(true);
 
-        //4. Remove the texture that indicates the hover state
-        var arrowTextureTransform = instance.transform.TryFind(DIALOG_ANSWER_ARROW_TEXTURE_PATH);
-        if (arrowTextureTransform)
-        {
-            Object.Destroy(arrowTextureTransform.gameObject);
-        }
+        //4. Disable the arrow image
+        if (arrowImage != null)
+            arrowImage.enabled = false;
     }
 
     private static void SetDialogAnswerColorHover(GameObject playButtonGameObject, DialogAnswerView instance)

@@ -50,11 +50,11 @@ public static class Hooks
 
         foreach (var textMeshPro in textMeshPros)
         {
-            textMeshPro.HookupTextToSpeech(force);
+            textMeshPro.HookupTextToSpeech(null, force);
         }
     }
 
-    public static void HookupTextToSpeech(this TextMeshProUGUI textMeshPro, bool force = false)
+    public static void HookupTextToSpeech(this TextMeshProUGUI textMeshPro, string textOverride = null, bool force = false)
     {
         if (textMeshPro == null)
         {
@@ -103,8 +103,7 @@ public static class Hooks
                     {
                         if (Main.Settings.FontStyles[i])
                         {
-                            textMeshPro.fontStyle ^=
-                                (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames![i]!, true);
+                            textMeshPro.fontStyle ^= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames![i]!, true);
                         }
                     }
 
@@ -134,7 +133,7 @@ public static class Hooks
             {
                 if (clickEvent?.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
                 {
-                    Main.Speech?.Speak(textMeshPro.text);
+                    Main.Speech?.Speak(string.IsNullOrWhiteSpace(textOverride) ? textMeshPro.text : textOverride);
                 }
             }
         ).AddTo(hookData.Disposables);

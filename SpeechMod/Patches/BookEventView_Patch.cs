@@ -4,6 +4,10 @@ using Kingmaker.UI.MVVM._PCView.Dialog.Dialog;
 using SpeechMod.Unity.Extensions;
 using UnityEngine;
 
+#if DEBUG
+using Kingmaker;
+#endif
+
 namespace SpeechMod.Patches;
 
 [HarmonyPatch(typeof(BookEventView<DialogAnswerPCView>), "SetCues")]
