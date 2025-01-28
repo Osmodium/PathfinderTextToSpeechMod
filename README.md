@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
-Version: 1.1.1
+Version: 1.1.2
 
 **Disclaimer: Works on Windows and macOS only**
 
@@ -91,7 +91,19 @@ When inspecting a character, the story of that character is displayed both under
 
 ![Stories give companions depth.](https://dashvoid.com/speechmod/wrath/story_1_0_4.png)
 
+#### 11) Loading screen hints
+When loading the loading screen hint can be played back.
+
+![Get some great advice from the loading screen.](https://dashvoid.com/speechmod/wrath/loading_message.png)
+
 ### Settings
+
+New keybind setting in the game menu under "Sound" to stop playback.
+![Assign keybind(s) to stopping of playback](https://dashvoid.com/speechmod/wrath/keybind_stop_playback.png)
+
+If enabled in the mod-settings, a notification will be shown when stopping the playback through use of the keybind.
+
+![Notification showing that the playback has stopped](https://dashvoid.com/speechmod/wrath/playback_stopped_info.png)
 
 The different settings (available through *ctrl+f10* if not overridden in the UMM) for SpeechMod
 - **Narrator Voice**: The settings for the voice used for either all or non-gender specific text in dialogs when *Use gender specific voices* is turned on.

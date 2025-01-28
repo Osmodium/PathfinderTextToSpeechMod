@@ -81,12 +81,9 @@ public static class DialogAnswerView_Patch
 
             text = text.PrepareText();
 
-            var voiceType = Game.Instance.DialogController.CurrentSpeaker?.Gender switch
-            {
-                Gender.Female => VoiceType.Female,
-                Gender.Male => VoiceType.Male,
-                _ => VoiceType.Narrator
-            };
+            var voiceType = VoiceType.Narrator;
+            if (Game.Instance.DialogController.FirstSpeaker != null) // If we are speaking to a character
+                voiceType = Game.Instance.Player.MainCharacter.Value.Gender == Gender.Female ? VoiceType.Female : VoiceType.Male;
 
             Main.Speech.SpeakAs(text, voiceType);
         });
