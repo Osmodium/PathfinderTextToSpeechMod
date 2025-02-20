@@ -21,10 +21,9 @@ public static class ElevenLabsGateway
     {
         try
         {
-            Debug.Log("Http Client");
+            Debug.Log($"using API key: {Main.VoiceSettings.ApiKey}");
             using var client = new HttpClient();
 
-            Debug.Log("Json");
             var json = new
             {
                 text = req.Text,
@@ -40,9 +39,6 @@ public static class ElevenLabsGateway
                 }
             };
 
-            Debug.Log(JsonConvert.SerializeObject(json));
-
-            Debug.Log("Headers");
             client.DefaultRequestHeaders.Add("xi-api-key", Main.VoiceSettings.ApiKey);
 
             var content = new StringContent(JsonConvert.SerializeObject(json), Encoding.UTF8, "application/json");

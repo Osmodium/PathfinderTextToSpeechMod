@@ -132,7 +132,7 @@ public static class Main
                 break;
             case RuntimePlatform.WindowsPlayer:
                 Speech = new WindowsSpeech();
-                SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
+                //SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
                 break;
             default:
                 Logger.Critical($"SpeechMod is not supported on {Application.platform}!");

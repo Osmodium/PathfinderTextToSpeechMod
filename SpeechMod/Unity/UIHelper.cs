@@ -2,6 +2,8 @@
 using Kingmaker.UI.Common;
 using System;
 using System.Collections;
+using System.Security.Cryptography;
+using Kingmaker.Blueprints;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;
@@ -88,44 +90,40 @@ public static class UIHelper
 
         if (skipEventAssignment)
         {
-#if DEBUG
-            Debug.Log("Skipping event assignment!");
-#endif
             return;
         }
 
-        textMeshPro.OnPointerEnterAsObservable().Subscribe(
-            _ =>
+        textMeshPro.OnPointerEnterAsObservable().Subscribe(_ =>
             {
-                if (Main.Settings.FontStyleOnHover)
-                {
-                    for (int i = 0; i < Main.Settings.FontStyles.Length; i++)
-                    {
-                        if (Main.Settings.FontStyles[i])
-                            textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames[i], true);
-                    }
-                }
-
                 if (Main.Settings.ColorOnHover)
                     textMeshPro.color = m_HoverColor;
+
+                if (!Main.Settings.FontStyleOnHover) return;
+
+                for (var i = 0; i < Main.Settings.FontStyles.Length; i++)
+                {
+                    if (!Main.Settings.FontStyles[i]) continue;
+                    textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames[i], true);
+                }
             }
         );
 
-        textMeshPro.OnPointerExitAsObservable().Subscribe(
-            _ =>
-            {
-                textMeshPro.fontStyle = defaultValues.FontStyles;
-                textMeshPro.color = defaultValues.Color;
-            }
-        );
+        textMeshPro.OnPointerExitAsObservable().Subscribe(_ =>
+        {
+            textMeshPro.fontStyle = defaultValues.FontStyles;
+            textMeshPro.color = defaultValues.Color;
+        });
 
-        textMeshPro.OnPointerClickAsObservable().Subscribe(
-            clickEvent =>
-            {
-                if (clickEvent.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
-                    Main.Speech.Speak(textMeshPro.text);
-            }
-        );
+        textMeshPro.OnPointerClickAsObservable().Subscribe(clickEvent =>
+        {
+            if (clickEvent.button != UnityEngine.EventSystems.PointerEventData.InputButton.Left) return;
+            
+            Main.WaveOutEvent?.Stop();
+            using var md5 = MD5.Create();
+            var inputBytes = System.Text.Encoding.ASCII.GetBytes(textMeshPro.text);
+            var guid = new Guid(md5.ComputeHash(inputBytes));
+            _ = VoicePlayer.PlayText(textMeshPro.text, guid.ToString(), Gender.Female, "narrator");
+        });
     }
 
     //------------Top-------------------
@@ -228,6 +226,7 @@ public static class UIHelper
     {
         trans.localScale = new Vector3(1, 1, 1);
     }
+
     public static void SetPivotAndAnchors(this RectTransform trans, Vector2 aVec)
     {
         trans.pivot = aVec;
@@ -239,10 +238,12 @@ public static class UIHelper
     {
         return trans.rect.size;
     }
+
     public static float GetWidth(this RectTransform trans)
     {
         return trans.rect.width;
     }
+
     public static float GetHeight(this RectTransform trans)
     {
         return trans.rect.height;
@@ -340,6 +341,7 @@ public static class UIHelper
             transform = transform.parent;
             path = transform.name + "/" + path;
         }
+
         return path;
     }
 }

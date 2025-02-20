@@ -102,7 +102,7 @@ public class WindowsSpeech : ISpeech
                 throw new ArgumentOutOfRangeException(nameof(voiceType), voiceType, null);
         }
 
-        WindowsVoiceUnity.Speak(text, Length(text));
+        //WindowsVoiceUnity.Speak(text, Length(text));
     }
 
     public string PrepareSpeechText(string text)
@@ -158,7 +158,7 @@ public class WindowsSpeech : ISpeech
 
         text = PrepareDialogText(text);
 
-        WindowsVoiceUnity.Speak(text, Length(text), delay);
+        //WindowsVoiceUnity.Speak(text, Length(text), delay);
     }
 
     public void Speak(string text, float delay = 0f)
@@ -171,21 +171,23 @@ public class WindowsSpeech : ISpeech
 
         text = PrepareSpeechText(text);
 
-        WindowsVoiceUnity.Speak(text, Length(text), delay);
+        //WindowsVoiceUnity.Speak(text, Length(text), delay);
     }
 
     public void Stop()
     {
-        WindowsVoiceUnity.Stop();
+        //WindowsVoiceUnity.Stop();
     }
 
     public string[] GetAvailableVoices()
     {
-        return WindowsVoiceUnity.GetAvailableVoices();
+       // return WindowsVoiceUnity.GetAvailableVoices();
+       return new[] { "WindowsVoice" };
     }
 
     public string GetStatusMessage()
     {
-        return WindowsVoiceUnity.GetStatusMessage();
+        //return WindowsVoiceUnity.GetStatusMessage();
+        return "WindowsVoice";
     }
 }

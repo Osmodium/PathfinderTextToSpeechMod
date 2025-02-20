@@ -10,6 +10,10 @@
 		<RootNamespace>SpeechMod</RootNamespace>
 		<PathfinderWOTRData>$(LocalAppData)Low\Owlcat Games\Pathfinder Wrath Of The Righteous</PathfinderWOTRData>
 	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+	  <OutputPath>F:\SteamLibrary\steamapps\common\Pathfinder Second Adventure\Mods\SpeechMod</OutputPath>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="System.Net.Http" />
 		<Reference Include="0Harmony">
@@ -65,6 +69,9 @@
 		<None Include="Info.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
 		<None Include="PhoneticDictionary.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
 		<None Update="mp3\do_not_delete.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="settings.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

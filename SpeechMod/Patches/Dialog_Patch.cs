@@ -24,46 +24,19 @@ public static class Dialog_Patch
     {
         try
         {
-            var id = Game.Instance?.DialogController?.CurrentCue.Text.Key;
+            Main.WaveOutEvent?.Stop();
+
+            var key = Game.Instance?.DialogController?.CurrentCue.Text.Key;
             var speaker = Game.Instance?.DialogController?.CurrentSpeakerName;
             var gender = Game.Instance?.DialogController?.CurrentSpeaker?.Gender ?? Gender.Female;
 
             var fileExists = false;
             var fullPath = "";
 
-            if (!string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(id, false)))
+            if (!string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(key, false)))
                 return;
 
-            try
-            {
-                fullPath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), $@"{Main.VoiceSettings.AudioSavePath}\{id}.mp3");
-                fileExists = System.IO.File.Exists(fullPath);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            if (fileExists)
-            {
-                await VoicePlayer.PlayExistingMp3(fullPath);
-            }
-            else
-            {
-                var (finalName, textForVoice) = TextParser.MakeTextForVoice(Game.Instance?.DialogController?.CurrentCue?.DisplayText, speaker);
-                var voice = Main.VoiceSettings.GetVoice(finalName, gender);
-                ElevenReq req = new()
-                {
-                    ModelID = Main.VoiceSettings.Model,
-                    Text = textForVoice,
-                    Voice = voice
-                };
-       
-                var stream = await ElevenLabsGateway.CreateStream(req);
-
-                if (stream != null)
-                    await VoicePlayer.PlayStream(stream, id);
-            }
+            await VoicePlayer.PlayText(Game.Instance?.DialogController?.CurrentCue?.DisplayText, key, gender, speaker);
         }
         catch (Exception e)
         {

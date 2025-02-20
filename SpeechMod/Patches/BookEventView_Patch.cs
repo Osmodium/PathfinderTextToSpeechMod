@@ -18,12 +18,7 @@ public static class BookEventView_Patch
         if (!Main.Enabled)
             return;
 
-#if DEBUG
-        var sceneName = Game.Instance.CurrentlyLoadedArea.ActiveUIScene.SceneName;
-        Debug.Log($"{nameof(BookEventView<DialogAnswerPCView>)}_SetCues_Postfix @ {sceneName}");
-#endif
-
-        Transform cuesBlock = UIHelper.TryFindInStaticCanvas(CANVAS_CUES_BLOCK_PATH, GLOBALMAP_CUES_BLOCK_PATH);
+        var cuesBlock = UIHelper.TryFindInStaticCanvas(CANVAS_CUES_BLOCK_PATH, GLOBALMAP_CUES_BLOCK_PATH);
 
         if (cuesBlock == null)
         {
