@@ -1,5 +1,8 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Security.Cryptography;
+using HarmonyLib;
 using Kingmaker;
+using Kingmaker.Blueprints;
 using Kingmaker.UI;
 using SpeechMod.Unity;
 using UnityEngine;
@@ -41,7 +44,12 @@ public static class StaticCanvas_Patch
 
         var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
         {
-            Main.Speech.SpeakDialog(Game.Instance?.DialogController?.CurrentCue?.DisplayText);
+            var text = Game.Instance?.DialogController?.CurrentCue?.DisplayText ?? string.Empty;
+            Main.WaveOutEvent?.Stop();
+            using var md5 = MD5.Create();
+            var inputBytes = System.Text.Encoding.ASCII.GetBytes(text);
+            var guid = new Guid(md5.ComputeHash(inputBytes));
+            _ = VoicePlayer.PlayText(text, guid.ToString(), Gender.Female, "narrator");
         });
 
         buttonGameObject.name = "SpeechButton";
