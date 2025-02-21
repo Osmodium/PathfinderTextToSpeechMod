@@ -13,7 +13,7 @@ namespace SpeechMod.Unity;
 
 public static class UIHelper
 {
-    private static Color m_HoverColor = Color.blue;
+    private static Color m_HoverColor = new(0f, 0f, 0f, 1);
 
     public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
     {
@@ -24,11 +24,6 @@ public static class UIHelper
     {
         yield return new WaitForSeconds(delay);
         action?.Invoke();
-    }
-
-    public static void UpdateHoverColor()
-    {
-        m_HoverColor = new Color(Main.Settings.HoverColorR, Main.Settings.HoverColorG, Main.Settings.HoverColorB, Main.Settings.HoverColorA);
     }
 
     public static Transform GetParentRecursive(this Transform transform, string name)
@@ -95,16 +90,15 @@ public static class UIHelper
 
         textMeshPro.OnPointerEnterAsObservable().Subscribe(_ =>
             {
-                if (Main.Settings.ColorOnHover)
-                    textMeshPro.color = m_HoverColor;
+              textMeshPro.color = m_HoverColor;
+              
+              bool[] fontStyles = [false, false, false, true, false, false, false, false, false, false, false];
 
-                if (!Main.Settings.FontStyleOnHover) return;
-
-                for (var i = 0; i < Main.Settings.FontStyles.Length; i++)
-                {
-                    if (!Main.Settings.FontStyles[i]) continue;
-                    textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames[i], true);
-                }
+              for (var i = 0; i < fontStyles.Length; i++)
+              {
+                  if (!fontStyles[i]) continue;
+                  textMeshPro.fontStyle |= (FontStyles)Enum.Parse(typeof(FontStyles), Main.FontStyleNames[i], true);
+              }
             }
         );
 

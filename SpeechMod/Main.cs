@@ -18,23 +18,11 @@ namespace SpeechMod;
 public static class Main
 {
     public static UnityModManager.ModEntry.ModLogger Logger;
-    public static Settings Settings;
+    //public static Settings Settings;
     public static WaveOutEvent WaveOutEvent = new();
     public static VoiceSettings VoiceSettings;
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
-
-    public static string NarratorVoice => VoicesDict?.ElementAtOrDefault(Settings.NarratorVoice).Key;
-    public static string FemaleVoice => VoicesDict?.ElementAtOrDefault(Settings.FemaleVoice).Key;
-    public static string MaleVoice => VoicesDict?.ElementAtOrDefault(Settings.MaleVoice).Key;
-
-    public static Dictionary<string, string> VoicesDict => Settings?.AvailableVoices?.Select(v =>
-    {
-        var splitV = v?.Split('#');
-        return splitV.Length != 2
-            ? new { Key = v, Value = "Unknown" }
-            : new { Key = splitV[0], Value = splitV[1] };
-    }).ToDictionary(p => p.Key, p => p.Value);
 
     //public static ISpeech Speech;
     private static bool m_Loaded = false;
@@ -46,7 +34,7 @@ public static class Main
 
         Logger = modEntry.Logger;
 
-        Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
+        //Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
 
         var harmony = new Harmony(modEntry.Info.Id);
         harmony.PatchAll(Assembly.GetExecutingAssembly());
