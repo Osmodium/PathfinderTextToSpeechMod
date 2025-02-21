@@ -128,7 +128,7 @@ public static class Main
         {
             case RuntimePlatform.OSXPlayer:
                 Speech = new AppleSpeech();
-                SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
+                //SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
                 break;
             case RuntimePlatform.WindowsPlayer:
                 Speech = new WindowsSpeech();

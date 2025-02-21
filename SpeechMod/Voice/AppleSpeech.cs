@@ -30,7 +30,7 @@ public class AppleSpeech : ISpeech
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
-        AppleVoiceUnity.Speak(text);
+      //  AppleVoiceUnity.Speak(text);
     }
 
     public void SpeakDialog(string text, float delay = 0f)
@@ -48,7 +48,7 @@ public class AppleSpeech : ISpeech
         }
 
         text = text.PrepareText();
-        AppleVoiceUnity.SpeakDialog(text, delay);
+        //AppleVoiceUnity.SpeakDialog(text, delay);
     }
 
     public void Speak(string text, float delay)
@@ -62,12 +62,12 @@ public class AppleSpeech : ISpeech
         text = text.PrepareText();
         text = new Regex("<[^>]+>").Replace(text, "");
         text = $"-v {Main.NarratorVoice} -r {Main.Settings.NarratorRate} {text.Replace("\"", "")}";
-        AppleVoiceUnity.Speak(text, delay);
+        //AppleVoiceUnity.Speak(text, delay);
     }
 
     public void Stop()
     {
-        AppleVoiceUnity.Stop();
+       // AppleVoiceUnity.Stop();
     }
 
     public string[] GetAvailableVoices()
