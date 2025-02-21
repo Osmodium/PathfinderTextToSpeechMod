@@ -46,22 +46,10 @@ public static class Main
 
         Logger = modEntry.Logger;
 
-        if (!SetSpeech())
-            return false;
-
         Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
-        //MenuGUI.UpdateColors();
-
-        modEntry.OnGUI = OnGui;
-        modEntry.OnSaveGUI = OnSaveGui;
 
         var harmony = new Harmony(modEntry.Info.Id);
         harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-        //ogger.Log(Speech.GetStatusMessage());
-
-        // if (!SetAvailableVoices())
-        //   return false;
 
         SpeechExtensions.LoadDictionary();
 
@@ -70,35 +58,4 @@ public static class Main
         return true;
     }
 
-    private static bool SetSpeech()
-    {
-        switch (Application.platform)
-        {
-            case RuntimePlatform.OSXPlayer:
-                //Speech = new AppleSpeech();
-                //SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
-                break;
-            case RuntimePlatform.WindowsPlayer:
-                //Speech = new WindowsSpeech();
-                //SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
-                break;
-            default:
-                Logger.Critical($"SpeechMod is not supported on {Application.platform}!");
-                return false;
-        }
-
-        return true;
-    }
-
-    private static void OnGui(UnityModManager.ModEntry modEntry)
-    {
-        /*if (m_Loaded)*/
-            //MenuGUI.OnGui();
-    }
-
-    private static void OnSaveGui(UnityModManager.ModEntry modEntry)
-    {
-       // MenuGUI.UpdateColors();
-        Settings.Save(modEntry);
-    }
 }
