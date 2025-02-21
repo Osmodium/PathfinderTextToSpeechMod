@@ -45,11 +45,10 @@ public static class StaticCanvas_Patch
         var buttonGameObject = ButtonFactory.CreatePlayButton(parent, () =>
         {
             var text = Game.Instance?.DialogController?.CurrentCue?.DisplayText ?? string.Empty;
-            Main.WaveOutEvent?.Stop();
-            using var md5 = MD5.Create();
-            var inputBytes = System.Text.Encoding.ASCII.GetBytes(text);
-            var guid = new Guid(md5.ComputeHash(inputBytes));
-            _ = VoicePlayer.PlayText(text, guid.ToString(), Gender.Female, "narrator");
+            var speaker = Game.Instance?.DialogController?.CurrentSpeakerName;
+            var gender = Game.Instance?.DialogController?.CurrentSpeaker?.Gender ?? Gender.Female;
+            var key = Game.Instance?.DialogController?.CurrentCue?.Text?.Key ?? string.Empty;
+            _ = VoicePlayer.PlayText(text, key, gender, speaker);
         });
 
         buttonGameObject.name = "SpeechButton";
