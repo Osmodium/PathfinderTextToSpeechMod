@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using SpeechMod.Unity;
-using SpeechMod.Voice;
 using System;
 using System.Collections.Generic;
 using System.Linq;

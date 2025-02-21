@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Security.Cryptography;
 using Kingmaker.Blueprints;
+using SpeechMod.voice;
 using TMPro;
 using UniRx;
 using UniRx.Triggers;

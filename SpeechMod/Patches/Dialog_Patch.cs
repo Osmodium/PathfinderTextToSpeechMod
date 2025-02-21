@@ -6,6 +6,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Localization;
 using Kingmaker.UI.MVVM._VM.Dialog.Dialog;
 using SpeechMod.ElevenLabs;
+using SpeechMod.voice;
 #if DEBUG
 using UnityEngine;
 #endif

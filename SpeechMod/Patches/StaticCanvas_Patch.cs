@@ -5,6 +5,7 @@ using Kingmaker;
 using Kingmaker.Blueprints;
 using Kingmaker.UI;
 using SpeechMod.Unity;
+using SpeechMod.voice;
 using UnityEngine;
 
 namespace SpeechMod.Patches;

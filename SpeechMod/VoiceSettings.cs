@@ -9,6 +9,7 @@ namespace SpeechMod;
 
 public class VoiceSettings
 {
+  public int MinChars { get; set; }
   public bool Enabled { get; set; }
   public double Stability { get; set; }
   public double Style { get; set; }

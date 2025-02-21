@@ -5,6 +5,7 @@ using SpeechMod.Unity;
 using System.Linq;
 using System.Security.Cryptography;
 using Kingmaker.Blueprints;
+using SpeechMod.voice;
 using TMPro;
 using UnityEngine;
 

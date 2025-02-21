@@ -2,6 +2,7 @@
   "ApiKey": "",
   "GenericMaleVoices": [],
   "GenericFemaleVoices": [],
+  "MinChars": 20,
   "Stability": 0.95,
   "UseSpeakerBoost": true,
   "Model": "eleven_flash_v2_5",
