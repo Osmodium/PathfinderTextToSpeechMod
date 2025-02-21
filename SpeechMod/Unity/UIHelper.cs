@@ -13,8 +13,6 @@ namespace SpeechMod.Unity;
 
 public static class UIHelper
 {
-    private static Color m_HoverColor = new(0f, 0f, 0f, 1);
-
     public static Coroutine ExecuteLater(this MonoBehaviour behaviour, float delay, Action action)
     {
         return behaviour.StartCoroutine(InternalExecute(delay, action));
@@ -90,8 +88,6 @@ public static class UIHelper
 
         textMeshPro.OnPointerEnterAsObservable().Subscribe(_ =>
             {
-              textMeshPro.color = m_HoverColor;
-              
               bool[] fontStyles = [false, false, false, true, false, false, false, false, false, false, false];
 
               for (var i = 0; i < fontStyles.Length; i++)
