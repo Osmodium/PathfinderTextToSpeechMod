@@ -18,13 +18,11 @@ namespace SpeechMod;
 public static class Main
 {
     public static UnityModManager.ModEntry.ModLogger Logger;
-    //public static Settings Settings;
     public static WaveOutEvent WaveOutEvent = new();
     public static VoiceSettings VoiceSettings;
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
 
-    //public static ISpeech Speech;
     private static bool m_Loaded = false;
 
     private static bool Load(UnityModManager.ModEntry modEntry)
@@ -38,8 +36,6 @@ public static class Main
 
         var harmony = new Harmony(modEntry.Info.Id);
         harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-        SpeechExtensions.LoadDictionary();
 
         Debug.Log("Speech Mod Initialized!");
         m_Loaded = true;

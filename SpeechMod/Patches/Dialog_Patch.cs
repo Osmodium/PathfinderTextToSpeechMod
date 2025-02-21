@@ -22,6 +22,9 @@ public static class Dialog_Patch
 
     private static async Task RunPostfix()
     {
+        if (!Main.VoiceSettings.Enabled)
+            return;
+
         try
         {
             Main.WaveOutEvent?.Stop();
