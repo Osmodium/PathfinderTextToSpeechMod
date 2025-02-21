@@ -1,10 +1,7 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Kingmaker.UI.MVVM._PCView.ServiceWindows.Encyclopedia;
 using SpeechMod.Unity;
 using System.Linq;
-using System.Security.Cryptography;
-using Kingmaker.Blueprints;
 using TMPro;
 using UnityEngine;
 
@@ -76,13 +73,8 @@ public static class EncyclopediaPage_Patch
 #endif
             button = ButtonFactory.CreatePlayButton(parent, () =>
             {
-                Main.WaveOutEvent?.Stop();
-                using var md5 = MD5.Create();
-                var inputBytes = System.Text.Encoding.ASCII.GetBytes(textMeshPro.text);
-                var guid = new Guid(md5.ComputeHash(inputBytes));
-                _ = VoicePlayer.PlayText(textMeshPro.text, guid.ToString(), Gender.Female, "narrator");
+                Main.Speech.Speak(textMeshPro.text);
             });
-            
             button.name = m_ButtonName;
             button.transform.localRotation = Quaternion.Euler(0, 0, 90);
             button.RectAlignTopLeft();
