@@ -12,7 +12,7 @@ static class TooltipEngine_Patch
 {
     public static void Postfix(ref MonoBehaviour __result)
     {
-        if (!Main.Enabled)
+        if (!Main.VoiceSettings.Enabled)
             return;
 
         if (__result == null)

@@ -9,6 +9,7 @@ namespace SpeechMod;
 
 public class VoiceSettings
 {
+  public bool Enabled { get; set; }
   public double Stability { get; set; }
   public double Style { get; set; }
   public bool UseSpeakerBoost { get; set; }

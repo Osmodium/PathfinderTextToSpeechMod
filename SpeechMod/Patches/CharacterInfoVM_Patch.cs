@@ -13,7 +13,7 @@ public static class CharacterInfoVM_Patch
 {
     public static void Postfix(CharInfoPageType pageType)
     {
-        if (!Main.Enabled)
+        if (!Main.VoiceSettings.Enabled)
             return;
 
 #if DEBUG

@@ -15,7 +15,7 @@ public static class BookEventView_Patch
 
     public static void Postfix()
     {
-        if (!Main.Enabled)
+        if (!Main.VoiceSettings.Enabled)
             return;
 
         var cuesBlock = UIHelper.TryFindInStaticCanvas(CANVAS_CUES_BLOCK_PATH, GLOBALMAP_CUES_BLOCK_PATH);

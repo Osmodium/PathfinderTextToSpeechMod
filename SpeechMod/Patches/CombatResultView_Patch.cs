@@ -11,7 +11,7 @@ public static class CombatResultView_Patch
 {
     public static void Postfix()
     {
-        if (!Main.Enabled)
+        if (!Main.VoiceSettings.Enabled)
             return;
 
 #if DEBUG
