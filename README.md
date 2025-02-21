@@ -19,8 +19,9 @@ Files are saved locally, so you can replay the game without additional cost (not
  2. Run Unity Mod Manger and set it up to find Pathfinder: Wrath of the Righteous (Second Adventure)
  3. Download the latest release of the mod from the [releases page]()
  4. Install the mod by dragging the zip file from step 3 into the Unity Mod Manager window under the Mods tab. Alternatively locate the zip file after clicking the "Install" button in Unity Mod Manager.
- 5. **IMPORTANT:** Fill in the `settings.json` file in the mod folder with the settings you want. (See below for more information)
-  
+ 5. Clone the voices you want to use in the game. (See below for more information) 
+ 6. **IMPORTANT:** Fill in the `settings.json` file in the mod folder with the settings you want. (See below for more information)
+
  *If running on OSX 64-bit you might need to use the *mono console.exe* command (see UMM documentation for further)
 
 ### Known issues / limitations
@@ -30,6 +31,7 @@ Files are saved locally, so you can replay the game without additional cost (not
 #### Limitations:
  - No stopping of playback yet.
  - Volume is based on the system volume, not the game volume.
+ - This mod is not compatible with the original SpeechMod. Use one or the other.
 
 #### Issues todo:
   - No support for chapter changes (although they seem to be narrated).
@@ -85,6 +87,8 @@ This array contains a list of [voice IDs](https://help.elevenlabs.io/hc/en-us/ar
 
 Note that adding an additional voice during a playthrough will affect which voice is selected for a character.
 
+For obvious reasons these voices will need to be cloned from samples not in the game, I've included mp3 files for various generic voices in the `samples` folder of this repository.
+
 Example:
 
 ```json
@@ -130,10 +134,14 @@ Example:
 
 - Download [WwiseUnpacker](https://github.com/Vextil/Wwise-Unpacker/releases/tag/1.0.3)
 - Unpack all voices in `Pathfinder Second Adventure\Wrath_Data\StreamingAssets\Audio\GeneratedSoundBanks\Windows\Packages`
-- map file id to character using `Pathfinder Second Adventure\Wrath_Data\StreamingAssets\Audio\GeneratedSoundBanks\Windows\SoundbanksInfo.xml`
+- Map file id to character using `Pathfinder Second Adventure\Wrath_Data\StreamingAssets\Audio\GeneratedSoundBanks\Windows\SoundbanksInfo.xml` by searching the xml file for the characters name.
 - Make an eleven labs instant clone using 2 or 3 voice samples
 - Fill out each characters voice id (or delete the character and it will use a generic fall back)
 
+<details>
+  <summary>Narrator voice Spoiler warning</summary>
+  Use audio files from areelu as the narrator.
+</details>
 
 #### 3) Dialog
 When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
