@@ -73,7 +73,7 @@ public static class JournalQuestObjective_Patch
                 using var md5 = MD5.Create();
                 var inputBytes = System.Text.Encoding.ASCII.GetBytes(text);
                 var guid = new Guid(md5.ComputeHash(inputBytes));
-                _ = VoicePlayer.PlayText(text, guid.ToString(), Gender.Female, "narrator");
+                _ = VoicePlayer.PlayText(text, guid.ToString(), Gender.Female, Constants.Narrator);
             });
             button.name = m_ButtonName;
             button.transform.localRotation = Quaternion.Euler(0, 0, 90);

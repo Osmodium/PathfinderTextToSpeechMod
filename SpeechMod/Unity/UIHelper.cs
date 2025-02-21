@@ -113,7 +113,7 @@ public static class UIHelper
             using var md5 = MD5.Create();
             var inputBytes = System.Text.Encoding.ASCII.GetBytes(textMeshPro.text);
             var guid = new Guid(md5.ComputeHash(inputBytes));
-            _ = VoicePlayer.PlayText(textMeshPro.text, guid.ToString(), Gender.Female, "narrator");
+            _ = VoicePlayer.PlayText(textMeshPro.text, guid.ToString(), Gender.Female, Constants.Narrator);
         });
     }
 

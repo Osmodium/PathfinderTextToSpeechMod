@@ -8,7 +8,7 @@ public static class TextParser
 {
   public static (string finalName, string text) MakeTextForVoice(string text, string name)
   {
-    if (name == "narrator")
+    if (name == Constants.Narrator)
       return (name, text);
 
     var (narratorValues, speakerValues) = SeparateNarratorAndSpeaker(text);
@@ -18,7 +18,7 @@ public static class TextParser
     var joinedSpeakerValues = string.Join("... ...", speakerValues); // ellipsis is for a pause when sent to the TTS
 
     return speakerValues.Count == 0
-      ? ("narrator", joinedNarratorValues) 
+      ? (Constants.Narrator, joinedNarratorValues) 
       : (name, joinedSpeakerValues);
   }
 

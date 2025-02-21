@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NAudio.Wave;
+using SpeechMod.voice;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
