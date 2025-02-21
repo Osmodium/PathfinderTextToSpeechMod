@@ -89,6 +89,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Properties\" />
+	  <Folder Include="Voice\" />
 	</ItemGroup>
 
 	<Target Name="GenerateCustomPropsFile" BeforeTargets="BeforeBuild" Condition="$(PathfinderWOTRInstallDir) == ''">
