@@ -96,7 +96,7 @@ public class VoicePlayer
       var (finalName, textForVoice) = TextParser.MakeTextForVoice(text, speaker);
       var voice = Main.VoiceSettings.GetVoice(finalName, gender);
       
-      if(text.Length < Main.VoiceSettings.MinChars)
+      if(textForVoice.Length < Main.VoiceSettings.MinChars)
         return;
       
       ElevenReq req = new()

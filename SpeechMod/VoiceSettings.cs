@@ -17,8 +17,8 @@ public class VoiceSettings
   public double SimilarityBoost { get; set; }
   public bool SaveAudio { get; set; }
   public string ApiKey { get; set; } = "";
-  public List<string> GenericMaleVoices { get; set; } = new();
-  public List<string> GenericFemaleVoices { get; set; } = new();
+  public List<string> GenericMaleVoices { get; set; } = [];
+  public List<string> GenericFemaleVoices { get; set; } = [];
   public string Model { get; set; } = "";
   public Dictionary<string, string> NamedCharacters { get; set; } = new();
   public string AudioSavePath { get; set; }
