@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Rewired;
 using SpeechMod.Configuration;
 using SpeechMod.Keybinds;
 using SpeechMod.Unity;
@@ -69,9 +70,23 @@ public static class Main
 
         PhoneticDictionary.LoadDictionary();
 
+        // For ReInput.players.AllPlayers : 
+        // 0 System, 1 MainPlayer
+        if (ReInput.players.allPlayerCount >= 1)
+        {
+            Rewired.Player p = ReInput.players.AllPlayers[1];
+
+            p.AddInputEventDelegate(doButtonWork, UpdateLoopType.Update, InputActionEventType.ButtonJustPressed, "Decline");
+        }
+
         Debug.Log("Pathfinder: Wrath of the Righteous Speech Mod Initialized!");
         m_Loaded = true;
         return true;
+    }
+
+    public static void doButtonWork(InputActionEventData data)
+    {
+        Speech.Stop();
     }
 
     private static void SetUpSettings()
@@ -132,6 +147,8 @@ public static class Main
         return true;
     }
 
+    // TODO set up some configuration, maybe a config file that can choose the implementation of Speech
+    // OR allow for switching in the UMM config
     private static bool SetSpeech()
     {
         switch (Application.platform)
@@ -141,7 +158,8 @@ public static class Main
                 SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
                 break;
             case RuntimePlatform.WindowsPlayer:
-                Speech = new WindowsSpeech();
+                //Speech = new WindowsSpeech();
+                Speech = new AuralisSpeech();
                 SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
                 break;
             default:

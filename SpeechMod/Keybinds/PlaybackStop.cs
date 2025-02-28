@@ -37,6 +37,10 @@ public class PlaybackStop : ModHotkeySettingEntry
 
         private static void StopPlayback(CommonPCView instance)
         {
+            // TODO just cancel this for now
+            // will see how to hook into my cancel stuff I have
+            if(true) {  return; }
+
             if (!Main.Speech?.IsSpeaking() == true)
                 return;
 
