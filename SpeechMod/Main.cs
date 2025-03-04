@@ -1,11 +1,13 @@
 ﻿using HarmonyLib;
 using Rewired;
 using SpeechMod.Configuration;
+using SpeechMod.Configuration.Settings;
 using SpeechMod.Keybinds;
 using SpeechMod.Unity;
 using SpeechMod.Voice;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -21,6 +23,7 @@ public static class Main
 {
     public static UnityModManager.ModEntry.ModLogger Logger;
     public static Settings Settings;
+    public static JsonSettings JsonSettings;
     public static bool Enabled;
 
     public static string[] FontStyleNames = Enum.GetNames(typeof(FontStyles));
@@ -45,6 +48,8 @@ public static class Main
         Debug.Log("Pathfinder: Wrath of the Righteous Speech Mod Initializing...");
 
         Logger = modEntry.Logger;
+
+        JsonSettings = JsonSettingsSerializer.LoadSettings(Path.Combine(modEntry.Path, "settings.json"));
 
         if (!SetSpeech())
             return false;
@@ -86,7 +91,8 @@ public static class Main
 
     public static void doButtonWork(InputActionEventData data)
     {
-        Speech.Stop();
+        // Interrupts current speech and plays the next phrase (if any)
+        Speech.NextPhrase();
     }
 
     private static void SetUpSettings()
@@ -147,22 +153,51 @@ public static class Main
         return true;
     }
 
-    // TODO set up some configuration, maybe a config file that can choose the implementation of Speech
-    // OR allow for switching in the UMM config
+    // TODO clean up UMM configuration to better show what speech implementation is being used
+    // and what can be changed in-game. I prefer the json way, anyway, so I'm not sure how much
+    // I will actually change this
     private static bool SetSpeech()
     {
+        // keep the setting of uielements/config section the same for now (until maybe I change it)
+        // but use the json config for the speech implementation instantiation
+        try {
+            var className = JsonSettings.speech_impl;
+
+            Logger.Log("Setting speech impl...." + className);
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Type type = assembly.GetTypes()
+                .FirstOrDefault(t => t.Name.Equals(className, StringComparison.Ordinal));
+            
+            if (type == null)
+            {
+                throw new ArgumentException($"Class '{className}' not found in the current assembly.");
+            }
+
+            Speech = (ISpeech) Activator.CreateInstance(type);
+        }
+        catch (Exception e)
+        {
+            Logger.Critical($"Failed to instantiate speech implementation: {JsonSettings.speech_impl}");
+            Logger.Critical(e.ToString());
+            return false;
+        }
+        
         switch (Application.platform)
         {
             case RuntimePlatform.OSXPlayer:
-                Speech = new AppleSpeech();
+                //Speech = new AppleSpeech();
                 SpeechExtensions.AddUiElements<AppleVoiceUnity>(Constants.APPLE_VOICE_NAME);
                 break;
             case RuntimePlatform.WindowsPlayer:
                 //Speech = new WindowsSpeech();
-                Speech = new AuralisSpeech();
+                //Speech = new AuralisSpeech();
+                //Speech = new KokoroSpeech();
                 SpeechExtensions.AddUiElements<WindowsVoiceUnity>(Constants.WINDOWS_VOICE_NAME);
                 break;
             default:
+                // I'm not sure if this will ever run, as the Linux version does not exist.
+                // Those running Linux use wine of some sort, which I believe would still show as Windows
                 Logger.Critical($"SpeechMod is not supported on {Application.platform}!");
                 return false;
         }

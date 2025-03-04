@@ -217,6 +217,11 @@ public class WindowsSpeech : ISpeech
         WindowsVoiceUnity.Stop();
     }
 
+    public void NextPhrase()
+    {
+        WindowsVoiceUnity.Stop();
+    }
+
     public string[] GetAvailableVoices()
     {
         return WindowsVoiceUnity.GetAvailableVoices();

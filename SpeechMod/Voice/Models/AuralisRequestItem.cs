@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpeechMod.Voice
+namespace SpeechMod.Voice.Models
 {
-    public class RequestItem
+    public class AuralisRequestItem
     {
         public string model { get; set; }
         public string[] voice { get; set; }
@@ -14,9 +14,9 @@ namespace SpeechMod.Voice
         public string response_format { get; set; }
         public float speed { get; set; }
 
-        public Boolean enhance_speech { get; set; }
+        public bool enhance_speech { get; set; }
 
-        public Boolean sound_norm_refs { get; set; }
+        public bool sound_norm_refs { get; set; }
 
         public int max_ref_length { get; set; }
         public int gpt_cond_len { get; set; }
@@ -28,7 +28,7 @@ namespace SpeechMod.Voice
         public float repetition_penalty { get; set; }
         public float length_penalty { get; set; }
 
-        public Boolean do_sample { get; set; }
+        public bool do_sample { get; set; }
 
         public string language { get; set; }
 
