@@ -17,48 +17,66 @@ using SpeechMod.Voice.Models;
 
 namespace SpeechMod.Voice
 {
-    public abstract class APISpeech : ISpeech
+    public abstract class APISpeech : ISpeech, System.IDisposable
     {
         public static HttpClient sharedHttpClient = new();
         protected ConcurrentQueue<string> filesToPlay = new();
-        public volatile bool isPlaying = false;
+        private readonly object _syncLock = new object();
+        private bool _isPlaying = false;
         private IWavePlayer wavePlayer;
         private WaveStream waveStream;
         private EventHandler<StoppedEventArgs> playbackStoppedHandler;
+        private CancellationTokenSource _playbackCts;
+        private readonly ManualResetEventSlim _playbackFinishedEvent = new ManualResetEventSlim(true);
 
 
         public APISpeech()
         {
-            Task.Run(() =>
-            {
-                doPlayback();
-            });
+            _playbackCts = new CancellationTokenSource();
+            Task.Run(() => doPlayback(_playbackCts.Token), _playbackCts.Token);
         }
 
-        // an infinite loop that will keep checking both if isPlaying and the concurrentqueue
-        // if it's not playing, and there is stuff in the queue, then flag isPlaying, pop, 
+        // an infinite loop that will keep checking the concurrentqueue
+        // if it's not playing, and there is stuff in the queue, then flag _isPlaying, pop, 
         // wait until done, then continue...
-
-        private void doPlayback()
+        private void doPlayback(CancellationToken token)
         {
-
-            while (true)
+            while (!token.IsCancellationRequested)
             {
+                bool shouldPlay = false;
+                string fileToPlay = null;
 
-                if (!isPlaying)
+                lock (_syncLock)
                 {
-                    if (filesToPlay.TryDequeue(out var fileToPlay))
+                    if (!_isPlaying && filesToPlay.TryDequeue(out fileToPlay))
                     {
-                        isPlaying = true;
-                        //UnityEngine.Debug.Log("File path: " + fileToPlay);
-                        PlayFile(fileToPlay);
-                        isPlaying = false;
+                        _isPlaying = true;
+                        shouldPlay = true;
+                        _playbackFinishedEvent.Reset();
                     }
+                }
 
+                if (shouldPlay && fileToPlay != null)
+                {
+                    try
+                    {
+                        PlayFile(fileToPlay);
+                    }
+                    finally
+                    {
+                        lock (_syncLock)
+                        {
+                            _isPlaying = false;
+                            _playbackFinishedEvent.Set();
+                        }
+                    }
+                }
+                else
+                {
+                    // Only sleep if we have nothing to do
                     Thread.Sleep(100);
                 }
             }
-
         }
 
         private void PlayFile(string filePath)
@@ -79,11 +97,12 @@ namespace SpeechMod.Voice
                 waveStream = new AudioFileReader(path);
                 
                 // Set up event handling for when playback is finished
-                playbackStoppedHandler= (sender, args) =>
+                var localFilePath = filePath; // Capture for the lambda
+                playbackStoppedHandler = (sender, args) =>
                 {
                     Main.Logger?.Log("Playback finished");
                     DisposeWaveObjects();
-                    DeleteFile(filePath);
+                    DeleteFile(localFilePath);
                 };
 
                 wavePlayer.PlaybackStopped += playbackStoppedHandler;
@@ -92,10 +111,24 @@ namespace SpeechMod.Voice
                 wavePlayer.Init(waveStream);
                 wavePlayer.Play();
                 
-                // Wait until playback is complete
-                while (wavePlayer != null && wavePlayer.PlaybackState == PlaybackState.Playing)
+                // Wait until playback is complete using a ManualResetEvent instead of busy waiting
+                using (var playbackWaitEvent = new ManualResetEventSlim(false))
                 {
-                    System.Threading.Thread.Sleep(100);
+                    EventHandler<StoppedEventArgs> tempHandler = null;
+                    tempHandler = (s, e) => playbackWaitEvent.Set();
+                    
+                    try
+                    {
+                        wavePlayer.PlaybackStopped += tempHandler;
+                        playbackWaitEvent.Wait();
+                    }
+                    finally
+                    {
+                        if (wavePlayer != null)
+                        {
+                            wavePlayer.PlaybackStopped -= tempHandler;
+                        }
+                    }
                 }
                 
                 Main.Logger?.Log("Done playing");
@@ -110,22 +143,25 @@ namespace SpeechMod.Voice
         
         private void DisposeWaveObjects()
         {
-            if (wavePlayer != null)
+            lock (_syncLock)
             {
-                if (playbackStoppedHandler != null)
+                if (wavePlayer != null)
                 {
-                    wavePlayer.PlaybackStopped -= playbackStoppedHandler;
-                }
+                    if (playbackStoppedHandler != null)
+                    {
+                        wavePlayer.PlaybackStopped -= playbackStoppedHandler;
+                    }
 
-                wavePlayer.Stop();
-                wavePlayer.Dispose();
-                wavePlayer = null;
-            }
-            
-            if (waveStream != null)
-            {
-                waveStream.Dispose();
-                waveStream = null;
+                    wavePlayer.Stop();
+                    wavePlayer.Dispose();
+                    wavePlayer = null;
+                }
+                
+                if (waveStream != null)
+                {
+                    waveStream.Dispose();
+                    waveStream = null;
+                }
             }
         }
 
@@ -144,22 +180,28 @@ namespace SpeechMod.Voice
             return new string[] { "APIVoice" };
         }
 
-        // TODO check what this is for....why do we need this?
+        // Updated to use thread-safe property access
         public string GetStatusMessage()
         {
-            if (isPlaying)
+            lock (_syncLock)
             {
-                return "Speaking";
-            }
-            else
-            {
-                return "Ready";
+                if (_isPlaying)
+                {
+                    return "Speaking";
+                }
+                else
+                {
+                    return "Ready";
+                }
             }
         }
 
         public bool IsSpeaking()
         {
-            return isPlaying || !filesToPlay.IsEmpty;
+            lock (_syncLock)
+            {
+                return _isPlaying || !filesToPlay.IsEmpty;
+            }
         }
 
         // TODO actually implement delay? what is it used for?
@@ -230,52 +272,66 @@ namespace SpeechMod.Voice
 
         public void Stop() 
         {
-            isPlaying = true;
+            lock (_syncLock)
+            {
+                _isPlaying = true; // Prevent new playback
+            }
+            
             StopWavePlayer();
 
-            while (filesToPlay.TryPeek(out _))
+            // Clear the queue
+            while (filesToPlay.TryDequeue(out var fileToRemove))
             {
-                if (filesToPlay.TryDequeue(out var fileToRemove))
-                {
-                    DeleteFile(fileToRemove);
-                }
+                DeleteFile(fileToRemove);
             }
 
-            isPlaying = false;
+            lock (_syncLock)
+            {
+                _isPlaying = false;
+            }
         }
 
         private void StopWavePlayer()
         {
-            if (wavePlayer != null && waveStream != null)
+            lock (_syncLock)
             {
-                Main.Logger?.Log("Stopping audio playback");
+                if (wavePlayer != null && waveStream != null)
+                {
+                    Main.Logger?.Log("Stopping audio playback");
 
-                // Trigger the same handler that would occur naturally when playback stops
-                // This will ensure the file is deleted and resources are disposed
-                if (playbackStoppedHandler != null)
-                {
-                    playbackStoppedHandler(wavePlayer, new StoppedEventArgs());
-                }
-                else
-                {
-                    // Fallback in case the handler is not set
-                    DisposeWaveObjects();
+                    // Trigger the same handler that would occur naturally when playback stops
+                    // This will ensure the file is deleted and resources are disposed
+                    if (playbackStoppedHandler != null)
+                    {
+                        playbackStoppedHandler(wavePlayer, new StoppedEventArgs());
+                    }
+                    else
+                    {
+                        // Fallback in case the handler is not set
+                        DisposeWaveObjects();
+                    }
                 }
             }
         }
 
         public void NextPhrase()
         {
-            // make sure no new playback starts
-            // TODO maybe a lock would be better?
-            isPlaying = true;
+            lock (_syncLock)
+            {
+                // make sure no new playback starts
+                _isPlaying = true;
+            }
+            
             StopWavePlayer();
-            isPlaying = false;
+            
+            lock (_syncLock)
+            {
+                _isPlaying = false;
+            }
         }
 
-        protected abstract void ProcessAndQueueFile(string item, int count);
+        protected abstract Task ProcessAndQueueFile(string item, int count);
        
-
 
         // TODO add serction to remove nararator, or later to split it into a seperate voice
         // TODO how do we know what's voiced yet?  (I think thatgets handled elsewhere...if we're here, it needs ai voice)
@@ -343,9 +399,9 @@ namespace SpeechMod.Voice
             }
 
             
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                ProcessText(phrases.ToArray());
+                await ProcessText(phrases.ToArray());
             });
 #if DEBUG
             if (System.Reflection.Assembly.GetEntryAssembly() == null)
@@ -354,7 +410,7 @@ namespace SpeechMod.Voice
             return text;
         }
 
-        private void ProcessText(string[] text)
+        private async Task ProcessText(string[] text)
         {
             // this stop call may be redundant
             Stop();
@@ -362,11 +418,25 @@ namespace SpeechMod.Voice
             int count = 0;
             foreach (var item in text)
             {
-                ProcessAndQueueFile(item, count++);
+                await ProcessAndQueueFile(item, count++);
             }
-
         }
 
-
+        // Implement IDisposable to properly clean up resources
+        public virtual void Dispose()
+        {
+            // Cancel ongoing playback operations
+            _playbackCts?.Cancel();
+            
+            // Stop playback
+            Stop();
+            
+            // Wait for playback to finish
+            _playbackFinishedEvent.Wait(1000);
+            
+            // Dispose resources
+            _playbackCts?.Dispose();
+            _playbackFinishedEvent.Dispose();
+        }
     }
 }

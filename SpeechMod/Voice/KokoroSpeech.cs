@@ -13,7 +13,7 @@ namespace SpeechMod.Voice
     {
         public KokoroSpeech() : base() { }
 
-        protected override void ProcessAndQueueFile(string item, int count)
+        protected override async Task ProcessAndQueueFile(string item, int count)
         {
             var jsonSettings = Main.JsonSettings;
 
@@ -40,15 +40,8 @@ namespace SpeechMod.Voice
 
             var content = JsonContent.Create(reqItem);
 
-            // since this already runs in a seperate thread, these calls to the TTS service will run synchronously
-            var task = Task.Run(() => sharedHttpClient.PostAsync(jsonSettings.endpoint, content));
-            task.Wait();
-            var response = task.Result;
-
-            var task2 = Task.Run(
-             () => response.Content.ReadAsStreamAsync());
-            task2.Wait();
-            var contentStream = task2.Result;
+            var response = await sharedHttpClient.PostAsync(jsonSettings.endpoint, content);
+            var contentStream = await response.Content.ReadAsStreamAsync();
 
             string tempDir = Path.Combine(Path.GetTempPath(), "WotRSpeechMod");
 
@@ -66,6 +59,7 @@ namespace SpeechMod.Voice
             contentStream.CopyTo(stream);
 
             filesToPlay.Enqueue(outputPath);
+            //return outputPath;
         }
     }
 }
