@@ -27,8 +27,6 @@ namespace SpeechMod.Voice
         private WaveStream waveStream;
         private EventHandler<StoppedEventArgs> playbackStoppedHandler;
         private CancellationTokenSource _playbackCts;
-        private readonly ManualResetEventSlim _playbackFinishedEvent = new ManualResetEventSlim(true);
-
 
         public APISpeech()
         {
@@ -52,7 +50,6 @@ namespace SpeechMod.Voice
                     {
                         _isPlaying = true;
                         shouldPlay = true;
-                        _playbackFinishedEvent.Reset();
                     }
                 }
 
@@ -67,7 +64,6 @@ namespace SpeechMod.Voice
                         lock (_syncLock)
                         {
                             _isPlaying = false;
-                            _playbackFinishedEvent.Set();
                         }
                     }
                 }
@@ -431,12 +427,8 @@ namespace SpeechMod.Voice
             // Stop playback
             Stop();
             
-            // Wait for playback to finish
-            _playbackFinishedEvent.Wait(1000);
-            
             // Dispose resources
             _playbackCts?.Dispose();
-            _playbackFinishedEvent.Dispose();
         }
     }
 }

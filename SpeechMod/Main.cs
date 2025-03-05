@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using Rewired;
 using SpeechMod.Configuration;
 using SpeechMod.Configuration.Settings;
@@ -40,7 +40,7 @@ public static class Main
             : new { Key = splitV[0], Value = splitV[1] };
     }).ToDictionary(p => p.Key, p => p.Value);
 
-    public static ISpeech Speech;
+    private static ISpeech Speech { get; set; }
     private static bool m_Loaded = false;
 
     private static bool Load(UnityModManager.ModEntry modEntry)
@@ -158,6 +158,12 @@ public static class Main
     // I will actually change this
     private static bool SetSpeech()
     {
+        // Dispose of existing speech instance if it exists
+        if (Speech is IDisposable disposableSpeech)
+        {
+            disposableSpeech.Dispose();
+        }
+
         // keep the setting of uielements/config section the same for now (until maybe I change it)
         // but use the json config for the speech implementation instantiation
         try {
@@ -207,6 +213,11 @@ public static class Main
 
     private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
     {
+        if (!value && Speech is IDisposable disposableSpeech)
+        {
+            disposableSpeech.Dispose();
+            Speech = null;
+        }
         Enabled = value;
         return true;
     }
