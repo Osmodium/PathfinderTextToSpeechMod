@@ -1,11 +1,7 @@
 # WotR-API-TextToSpeechMod
 By [lvaskys](https://github.com/lvaskys)
 
-Fork of [PathfinderTextToSpeechMod](https://github.com/Osmodium/PathfinderTextToSpeechMod)
-
-This is based on [PathfinderTextToSpeechMod](https://github.com/Osmodium/PathfinderTextToSpeechMod) and currently preserves all its functionality and adds the ability to use a backend API for TTS instead of the Windows TTS engine. Currently, [Auralis](https://github.com/astramind-ai/Auralis) (based on xttsv2) and [Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) are supported. I believe an NVIDIA gpu is required for both, but see their documentation for more information.
-
-See [SpeechMod-README.md](SpeechMod-README.md) for the original README.md on how to install windows tts natural voices (if desired) and the basic functionality of the mod.
+This README is for the API implementation that adds the ability to use a backend API for TTS instead of the Windows TTS engine. Currently, [Auralis](https://github.com/astramind-ai/Auralis) (based on xttsv2) and [Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) are supported. I believe an NVIDIA gpu is required for both, but see their documentation for more information.
 
 ## How to use
 
