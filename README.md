@@ -27,8 +27,14 @@ docker run --gpus all -p 8000:8880 ghcr.io/remsky/kokoro-fastapi-gpu:v0.2.2
 ## Other new features
 This supports cancelling playback with the controller cancel/B/Circle button. Specifically, it will cancel the current sentence or two sentence chunk being played and continue with the next sentence. This allows for a kind of "fast-forward" type effect if you don't feel like listening to the entire dialogue, but still want to hear later portions. Like, for example, if your reading outpaces the speaker.
 
+## Multilingual Support
+This should theoretically be multi-lingual, but is untested. Both XTTS and Kokoro support multiple languages.
+
+## Linux/WINE Support
+I believe some people have wanted a version of this mod for Linux. I have not tested this on Linux/WINE, but Auralis or Kokoro should theoretically work.
+
 ## Limitations/Broken Features
 These new features only support one speaker at the moment. Both voiced and narrator content will be spoken with the chosen voice. I may fully implement male/female/narrator as it was in the original mod, or maybe even characters-specific voices. But as it stands for now, this is a good initial release and works fine for my own needs.
 
 ## Motivation and thoughts
-Windows natural TTS voices are pretty good, but lack proper cadence and emotion. XTTS is excellent in that regard, and seems to pick up on cues without even feeding it any additional information. The sound quality is poorer, however, and it is a good bit slower, but still responsive enough for my needs. Kororo is another TTS I heard about, and decided to add it as an option as well for another alternative. It's super fast, many times more than realtime, and the quality is excellent. The cadence and emotion aren't super, though, and seem rather similar to Windows natural voices.
+Windows natural TTS voices are pretty good, but lack proper cadence and emotion. Also, I did not want to pay for API, but rather have it run locally. XTTS is excellent in that regard, and seems to pick up on cues without even feeding it any additional information. The sound quality is poorer, however, and it is a good bit slower, but still responsive enough for my needs. Kororo is another TTS I heard about, and decided to add it as an option as well for another alternative. It's super fast, many times more than realtime, and the quality is excellent. The cadence and emotion aren't super, though, and seem rather similar to Windows natural voices.
