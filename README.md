@@ -1,5 +1,6 @@
 # WotR-API-TextToSpeechMod
 By [lvaskys](https://github.com/lvaskys)
+
 Fork of [PathfinderTextToSpeechMod](https://github.com/Osmodium/PathfinderTextToSpeechMod)
 
 This is based on [PathfinderTextToSpeechMod](https://github.com/Osmodium/PathfinderTextToSpeechMod) and currently preserves all its functionality and adds the ability to use a backend API for TTS instead of the Windows TTS engine. Currently, [Auralis](https://github.com/astramind-ai/Auralis) (based on xttsv2) and [Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) are supported. I believe an NVIDIA gpu is required for both, but see their documentation for more information.
@@ -8,7 +9,7 @@ See [SpeechMod-README.md](SpeechMod-README.md) for the original README.md on how
 
 ## How to use
 
-This mod's main features are configured in a `settings.json` file that lives in the base mod folder. Comments are included to help guide your configuration. Of note is `speech_impl` which defines the implementation of the speech service to use, either `AuralisSpeech` or `KokoroSpeech` (this new implementation) or `WindowsSpeech` or `AppleSpeech` for the original implementation.
+This mod's main features are configured in a `settings.json` file that lives in the base mod folder. Comments are included to help guide your configuration. Of note is `speech_impl` which defines the implementation of the speech service to use, either `AuralisSpeech` or `KokoroSpeech` (this new implementation), or `WindowsSpeech` or `AppleSpeech` for the original implementation.
 
 The API service must be up and running for the mod to work. See the documentation for the API service you are using for more information on how to set it up. I used WSL to run Auralis, although it may work in native Windows now as well, I'm not sure. For Kokoro, I used the [docker-run](https://github.com/remsky/Kokoro-FastAPI?tab=readme-ov-file#get-started) instructions. I think docker on Windows may require WSL for proper sharing of gpu to the container, so you may need to install it either way.
 
@@ -21,8 +22,7 @@ or Kokoro:
 docker run --gpus all -p 8000:8880 ghcr.io/remsky/kokoro-fastapi-gpu:v0.2.2
 ```
 
-**Note: in order to use Auralis, you must provide a wav file for server to use for one-shot voice cloning**
-Currently, this is set up to live in your base game directory, not your mod directory. Although perhaps that can be fixed in the future. An example file you can use is [female_01.wav](samples/female_01.wav).
+**Note: in order to use Auralis, you must provide a wav file for server to use for one-shot voice cloning.** Currently, this is set up to live in your base game directory, not your mod directory. Although perhaps that can be fixed in the future. An example file you can use is [female_01.wav](samples/female_01.wav).
 
 ## Other new features
 This supports cancelling playback with the controller cancel/B/Circle button. Specifically, it will cancel the current sentence or two sentence chunk being played and continue with the next sentence. This allows for a kind of "fast-forward" type effect if you don't feel like listening to the entire dialogue, but still want to hear later portions. Like, for example, if your reading outpaces the speaker.
