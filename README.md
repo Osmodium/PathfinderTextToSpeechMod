@@ -34,7 +34,7 @@ This should theoretically be multi-lingual, but is untested. Both XTTS and Kokor
 I believe some people have wanted a version of this mod for Linux. I have not tested this on Linux/WINE, but Auralis or Kokoro should theoretically work.
 
 ## Limitations/Broken Features
-These new features only support one speaker at the moment. Both voiced and narrator content will be spoken with the chosen voice. I may fully implement male/female/narrator as it was in the original mod, or maybe even characters-specific voices. But as it stands for now, this is a good initial release and works fine for my own needs.
+These new features only support one speaker at the moment. Both voiced and narrator content will be spoken with the chosen voice. I may fully implement male/female/narrator as it was in the original mod, or maybe even characters-specific voices. But as it stands for now, this is a good initial release and works fine for my own needs. However, Windows/Apple implementation should work as intended.
 
 ## Motivation and thoughts
 Windows natural TTS voices are pretty good, but lack proper cadence and emotion. Also, I did not want to pay for API, but rather have it run locally. XTTS is excellent in that regard, and seems to pick up on cues without even feeding it any additional information. The sound quality is poorer, however, and it is a good bit slower, but still responsive enough for my needs. Kororo is another TTS I heard about, and decided to add it as an option as well for another alternative. It's super fast, many times more than realtime, and the quality is excellent. The cadence and emotion aren't super, though, and seem rather similar to Windows natural voices.
