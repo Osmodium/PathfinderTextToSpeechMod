@@ -80,6 +80,11 @@ public class AppleSpeech : ISpeech
         AppleVoiceUnity.Stop();
     }
 
+    public void NextPhrase() 
+    {
+        AppleVoiceUnity.Stop();
+    }
+
     public string[] GetAvailableVoices()
     {
         var arguments = "say -v '?' | awk '{\\$3=\\\"\\\"; printf \\\"%s;\\\", \\$1\\\"#\\\"\\$2}' | rev | cut -c 2- | rev";

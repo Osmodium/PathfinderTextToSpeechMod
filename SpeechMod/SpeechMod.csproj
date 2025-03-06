@@ -25,10 +25,14 @@
         <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\UnityModManager\UnityModManager.dll*" Publicize="true" Private="false" />
         <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Owlcat.Runtime.UI.dll*" Publicize="true" Private="false" />
         <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Assembly-CSharp.dll*" Publicize="true" Private="false" />
+
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Rewired_Core.dll*" Publicize="true" Private="false" />
+        <Reference Include="$(PathfinderWOTRInstallDir)\Wrath_Data\Managed\Rewired_Windows.dll*" Publicize="true" Private="false" />
     </ItemGroup>
     <ItemGroup>
         <None Include="Info.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
         <None Include="PhoneticDictionary.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
+		<None Include="settings.json" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
     </ItemGroup>
     <!--<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
@@ -37,6 +41,11 @@
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" IncludeAssets="build; contentfiles" Version="0.4.2" PrivateAssets="all" />
         <PackageReference Include="MicroUtils.HarmonyAnalyzers" IncludeAssets="runtime; build; native; contentfiles; analyzers" Version="*-*" PrivateAssets="all" />
+        <PackageReference Include="NAudio" Version="2.2.1" />
+        <PackageReference Include="System.Net.Http.Json" Version="9.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="System.Net.Http" />
     </ItemGroup>
     <ItemGroup>
       <None Update="Localization\enGB.json">

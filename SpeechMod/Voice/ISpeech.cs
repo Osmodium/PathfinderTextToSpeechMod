@@ -10,4 +10,5 @@ public interface ISpeech
     void SpeakAs(string text, VoiceType voiceType, float delay = 0f);
     void Speak(string text, float delay = 0f);
     void Stop();
+    void NextPhrase();
 }

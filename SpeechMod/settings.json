@@ -1,0 +1,73 @@
+{
+  // Implementation of Speech service to use. Current options are:
+  // AuralisSpeech  - A faster TTS implementation of xttsv2 (and theorically others in the future) https://github.com/astramind-ai/Auralis
+  //                - The most natural sounding TTS, but the slowest. Can be fine-tuned.
+  // KokoroSpeech   - A very, very fast, somewhat natural-sounding TTS. Wrapper API at https://github.com/remsky/Kokoro-FastAPI
+  //                - Extremely fast, and comparable to WindowsSpeech's natural voices. Limited set of voices and currently cannot be fine-tuned.
+  // WindowsSpeech  - Builtin Windows TTS service
+  // AppleSpeech    - Builtin macOS TTS service
+  "speech_impl": "AuralisSpeech",
+  "endpoint": "http://127.0.0.1:8000/v1/audio/speech",
+
+  "auralis_settings": {
+    // path to file to use for one-shot speech cloning, required
+    // your base game directory is considered the working directory, otherwise you can provide an absolute path
+    "path_to_voice_one_shot": "female_01.wav",
+    "response_format": "wav",
+    "speed": 1.0,
+    "model": "xttsv2",
+    "enhance_speech": true,
+    "sound_norm_refs": false,
+    "max_ref_length": 60,
+    "gpt_cond_len": 30,
+    "gpt_cond_chunk_len": 4,
+    "temperature": 0.75,
+    "top_p": 0.85,
+    "top_k": 50,
+    "repetition_penalty": 5.0,
+    "length_penalty": 1.0,
+    "do_sample": true,
+    "language": "auto"
+  },
+
+  "kokoro_settings": {
+    // Available voices:
+    //af_alloy, af_aoede, af_bella, af_heart, af_jadzia, af_jessica, af_kore, af_nicole, af_nova, af_river, af_sarah, af_sky, af_v0, af_v0bella, af_v0irulan, af_v0nicole, af_v0sarah, af_v0sky, 
+    //am_adam, am_echo, am_eric, am_fenrir, am_liam, am_michael, am_onyx, am_puck, am_santa, am_v0adam, am_v0gurney, am_v0michael, 
+    //bf_alice, bf_emma, bf_lily, bf_v0emma, bf_v0isabella, 
+    //bm_daniel, bm_fable, bm_george, bm_lewis, bm_v0george, bm_v0lewis, 
+    //ef_dora, 
+    //em_alex, em_santa, 
+    //ff_siwis, 
+    //hf_alpha, hf_beta, 
+    //hm_omega, hm_psi, 
+    //if_sara, 
+    //im_nicola, 
+    //jf_alpha, jf_gongitsune, jf_nezumi, jf_tebukuro, 
+    //jm_kumo, 
+    //pf_dora, 
+    //pm_alex, pm_santa, 
+    //zf_xiaobei, zf_xiaoni, zf_xiaoxiao, zf_xiaoyi,
+    //zm_yunjian, zm_yunxi, zm_yunxia, zm_yunyang
+    "voice": "af_heart",
+    "model": "kokoro",
+    "speed": 1.0,
+    // Possible language codes:
+    //'a': 'American English'
+    //'b': 'British English'
+    //'e': 'es'
+    //'f': 'fr-fr'
+    //'h': 'hi'
+    //'i': 'it'
+    //'p': 'pt-br'
+    //'j': 'Japanese'
+    //'z': 'Mandarin Chinese'
+    "lang_code": "a",
+    "response_format": "wav",
+    "normalize": true,
+    "unit_normalization": false,
+    "url_normalization": true,
+    "email_normalization": true,
+    "optional_pluralization_normalization": true
+  }
+}
