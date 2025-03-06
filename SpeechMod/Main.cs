@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using Rewired;
 using SpeechMod.Configuration;
 using SpeechMod.Configuration.Settings;
@@ -40,7 +40,7 @@ public static class Main
             : new { Key = splitV[0], Value = splitV[1] };
     }).ToDictionary(p => p.Key, p => p.Value);
 
-    private static ISpeech Speech { get; set; }
+    public static ISpeech Speech;
     private static bool m_Loaded = false;
 
     private static bool Load(UnityModManager.ModEntry modEntry)
