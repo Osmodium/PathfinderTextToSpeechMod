@@ -26,6 +26,20 @@ namespace WindowsVoice
 			return;
 		}
 
+		ISpAudio* pAudio = nullptr;
+
+		if (SUCCEEDED(CoCreateInstance(CLSID_SpMMAudioOut, nullptr, CLSCTX_ALL, IID_ISpAudio, reinterpret_cast<void**>(&pAudio))))
+		{
+			// Force the audio format to be 48kHz 16-bit stereo
+			CSpStreamFormat format;
+			if (SUCCEEDED(format.AssignFormat(SPSF_48kHz16BitStereo)))
+			{
+				pAudio->SetFormat(format.FormatId(), format.WaveFormatExPtr());
+				pVoice->SetOutput(pAudio, FALSE);
+			}
+			pAudio->Release();
+		}
+
 		theStatusMessage = L"Speech ready.";
 		speechState = speech_state_enum::ready;
 
