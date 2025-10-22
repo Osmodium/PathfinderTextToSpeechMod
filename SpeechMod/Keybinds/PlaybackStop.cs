@@ -3,6 +3,7 @@ using Kingmaker;
 using Kingmaker.Localization;
 using Kingmaker.UI.MVVM._PCView.Common;
 using SpeechMod.Configuration.Settings;
+using System;
 #if DEBUG
 using UnityEngine;
 #endif
@@ -25,6 +26,9 @@ public class PlaybackStop : ModHotkeySettingEntry
     [HarmonyPatch]
     private static class Patches
     {
+        private static string _playbackStoppedText = "SpeechMod: Playback stopped!";
+        private static IDisposable _disposableBinding;
+
         [HarmonyPatch(typeof(CommonPCView), nameof(CommonPCView.BindViewImplementation))]
         [HarmonyPostfix]
         private static void Add(CommonPCView __instance)
@@ -32,7 +36,20 @@ public class PlaybackStop : ModHotkeySettingEntry
 #if DEBUG
             Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix : {BIND_NAME}");
 #endif
-            __instance?.AddDisposable(Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { StopPlayback(__instance); }));
+            var text = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.playback.stop.notification", false);
+            if (string.IsNullOrWhiteSpace(text))
+                _playbackStoppedText = text;
+
+            if (Game.Instance.Keyboard.m_Bindings.Exists(binding => binding.Name.Equals(BIND_NAME)))
+            {
+#if DEBUG
+                Debug.Log($"Binding {BIND_NAME} already exists! Disposing of binding...");
+#endif
+                _disposableBinding.Dispose();
+            }
+
+            _disposableBinding = Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { StopPlayback(__instance); });
+            __instance?.AddDisposable(_disposableBinding);
         }
 
         private static void StopPlayback(CommonPCView instance)
@@ -42,13 +59,8 @@ public class PlaybackStop : ModHotkeySettingEntry
 
             if (instance.m_WarningsText != null)
             {
-                var text = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.playback.stop.notification", false);
-
-                if (string.IsNullOrEmpty(text))
-                    text = "SpeechMod: Playback stopped!";
-
                 if (Main.Settings!.ShowNotificationOnPlaybackStop)
-                    instance.m_WarningsText?.Show(text);
+                    instance.m_WarningsText?.Show(_playbackStoppedText);
             }
 
             Main.Speech?.Stop();

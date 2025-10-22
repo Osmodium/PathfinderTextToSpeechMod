@@ -6,7 +6,7 @@
   "Requirements": [],
   "AssemblyName": "PathfinderWOTRSpeechMod.dll",
   "EntryMethod": "SpeechMod.Main.Load",
-  "GameVersion": "2.6.0n",
+  "GameVersion": "2.7.0x",
   "HomePage": "https://www.nexusmods.com/pathfinderwrathoftherighteous/mods/241",
-  "Version": "1.1.2"
+  "Version": "1.2.0"
 }
