@@ -2,7 +2,7 @@
 By [Osmodium](https://github.com/Osmodium)
 
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
-Version: 1.1.2
+Version: 1.2.0
 
 **Disclaimer: Works on Windows and macOS only**
 
@@ -33,6 +33,7 @@ Disclaimer: I do NOT intend to support issues related to the NaturalVoicesSAPIAd
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/PathfinderTextToSpeechMod/issues)*
 
 #### Limitations:
+ - No controller support (and probably never will have)
  - No stopping of playback yet.
 
 #### Issues todo:
@@ -115,6 +116,7 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 		- **Speech volume**: The volume of the voice from 0 to 100.
 		- **Speech pitch**: The pitch of the voice from -10 to 10.
 	-**Preview Voice**: Used to preview the settings of the voice.
+- **Use protagonist specific voice**: Specify a voice to be used for every time the protagonist speaks.
 - **Use gender specific voices**: Specify voices for female and male dialog parts. Each of the voices can be adjusted with rate, volume and pitch where available.
 - Windows Only:
 	- **Interrupt speech on play**: 2 settings: *Interrupt and play* or *Add to queue*, hope this speaks for itself.
