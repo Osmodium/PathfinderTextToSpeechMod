@@ -28,6 +28,10 @@ public static class MenuGUI
             AddVoiceSelector("Protagonist - See nationality below", ref Main.Settings.ProtagonistVoice, ref m_ProtagonistPreviewText, ref Main.Settings.ProtagonistRate, ref Main.Settings.ProtagonistVolume, ref Main.Settings.ProtagonistPitch, VoiceType.Protagonist);
         }
 
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Use gender specific voices", GUILayout.ExpandWidth(false));
         Main.Settings.UseGenderSpecificVoices = GUILayout.Toggle(Main.Settings.UseGenderSpecificVoices, "Enabled");
