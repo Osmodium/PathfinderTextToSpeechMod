@@ -36,8 +36,7 @@ public static class Dialog_Patch
             return;
 
         // Stop playing and don't play if the dialog is voice acted.
-        if (!Main.Settings.AutoPlayIgnoreVoice &&
-            !string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(key, false)))
+        if (!Main.Settings.AutoPlayIgnoreVoice && !string.IsNullOrWhiteSpace(LocalizationManager.SoundPack?.GetText(key, false)))
         {
             Main.Speech.Stop();
             return;

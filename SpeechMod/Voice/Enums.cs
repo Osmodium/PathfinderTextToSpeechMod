@@ -4,5 +4,6 @@ public enum VoiceType
 {
     Narrator,
     Female,
-    Male
+    Male,
+    Protagonist
 }

@@ -10,12 +10,23 @@ public static class MenuGUI
     private static string m_NarratorPreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Narrator voice speech test";
     private static string m_FemalePreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Female voice speech test";
     private static string m_MalePreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Male voice speech test";
+    private static string m_ProtagonistPreviewText = "Speech Mod for Pathfinder Wrath of the Righteous - Protagonist voice speech test";
 
     public static void OnGui()
     {
         AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
 
         GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Use specific voice for protagonist", GUILayout.ExpandWidth(false));
+        Main.Settings.UseProtagonistSpecificVoice = GUILayout.Toggle(Main.Settings.UseProtagonistSpecificVoice, "Enabled");
+        GUILayout.EndHorizontal();
+
+        if (Main.Settings.UseProtagonistSpecificVoice)
+        {
+            AddVoiceSelector("Protagonist - See nationality below", ref Main.Settings.ProtagonistVoice, ref m_ProtagonistPreviewText, ref Main.Settings.ProtagonistRate, ref Main.Settings.ProtagonistVolume, ref Main.Settings.ProtagonistPitch, VoiceType.Protagonist);
+        }
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Use gender specific voices", GUILayout.ExpandWidth(false));
