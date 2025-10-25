@@ -4,14 +4,26 @@ By [Osmodium](https://github.com/Osmodium)
 ## This mod is made for Pathfinder: Wrath of the Righteous and introduces TTS (TextToSpeech) in most places.
 Version: 1.2.0
 
-**Disclaimer: Works on Windows and macOS only**
+---
 
-**Works with all languages as long as you have a voice in that language installed.**
+As of now this is the support on each platform:
+- **Windows**: ✅ Should work with the features implemented.
+- **OSX**: ⚠️ Might work, let me know if there are any issues.
+- **Linux**: ⛔ Not supported (this includes Steam Deck).
+
+---
+
+### 🚨 This mod contains no AI and no pre-baked voice files!🚨
+The mod utilizes the internal Text-To-Speech (`SAPI`) functionality in **Windows**, or the `say` command on **OSX**.
+
+**📢Works with all languages as long as you have a voice in that language installed.**
+
+---
 
 - [How to unlock more voices in Windows 10/11](https://www.ghacks.net/2018/08/11/unlock-all-windows-10-tts-voices-system-wide-to-get-more-of-them/)
 - [How to use Natural voices in Windows 10/11](https://www.nexusmods.com/warhammer40kroguetrader/articles/7)
 
-### How to use natural voices:
+### How to use natural voices
 
 Install this application: [NaturalVoiceSAPIAdapter](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
 
@@ -19,7 +31,9 @@ Known issue: If the mod is not showing in the mod manager, it might be due to in
 
 Disclaimer: I do NOT intend to support issues related to the NaturalVoicesSAPIAdapter application. If it looks like it is an issue with the WindowsVoice dll, I'll have a look at it.
 
-### How to install
+---
+
+### How to install 📝
 
  1. Download and install Unity Mod Manager, make sure it is at least version 0.23.0 (I use 0.23.3)
  2. Run Unity Mod Manger and set it up to find Pathfinder: Wrath of the Righteous (Second Adventure)
@@ -28,7 +42,7 @@ Disclaimer: I do NOT intend to support issues related to the NaturalVoicesSAPIAd
 
  *If running on OSX 64-bit you might need to use the *mono console.exe* command (see UMM documentation for further)
 
-### Known issues / limitations
+### Known issues / limitations❗
 
 *If you find issues or would like to request features, please use the issues tracker in GitHub [here](https://github.com/Osmodium/PathfinderTextToSpeechMod/issues)*
 
@@ -39,7 +53,7 @@ Disclaimer: I do NOT intend to support issues related to the NaturalVoicesSAPIAd
 #### Issues todo:
   - No support for chapter changes (although they seem to be narrated).
 
-### How to use
+## How to use ❓
 
 #### 1) Dialog
 When in dialog mode you can now press the play button next to the left image to listen to the current block of dialog. If autoplay is enabled, you don't have to push the playbutton.
@@ -97,9 +111,11 @@ When loading the loading screen hint can be played back.
 
 ![Get some great advice from the loading screen.](https://dashvoid.com/speechmod/wrath/loading_message.png)
 
-### Settings
+---
 
-New keybind setting in the game menu under "Sound" to stop playback.
+### Settings ⚙️
+
+Keybind setting in the game menu under "Sound" to stop playback.
 ![Assign keybind(s) to stopping of playback](https://dashvoid.com/speechmod/wrath/keybind_stop_playback.png)
 
 If enabled in the mod-settings, a notification will be shown when stopping the playback through use of the keybind.
@@ -131,16 +147,16 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 
 ![Settings for SpeechMod](https://dashvoid.com/speechmod/wrath/settings_1_1_1.png)
 
-### Motivation
+### Motivation 💪
 *Why did I create this mod?*
 I have come to realize that I spend alot of my energy through the day on various activities, so when I get to play a game I rarely have enough energy left over to focus on reading long passages of text. So I thought it nice if I could get a helping hand so I wouldn't miss out on the excellent stories and writing in text heavy games.
 After I started creating this mod, I have thought to myself that if I struggle with this issue, imageine what people with genuine disabilities must go through and possibly miss out on, which motivated me even more to get this mod working and release it. I really hope that it will help and encourage more people to get as much out of the game as possible.
 
-### Contribute
+### Contribute 👷
 If you find a name in the game which is pronounced funny by the voice, you can add it to the PhoneticDictionary.json in the mod folder (don't uninstall the mod as this will be deleted). I don't have a great way of submitting changes to this besides through GitHub pull requests, which is not super user friendly. But let's see if we can build a good pronounciation database for the voice together.
 Also feel free to hit me up with ideas, issues and PRs on GitHub or NexusMods :)
 
-### Acknowledgments
+### Acknowledgments 🎖️
 - [Chad Weisshaar](https://chadweisshaar.com/blog/author/wp_admin/) for his blog about [Windows TTS for Unity](https://chadweisshaar.com/blog/2015/07/02/microsoft-speech-for-unity/)
 - [dope0ne](https://forums.nexusmods.com/index.php?/user/895998-dope0ne/) (zer0bits) for providing code to support macOS, and various exploration work.
 - [gexgd0419](https://github.com/gexgd0419) for his work on the [NaturalVoiceSAPIAdapter](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
