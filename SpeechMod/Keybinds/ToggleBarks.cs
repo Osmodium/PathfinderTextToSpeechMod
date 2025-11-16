@@ -4,6 +4,7 @@ using Kingmaker.Localization;
 using Kingmaker.UI.MVVM._PCView.Common;
 using SpeechMod.Configuration.Settings;
 using System;
+
 #if DEBUG
 using UnityEngine;
 #endif
@@ -23,7 +24,8 @@ public class ToggleBarks() : ModHotkeySettingEntry(_key, _title, _tooltip, _defa
     [HarmonyPatch]
     private static class Patches
     {
-        private static string _ToggleBarksText = "SpeechMod: Barks toggled {0}!";
+        private static string _ToggleBarksOffText = "SpeechMod: Barks toggled OFF!";
+        private static string _ToggleBarksOnText = "SpeechMod: Barks toggled ON!";
         private static IDisposable _disposableBinding;
 
         [HarmonyPatch(typeof(CommonPCView), nameof(CommonPCView.BindViewImplementation))]
@@ -33,10 +35,13 @@ public class ToggleBarks() : ModHotkeySettingEntry(_key, _title, _tooltip, _defa
 #if DEBUG
             Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix : {BIND_NAME}");
 #endif
-            var text = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.barks.toggle.notification", false);
-            if (string.IsNullOrWhiteSpace(text))
-                _ToggleBarksText = text;
+            var barksOffText = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.barks.toggle.notification.off", false);
+            if (string.IsNullOrWhiteSpace(barksOffText))
+                _ToggleBarksOffText = barksOffText;
 
+            var barksOnText = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.barks.toggle.notification.on", false);
+            if (string.IsNullOrWhiteSpace(barksOnText))
+                _ToggleBarksOnText = barksOnText;
 
             if (Game.Instance.Keyboard.m_Bindings.Exists(binding => binding.Name.Equals(BIND_NAME)))
             {
@@ -56,7 +61,7 @@ public class ToggleBarks() : ModHotkeySettingEntry(_key, _title, _tooltip, _defa
 
             if (instance.m_WarningsText != null && Main.Settings!.ShowNotificationOnPlaybackStop)
             {
-                instance.m_WarningsText?.Show(string.Format(_ToggleBarksText, Main.Settings.PlaybackBarks ? "ON" : "OFF"));
+                instance.m_WarningsText?.Show(Main.Settings.PlaybackBarks ? _ToggleBarksOnText : _ToggleBarksOffText);
             }
         }
     }

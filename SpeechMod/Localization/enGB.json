@@ -16,10 +16,13 @@
             "Text": "Toggle barks"
         },
         "osmodium.speechmod.feature.barks.toggle.tooltip-description": {
-            "Text": "Toggles playback of barks on and off."
+            "Text": "Toggles playback of barks ON and OFF.\nBarks are the small text boxes above characters heads when they speak."
         },
-        "osmodium.speechmod.feature.barks.toggle.notification": {
-            "Text": "SpeechMod: Barks toggled {0}!"
+        "osmodium.speechmod.feature.barks.toggle.notification.off": {
+            "Text": "SpeechMod: Barks toggled OFF!"
+        },
+        "osmodium.speechmod.feature.barks.toggle.notification.on": {
+            "Text": "SpeechMod: Barks toggled ON!"
         }
     }
 }
