@@ -43,6 +43,9 @@ public class Settings : UnityModManager.ModSettings
 
     public bool InterruptPlaybackOnPlay = true;
 
+    public bool PlaybackBarks = true;
+    public bool PlaybackBarkOnlyIfSilence = true;
+
     public bool ShowNotificationOnPlaybackStop = true;
 
     public bool ShowPlaybackOfDialogAnswers = true;

@@ -101,6 +101,35 @@ public static class MenuGUI
             GUILayout.EndVertical();
         }
 
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Playback barks", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.PlaybackBarks = GUILayout.Toggle(Main.Settings.PlaybackBarks, "Enabled");
+        GUILayout.EndHorizontal();
+
+        if (Main.Settings.PlaybackBarks)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Only playback barks if there's silence", GUILayout.ExpandWidth(false));
+            GUILayout.Space(10);
+            Main.Settings.PlaybackBarkOnlyIfSilence = GUILayout.Toggle(Main.Settings.PlaybackBarkOnlyIfSilence, "Enabled");
+            GUILayout.EndHorizontal();
+        }
+
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Show notification on playback stop (set the keybind in the game menu under sound).", GUILayout.ExpandWidth(false));
+        GUILayout.Space(10);
+        Main.Settings.ShowNotificationOnPlaybackStop = GUILayout.Toggle(Main.Settings.ShowNotificationOnPlaybackStop, "Enabled");
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+
         AddColorPicker("Color on text hover", ref Main.Settings.ColorOnHover, "Hover color", ref Main.Settings.HoverColorR, ref Main.Settings.HoverColorG, ref Main.Settings.HoverColorB, ref Main.Settings.HoverColorA);
 
         GUILayout.BeginVertical("", GUI.skin.box);

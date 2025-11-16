@@ -1,16 +1,25 @@
 {
-  "Strings": {
-    "osmodium.speechmod.group.main": {
-      "Text": "Speech Mod"
-    },
-    "osmodium.speechmod.feature.playback.stop.description": {
-      "Text": "Stop playback"
-    },
-    "osmodium.speechmod.feature.playback.stop.tooltip-description": {
-      "Text": "Stops playback of SpeechMod TTS when it is playing."
-    },
-    "osmodium.speechmod.feature.playback.stop.notification": {
-      "Text": "SpeechMod: Playback stopped!"
+    "Strings": {
+        "osmodium.speechmod.group.main": {
+            "Text": "Speech Mod"
+        },
+        "osmodium.speechmod.feature.playback.stop.description": {
+            "Text": "Stop playback"
+        },
+        "osmodium.speechmod.feature.playback.stop.tooltip-description": {
+            "Text": "Stops playback of SpeechMod TTS when it is playing."
+        },
+        "osmodium.speechmod.feature.playback.stop.notification": {
+            "Text": "SpeechMod: Playback stopped!"
+        },
+        "osmodium.speechmod.feature.barks.toggle.description": {
+            "Text": "Toggle barks"
+        },
+        "osmodium.speechmod.feature.barks.toggle.tooltip-description": {
+            "Text": "Toggles playback of barks on and off."
+        },
+        "osmodium.speechmod.feature.barks.toggle.notification": {
+            "Text": "SpeechMod: Barks toggled {0}!"
+        }
     }
-  }
 }

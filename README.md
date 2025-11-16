@@ -141,8 +141,11 @@ The different settings (available through *ctrl+f10* if not overridden in the UM
 - **Show playback button of dialog answers**: Display a playback button next to the dialog answers, left-click it to play the dialog line.
 - **Include dialog answer number in playback**: When playing the dialog answer, include the respective number.
 - **Color answer on hover**: Colorizes the background of the dialog answer for clearer indication that it is not being chosen, but played back.
-- **Enable color on text hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
-- **Enable font style on hover**: As above this is only used for text boxes, but lets you set the style of the font.
+- **Playback barks**: When clicking on points of interests in the world, the small description is called a "Bark". Enabling this feature reads the bark aloud in the narrator voice. This also applies to character "banter" which is in the same style.
+- **Only playback barks if silence**: When enabled, barks are only played if there is no other TTS playback currently playing. Can be useful with the next option.
+- **Show notification on playback stop**: When this is enabled, a notification will show on the screen that the playback was stopped when the keybind for stopping is pressed. This keybinding can be set in the game menu under "Sound".
+- **Color on text hover**: This is used only for the text boxes when inspecting items, and colors the text the selected color when hovering the text box.
+- **Font style on text hover**: As above this is only used for text boxes, but lets you set the style of the font.
 - **Phonetic Dictionary Reload**: Reloads the PhoneticDictionary.json into the game, to facilitate modificaton while playing. (Note that the keys are now regex enabled, so it might need an update if you use this)
 
 ![Settings for SpeechMod](https://dashvoid.com/speechmod/wrath/settings_1_1_1.png)

@@ -4,19 +4,18 @@ using Kingmaker.Localization;
 using Kingmaker.UI.MVVM._PCView.Common;
 using SpeechMod.Configuration.Settings;
 using System;
-
 #if DEBUG
 using UnityEngine;
 #endif
 
 namespace SpeechMod.Keybinds;
 
-public class PlaybackStop() : ModHotkeySettingEntry(_key, _title, _tooltip, _defaultValue)
+public class ToggleBarks() : ModHotkeySettingEntry(_key, _title, _tooltip, _defaultValue)
 {
-    private const string _key = "playback.stop";
-    private const string _title = "Stop playback";
-    private const string _tooltip = "Stops playback of SpeechMod TTS.";
-    private const string _defaultValue = "%S;;All;false";
+    private const string _key = "barks.toggle";
+    private const string _title = "Toggle barks";
+    private const string _tooltip = "Toggles playback of barks on and off.";
+    private const string _defaultValue = "%B;;All;false";
     private const string BIND_NAME = $"{Constants.SETTINGS_PREFIX}.newcontrols.ui.{_key}";
 
     public override SettingStatus TryEnable() => TryEnableAndPatch(typeof(Patches));
@@ -24,7 +23,7 @@ public class PlaybackStop() : ModHotkeySettingEntry(_key, _title, _tooltip, _def
     [HarmonyPatch]
     private static class Patches
     {
-        private static string _playbackStoppedText = "SpeechMod: Playback stopped!";
+        private static string _ToggleBarksText = "SpeechMod: Barks toggled {0}!";
         private static IDisposable _disposableBinding;
 
         [HarmonyPatch(typeof(CommonPCView), nameof(CommonPCView.BindViewImplementation))]
@@ -34,9 +33,10 @@ public class PlaybackStop() : ModHotkeySettingEntry(_key, _title, _tooltip, _def
 #if DEBUG
             Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix : {BIND_NAME}");
 #endif
-            var text = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.playback.stop.notification", false);
+            var text = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.barks.toggle.notification", false);
             if (string.IsNullOrWhiteSpace(text))
-                _playbackStoppedText = text;
+                _ToggleBarksText = text;
+
 
             if (Game.Instance.Keyboard.m_Bindings.Exists(binding => binding.Name.Equals(BIND_NAME)))
             {
@@ -46,22 +46,18 @@ public class PlaybackStop() : ModHotkeySettingEntry(_key, _title, _tooltip, _def
                 _disposableBinding.Dispose();
             }
 
-            _disposableBinding = Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { StopPlayback(__instance); });
+            _disposableBinding = Game.Instance!.Keyboard!.Bind(BIND_NAME, delegate { ToggleBarks(__instance); });
             __instance?.AddDisposable(_disposableBinding);
         }
 
-        private static void StopPlayback(CommonPCView instance)
+        private static void ToggleBarks(CommonPCView instance)
         {
-            if (!Main.Speech?.IsSpeaking() == true)
-                return;
+            Main.Settings.PlaybackBarks = !Main.Settings.PlaybackBarks;
 
-            if (instance.m_WarningsText != null)
+            if (instance.m_WarningsText != null && Main.Settings!.ShowNotificationOnPlaybackStop)
             {
-                if (Main.Settings!.ShowNotificationOnPlaybackStop)
-                    instance.m_WarningsText?.Show(_playbackStoppedText);
+                instance.m_WarningsText?.Show(string.Format(_ToggleBarksText, Main.Settings.PlaybackBarks ? "ON" : "OFF"));
             }
-
-            Main.Speech?.Stop();
         }
     }
 }
