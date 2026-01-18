@@ -29,24 +29,26 @@ public static class BarkPlayer_Patch
         if (isAnyoneSpeaking && Main.Settings.PlaybackBarkOnlyIfSilence)
             return;
 
-        VoiceType voice;
-        if (__instance.Unit.IsMainCharacter && Main.Settings.UseProtagonistSpecificVoice)
-        {
-            voice = VoiceType.Protagonist;
-        }
-        else
-        {
-            Gender? gender = null;
-            if (__instance.Unit != null)
-                gender = __instance.Unit.Gender;
+        VoiceType voice = VoiceType.Narrator;
 
-            voice = gender switch
+        if (__instance.Unit != null)
+        {
+            if (__instance.Unit.IsMainCharacter && Main.Settings.UseProtagonistSpecificVoice)
             {
-                Gender.Male => VoiceType.Male,
-                Gender.Female => VoiceType.Female,
-                _ => VoiceType.Narrator
-            };
+                voice = VoiceType.Protagonist;
+            }
+            else
+            {
+                voice = __instance.Unit.Gender switch
+                {
+                    Gender.Male => VoiceType.Male,
+                    Gender.Female => VoiceType.Female,
+                    _ => VoiceType.Narrator
+                };
+            }
         }
+
+        Main.Speech.SpeakAs(text, voice);
 
         Main.Speech.SpeakAs(text, voice);
     }
