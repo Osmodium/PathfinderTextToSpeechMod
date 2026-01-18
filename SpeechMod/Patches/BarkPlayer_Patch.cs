@@ -49,7 +49,5 @@ public static class BarkPlayer_Patch
         }
 
         Main.Speech.SpeakAs(text, voice);
-
-        Main.Speech.SpeakAs(text, voice);
     }
 }
