@@ -29,7 +29,8 @@ public static class BarkPlayer_Patch
         if (isAnyoneSpeaking && Main.Settings.PlaybackBarkOnlyIfSilence)
             return;
 
-        VoiceType voice = VoiceType.Narrator;
+        var voice = VoiceType.Narrator;
+
 
         if (__instance.Unit != null)
         {
