@@ -5,6 +5,7 @@ using Kingmaker;
 using Kingmaker.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components.TargetCheckers;
 using SpeechMod.Unity;
+using System.Text;
 
 #if DEBUG
 using System.Reflection;
@@ -68,8 +69,61 @@ public class WindowsSpeech : ISpeech
         return arr.Aggregate(text, (current, t) => current.Replace(t, "")).Length;
     }
 
+    private string GetVoiceStartTag(VoiceType voiceType)
+    {
+        return voiceType switch
+        {
+            VoiceType.Narrator => CombinedNarratorVoiceStart,
+            VoiceType.Female => CombinedFemaleVoiceStart,
+            VoiceType.Male => CombinedMaleVoiceStart,
+            VoiceType.Protagonist => CombinedProtagonistVoiceStart,
+            _ => CombinedDialogVoiceStart // Fallback
+        };
+    }
+
+    // Process text with brackets to switch voices
+    private string ProcessBrackets(string text, VoiceType? voiceType = null)
+    {
+        if (!Main.Settings.UseBracketNarratorVoice || string.IsNullOrEmpty(text) || !text.Contains("["))
+        {
+            return text;
+        }
+
+        // Determine what voice to switch back to after the ']'
+        string returnVoiceTag = voiceType.HasValue ? GetVoiceStartTag(voiceType.Value) : CombinedDialogVoiceStart;
+
+        StringBuilder sb = new();
+        int depth = 0;
+
+        // Iterate through each character instead of using regex to handle nested brackets as regex would struggle with nested structures
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (c == '[')
+            {
+                if (depth == 0) sb.Append($"</voice>{CombinedNarratorVoiceStart}");
+                depth++;
+            }
+            else if (c == ']')
+            {
+                if (depth > 0)
+                {
+                    depth--;
+                    if (depth == 0) sb.Append($"</voice>{returnVoiceTag}");
+                }
+            }
+            else
+            {
+                sb.Append(c);
+            }
+        }
+        return sb.ToString();
+    }
+
     private string FormatGenderSpecificVoices(string text)
     {
+        text = ProcessBrackets(text);
+
         text = text.Replace("<color=#616060>", $"</voice>{CombinedNarratorVoiceStart}");
         text = text.Replace("</color>", $"</voice>{CombinedDialogVoiceStart}");
 
@@ -194,6 +248,8 @@ public class WindowsSpeech : ISpeech
             Main.Logger?.Warning("No text to speak!");
             return;
         }
+
+        text = ProcessBrackets(text, voiceType);
 
         if (Main.Settings!.UseProtagonistSpecificVoice && voiceType == VoiceType.Protagonist)
         {

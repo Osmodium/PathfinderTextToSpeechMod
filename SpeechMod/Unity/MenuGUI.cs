@@ -17,6 +17,13 @@ public static class MenuGUI
         AddVoiceSelector("Narrator Voice - See nationality below", ref Main.Settings.NarratorVoice, ref m_NarratorPreviewText, ref Main.Settings.NarratorRate, ref Main.Settings.NarratorVolume, ref Main.Settings.NarratorPitch, VoiceType.Narrator);
 
         GUILayout.BeginVertical("", GUI.skin.box);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Use Narrator voice for text in brackets [ ]", GUILayout.ExpandWidth(false));
+        Main.Settings.UseBracketNarratorVoice = GUILayout.Toggle(Main.Settings.UseBracketNarratorVoice, "Enabled");
+        GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+
+        GUILayout.BeginVertical("", GUI.skin.box);
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Use specific voice for protagonist", GUILayout.ExpandWidth(false));

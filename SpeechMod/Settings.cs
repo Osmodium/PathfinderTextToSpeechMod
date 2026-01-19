@@ -6,6 +6,8 @@ public class Settings : UnityModManager.ModSettings
 {
     public string[] AvailableVoices;
 
+    public bool UseBracketNarratorVoice = true;
+
     public int NarratorVoice = 0;
     public int NarratorRate = 0;
     public int NarratorVolume = 100;
