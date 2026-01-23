@@ -36,11 +36,11 @@ public class ToggleBarks() : ModHotkeySettingEntry(_key, _title, _tooltip, _defa
             Debug.Log($"{nameof(CommonPCView)}_{nameof(CommonPCView.BindViewImplementation)}_Postfix : {BIND_NAME}");
 #endif
             var barksOffText = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.barks.toggle.notification.off", false);
-            if (string.IsNullOrWhiteSpace(barksOffText))
+            if (!string.IsNullOrWhiteSpace(barksOffText))
                 _ToggleBarksOffText = barksOffText;
 
             var barksOnText = LocalizationManager.CurrentPack!.GetText("osmodium.speechmod.feature.barks.toggle.notification.on", false);
-            if (string.IsNullOrWhiteSpace(barksOnText))
+            if (!string.IsNullOrWhiteSpace(barksOnText))
                 _ToggleBarksOnText = barksOnText;
 
             if (Game.Instance.Keyboard.m_Bindings.Exists(binding => binding.Name.Equals(BIND_NAME)))

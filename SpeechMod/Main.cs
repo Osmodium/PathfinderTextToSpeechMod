@@ -80,7 +80,7 @@ public static class Main
         if (ModConfigurationManager.Instance.GroupedSettings.TryGetValue("main", out _))
             return;
 
-        ModConfigurationManager.Instance.GroupedSettings.Add("main", [new PlaybackStop(), new ToggleBarks()]);
+        ModConfigurationManager.Instance.GroupedSettings.Add("main", [new PlaybackStop(), new ToggleBarks(), new ToggleAutoPlay()]);
     }
 
     private static bool SetAvailableVoices()
